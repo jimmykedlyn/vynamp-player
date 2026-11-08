@@ -1,0 +1,14 @@
+[package]
+name = "vynamp_player"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+description = "Player Vynamp: shell de playback, integracao do engine, UI."
+license = "MIT OR Apache-2.0"
+publish = false
+
+[dependencies]
+
+[[bin]]
+name = "vynamp_player"
+path = "src/main.rs"
