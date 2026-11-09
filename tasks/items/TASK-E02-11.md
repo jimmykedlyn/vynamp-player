@@ -40,11 +40,11 @@ Pacote assets/reference/mvp com MVP rev.37 congelado por hash, 12 temas resolvid
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-11-AC-1` | PENDENTE | PENDENTE | Cada SVG renderiza em resvg sem pixel de geometria divergente do Chrome (delta>48 fora do antialiasing de 1 px |
-| `TASK-E02-11-AC-2` | PENDENTE | PENDENTE | texto registrado e resolvido em E02-12 |
-| `TASK-E02-11-AC-3` | PENDENTE | PENDENTE | recurso sem suporte no resvg vira requisito do carregador nativo) |
-| `TASK-E02-11-AC-4` | PENDENTE | PENDENTE | cada tema traz resolvidos todos os tokens --* que define em :root, e toda variável referenciada que o tema não define em :root consta de unsetVars com fallback, origem e temas afetados (valor por estado em E02-12) |
-| `TASK-E02-11-AC-5` | PENDENTE | PENDENTE | reextração reproduz os mesmos hashes. |
+| `TASK-E02-11-AC-1` | cada SVG do pacote, com zoom 2, renderizado no Chrome e no resvg sobre branco e sobre preto | o svgcheck compara os dois, com todo `<text>` removido | Cada SVG renderiza em resvg sem pixel de geometria divergente do Chrome (delta>48 fora do antialiasing de 1 px |
+| `TASK-E02-11-AC-2` | um SVG cuja diferença só aparece na rasterização de glifos | o svgcheck isola o caso | texto registrado e resolvido em E02-12 |
+| `TASK-E02-11-AC-3` | um SVG que usa `pathLength` ou `filter: blur()` de CSS | o svgcheck compara o resvg sobre o arquivo normalizado com o Chrome sobre o original | recurso sem suporte no resvg vira requisito do carregador nativo) |
+| `TASK-E02-11-AC-4` | cada tema do pacote | os tokens `--*` de `:root` são resolvidos e as variáveis referenciadas são conferidas contra `unsetVars` | cada tema traz resolvidos todos os tokens --* que define em :root, e toda variável referenciada que o tema não define em :root consta de unsetVars com fallback, origem e temas afetados (valor por estado em E02-12) |
+| `TASK-E02-11-AC-5` | o pacote extraído uma vez | a ferramenta de extração roda de novo | reextração reproduz os mesmos hashes. |
 
 ## Verificação
 
