@@ -40,8 +40,8 @@ Lista virtualizada, drag insert, seleção, context menu e queue actions.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-04-AC-1` | PENDENTE | PENDENTE | Tocar/agendar/adicionar têm comportamentos distintos |
-| `TASK-E02-04-AC-2` | PENDENTE | PENDENTE | teclado completo e faixa atual separada da seleção. |
+| `TASK-E02-04-AC-1` | uma playlist de dez faixas e a fila acompanhada por snapshot | a mesma faixa é acionada por tocar agora, tocar em seguida e adicionar ao fim | Tocar/agendar/adicionar têm comportamentos distintos |
+| `TASK-E02-04-AC-2` | a lista com o foco do teclado e uma faixa tocando | a navegação por teclado move a seleção sem tocar e as ações de fila são disparadas por atalho | teclado completo e faixa atual separada da seleção. |
 
 ## Verificação
 

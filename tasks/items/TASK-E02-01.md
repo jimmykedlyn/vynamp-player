@@ -40,9 +40,9 @@ Spike desktop egui/AccessKit em Windows/Linux/macOS Intel+Silicon, com Classic e
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-01-AC-1` | PENDENTE | PENDENTE | Narrator/NVDA/Orca/VoiceOver workflow de transporte funciona |
-| `TASK-E02-01-AC-2` | PENDENTE | PENDENTE | DPI/zoom200% sem esconder ações |
-| `TASK-E02-01-AC-3` | PENDENTE | PENDENTE | falhas mudam toolkit com ADR. Android tem gate E13-01/05. |
+| `TASK-E02-01-AC-1` | o spike rodando em Windows com Narrator e NVDA, em Linux com Orca e em macOS com VoiceOver | um roteiro só de teclado e leitor de tela executa abrir, play, pause, stop, próxima faixa e seek | Narrator/NVDA/Orca/VoiceOver workflow de transporte funciona |
+| `TASK-E02-01-AC-2` | a janela Classic Stack em 480x660 com o texto do sistema em 200% | a árvore de acessibilidade é percorrida e cada controle de transporte é alcançado e acionado | DPI/zoom200% sem esconder ações |
+| `TASK-E02-01-AC-3` | o relatório do spike com qualquer AC-1 ou AC-2 reprovado em alguma plataforma | a decisão de toolkit é registrada no ADR-003 com o motivo e o contexto medido | falhas mudam toolkit com ADR. Android tem gate E13-01/05. |
 
 ## Verificação
 

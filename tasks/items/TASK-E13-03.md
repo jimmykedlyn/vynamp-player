@@ -40,10 +40,10 @@ AudioManager, foco/noisy/Bluetooth e output clock com formato negociado.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E13-03-AC-1` | PENDENTE | PENDENTE | Definir loss/transient/duck |
-| `TASK-E13-03-AC-2` | PENDENTE | PENDENTE | unplug pausa sem tocar speaker |
-| `TASK-E13-03-AC-3` | PENDENTE | PENDENTE | desconexão recupera fora da callback |
-| `TASK-E13-03-AC-4` | PENDENTE | PENDENTE | taxa e sharing reais visíveis. |
+| `TASK-E13-03-AC-1` | o engine tocando e um segundo app pedindo foco | cada tipo de perda é solicitado: AUDIOFOCUS_LOSS, AUDIOFOCUS_LOSS_TRANSIENT e AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK | Definir loss/transient/duck |
+| `TASK-E13-03-AC-2` | a reprodução num fone Bluetooth e o dispositivo desconectando | a rota de saída é consultada imediatamente depois da desconexão | unplug pausa sem tocar speaker |
+| `TASK-E13-03-AC-3` | a callback de áudio com a rota invalidada | o backend reabre o dispositivo | desconexão recupera fora da callback |
+| `TASK-E13-03-AC-4` | o output Android com um arquivo de 44,1 kHz e um dispositivo negociado em 48 kHz | o painel de saída lê taxa, formato e modo de compartilhamento | taxa e sharing reais visíveis. |
 
 ## Verificação
 

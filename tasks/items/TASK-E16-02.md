@@ -40,10 +40,10 @@ Lock OS, encaminhamento IPC, idempotência e isolamento de perfis.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E16-02-AC-1` | PENDENTE | PENDENTE | Vinte launches elegem um owner |
-| `TASK-E16-02-AC-2` | PENDENTE | PENDENTE | installed/portable não escrevem o mesmo perfil simultaneamente |
-| `TASK-E16-02-AC-3` | PENDENTE | PENDENTE | stale PID não libera lock |
-| `TASK-E16-02-AC-4` | PENDENTE | PENDENTE | ACK e Conflict testados. |
+| `TASK-E16-02-AC-1` | o app fechado e vinte invocações simultâneas do entrypoint | cada instância tenta tomar o lock de perfil | Vinte launches elegem um owner |
+| `TASK-E16-02-AC-2` | a versão instalada e a versão portátil apontando para o mesmo diretório de perfil | as duas tentam abrir o banco de biblioteca ao mesmo tempo | installed/portable não escrevem o mesmo perfil simultaneamente |
+| `TASK-E16-02-AC-3` | um arquivo de lock com PID de processo já morto e outro cujo PID foi reutilizado por processo alheio | a elegibilidade de owner é avaliada | stale PID não libera lock |
+| `TASK-E16-02-AC-4` | um owner já eleito e um segundo pedido de abertura | o encaminhamento por IPC responde ao pedido | ACK e Conflict testados. |
 
 ## Verificação
 

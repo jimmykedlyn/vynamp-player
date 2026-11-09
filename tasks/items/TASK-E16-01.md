@@ -40,9 +40,9 @@ Contrato OpenRequest, limites e spikes de entrega nativa em cinco alvos.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E16-01-AC-1` | PENDENTE | PENDENTE | Cold/warm e lotes 1/2/20/100 preservam ordem |
-| `TASK-E16-01-AC-2` | PENDENTE | PENDENTE | nomes especiais são dados |
-| `TASK-E16-01-AC-3` | PENDENTE | PENDENTE | limites e ACK/generation definidos. |
+| `TASK-E16-01-AC-1` | o app fechado (cold) e o app aberto (warm), com lotes de arquivos enviados ao entrypoint | lotes de 1, 2, 20 e 100 OpenRequest são enviados e a ordem de chegada é registrada | Cold/warm e lotes 1/2/20/100 preservam ordem |
+| `TASK-E16-01-AC-2` | arquivos cujo nome contém dois hífens, aspas, quebra de linha e espaço à esquerda | o envelope de ativação é montado e o app lê o pedido | nomes especiais são dados |
+| `TASK-E16-01-AC-3` | o contrato OpenRequest e os limites de tamanho e de contagem | o contrato é confrontado com os spikes de entrega nativa nos cinco alvos | limites e ACK/generation definidos. |
 
 ## Verificação
 

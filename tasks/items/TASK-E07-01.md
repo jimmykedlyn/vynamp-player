@@ -40,9 +40,9 @@ Spike Wasmtime/WIT com limites de memória, fuel, interruption e ADR-004.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E07-01-AC-1` | PENDENTE | PENDENTE | Interromper loops e crescimento de memória |
-| `TASK-E07-01-AC-2` | PENDENTE | PENDENTE | nenhum acesso ambiente a arquivos/rede |
-| `TASK-E07-01-AC-3` | PENDENTE | PENDENTE | medir consumo com runtime não carregado. |
+| `TASK-E07-01-AC-1` | um módulo Wasm de teste com loop infinito e outro que aloca sem limite, com fuel e limite de memória configurados | o host interrompe cada módulo pelo limite que estourar primeiro | Interromper loops e crescimento de memória |
+| `TASK-E07-01-AC-2` | um módulo que tenta abrir arquivo e abrir soquete pelas importações disponíveis | o módulo roda no host com as capabilities padrão | nenhum acesso ambiente a arquivos/rede |
+| `TASK-E07-01-AC-3` | o app iniciando sem nenhum plugin instalado | memória residente e tempo de start são medidos com e sem o runtime Wasm disponível | medir consumo com runtime não carregado. |
 
 ## Verificação
 

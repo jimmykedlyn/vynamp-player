@@ -40,10 +40,10 @@ Spike NDK/ABI Rust, ownership de buffers, AAudio direto (vynamp-output) e adapte
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E13-01-AC-1` | PENDENTE | PENDENTE | Tocar WAV/FLAC em aparelho arm64 real |
-| `TASK-E13-01-AC-2` | PENDENTE | PENDENTE | callback sem JNI/alloc |
-| `TASK-E13-01-AC-3` | PENDENTE | PENDENTE | native build compatível com requisitos de páginas |
-| `TASK-E13-01-AC-4` | PENDENTE | PENDENTE | comparar lifecycle e runtime antes congelar. |
+| `TASK-E13-01-AC-1` | um aparelho arm64-v8a real com Android 10 ou superior e o spike instalado | um WAV e um FLAC do spike são tocados pelo vynamp-output via AAudio | Tocar WAV/FLAC em aparelho arm64 real |
+| `TASK-E13-01-AC-2` | a callback de áudio do spike com instrumentação de alocação e de travessia JNI | uma reprodução completa roda com o perfil de alocação ligado | callback sem JNI/alloc |
+| `TASK-E13-01-AC-3` | o APK gerado pelo spike com as bibliotecas nativas | o tamanho de página e a compatibilidade com 16 KB são conferidos no artefato | native build compatível com requisitos de páginas |
+| `TASK-E13-01-AC-4` | as duas opções de UI e runtime em avaliação | o mesmo fluxo de abrir, tocar, pausar e rotacionar roda em cada uma | comparar lifecycle e runtime antes congelar. |
 
 ## Verificação
 

@@ -40,9 +40,9 @@ Theme token loader builtin, buttons/sliders/list rows com estados completos.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-02-AC-1` | PENDENTE | PENDENTE | Usar tokens canônicos |
-| `TASK-E02-02-AC-2` | PENDENTE | PENDENTE | focus/hover/pressed/disabled diferem |
-| `TASK-E02-02-AC-3` | PENDENTE | PENDENTE | contraste medido e nome acessível em cada controle. |
+| `TASK-E02-02-AC-1` | o pacote de temas de vynamp-mvp-reference no SHA do pin e o loader de tokens do player | cada componente é construído e suas propriedades visuais são lidas em runtime | Usar tokens canônicos |
+| `TASK-E02-02-AC-2` | um botão, um slider e uma linha de lista em estado habilitado | o harness aplica focus, hover, pressed e disabled e compara os estilos computados dos quatro estados | focus/hover/pressed/disabled diferem |
+| `TASK-E02-02-AC-3` | todos os controles do Classic Stack renderizados nos 12 temas do pacote | a razão de contraste entre texto e fundo é calculada e a árvore de acessibilidade é lida por controle | contraste medido e nome acessível em cada controle. |
 
 ## Verificação
 
