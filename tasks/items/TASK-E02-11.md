@@ -14,7 +14,7 @@
 | Critérios da spec | pendente — `specs/player.md` §5 |
 | Fase | M0 |
 | Prioridade | P0 |
-| Estado | in_progress |
+| Estado | implemented |
 | Depende de | nenhuma |
 | Bloqueia | `TASK-E02-02`, `TASK-E02-12`, `TASK-E02-13`, `TASK-E02-14` |
 | Modelo executor | Opus — áudio/RT, concorrência, segurança ou release |
@@ -65,4 +65,37 @@ Pacote assets/reference/mvp com MVP rev.37 congelado por hash, 12 temas resolvid
 - [ ] PR aberto com template preenchido; CI Gate verde no SHA final
 ## Notas de execução
 
-Preenchido durante a execução, não antes.
+Fechada em 2026-11-09 com o pacote apontando para `vynamp-mvp-reference`
+(decisão do mantenedor). A extração foi provada em 2026-10-18 e confirmada de
+novo hoje contra o estado atual do repositório de referência; nenhum arquivo do
+MVP está ou volta a estar neste repositório.
+
+| AC | Verificação executada | Resultado |
+|---|---|---|
+| AC-1 | `out/check/report.json` (svgcheck, rev.38) | 477 SVGs; **471 `pass`**; 6 reprovam com a razão registrada: 4 `blurFn` (todos `cropped: true`), 1 `pathLength` (com `text: true`) e 1 `text: true` com `gaps: []` |
+| AC-2 | o mesmo relatório, campo `text` | os 6 reprovam ou por glifo rasterizado (`text: true`, 2 arquivos) ou por gap de renderizador (`blurFn`/`pathLength`, 5 arquivos); nenhum reprova por geometria de caminho |
+| AC-3 | `gaps` do relatório | `blurFn` ×4 e `pathLength` ×1 — exatamente os dois recursos que o `Then` manda virar requisito do carregador nativo |
+| AC-4 | `out/themes/themes.json` | 12 temas; `unsetVars` com **22** variáveis, cada uma com `fallbacks`, `setBy` (origem) e `missingIn` (temas afetados) |
+| AC-5 | `node tools/pin.cjs` duas vezes + `npm run verify` | `contentSha256` **idêntico** nas duas execuções: `f00f766045edf4c1032c9a30c5826803c090f960ac9377d815c020079f398bba`; `git mvp/` = `f85fd662…`, `out/` = `1d9f9615…`, 203 arquivos, 2 118 012 bytes. `npm run verify`: **`compared 499 files, 0 differ`**, exit 0 |
+
+O hash acima é o mesmo que `design/07-pin-mvp.md` registra para `0d9860b` —
+ou seja, o conteúdo de `mvp/` e de `out/` **não mudou** desde o pin; o gitlink
+avou para `e689d90` (PR #3, CI do MVP) sem tocar no pacote.
+
+**Onde o pacote vive, hoje.** Este repo não tem `assets/reference/mvp` e não
+volta a ter. O pacote extraído é `vynamp-mvp-reference` (público, branch
+`main`, fixado em `e689d90` para a ferramenta; conteúdo em `0d9860b`), e o
+consumidor passa a ser `vynamp-player` por **citação** — URL + SHA fixo +
+caminho dentro daquele repositório, o mesmo formato de
+`design/07-pin-mvp.md §2`. A ferramenta que o mantém reprodutível é
+`tools/pin.cjs` (`npm run pin`), que imprime a própria tabela de proveniência;
+`tools/package.cjs` foi removido no PR #1 do repositório de referência. Quem
+precisar do pacote em disco clona `vynamp-mvp-reference` no SHA do pin — não
+o copia para dentro do app.
+
+**O que esta TASK não provou:** nenhuma comparação foi refeita contra a
+rev.37 da evidência original, e o `svgcheck` roda sobre os 477 SVGs versionados
+de `out/svg/`, não sobre a árvore de trabalho. Nenhum SVG novo foi gerado;
+nenhum tema foi resolvido em runtime nativo. As TASKs que consomem o pacote
+(`E02-12`..`E02-16`) continuam `planned` e sem critérios.
+
