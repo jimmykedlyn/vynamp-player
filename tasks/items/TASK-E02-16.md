@@ -40,9 +40,9 @@ Crate de testes que renderiza telas nativas e as compara com os gabaritos visual
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-16-AC-1` | PENDENTE | PENDENTE | O harness falha quando uma tela ou estado excede a tolerância e aponta o elemento divergente |
-| `TASK-E02-16-AC-2` | PENDENTE | PENDENTE | roda apenas localmente, na máquina do mantenedor, com o clone de vynamp-mvp-reference no SHA 0d9860b901510021bcca4c31a25014373ea7c452 |
-| `TASK-E02-16-AC-3` | PENDENTE | PENDENTE | o CI Gate o marca como não executado. |
+| `TASK-E02-16-AC-1` | o harness com os gabaritos de E02-12, E02-13 e E02-14 e uma tela com um controle deslocado além da tolerância do gabarito | o teste roda e a tela é comparada com o gabarito | O harness falha quando uma tela ou estado excede a tolerância e aponta o elemento divergente |
+| `TASK-E02-16-AC-2` | o clone local de vynamp-mvp-reference no SHA 0d9860b901510021bcca4c31a25014373ea7c452 apontado pela configuração do harness | o mantenedor executa o harness com cargo test no crate de testes, na própria máquina | roda apenas localmente, na máquina do mantenedor, com o clone de vynamp-mvp-reference no SHA 0d9860b901510021bcca4c31a25014373ea7c452 |
+| `TASK-E02-16-AC-3` | o CI Gate rodando sem o clone do pacote de referência e sem GPU | os testes do harness são coletados na matriz de CI | o CI Gate o marca como não executado. |
 
 ## Verificação
 

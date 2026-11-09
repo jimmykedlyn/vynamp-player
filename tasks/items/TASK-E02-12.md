@@ -40,9 +40,9 @@ Capturas por tema, layout, largura e estado com dump de geometria e estilo por e
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-12-AC-1` | PENDENTE | PENDENTE | Todo estado alcançável do MVP tem captura e dump (geometria, estilo computado e custom properties --* por elemento, inclusive as de unsetVars), incluindo os estados cujo clique expira na varredura de TASK-E02-11 (`rendered/click-failures.json`: link de salto com foco, fila limpa), acionados por teclado ou script |
-| `TASK-E02-12-AC-2` | PENDENTE | PENDENTE | cada família de fonte usada tem fonte nativa ou substituta licenciada com métricas comparadas |
-| `TASK-E02-12-AC-3` | PENDENTE | PENDENTE | armazenamento dos PNG decidido. |
+| `TASK-E02-12-AC-1` | o MVP de vynamp-mvp-reference no SHA 0d9860b901510021bcca4c31a25014373ea7c452 e a lista de estados de rendered/click-failures.json | a varredura automatizada percorre cada tema, layout, largura e estado e grava PNG mais o dump de geometria, estilo computado e custom properties por elemento | Todo estado alcançável do MVP tem captura e dump (geometria, estilo computado e custom properties --* por elemento, inclusive as de unsetVars), incluindo os estados cujo clique expira na varredura de TASK-E02-11 (`rendered/click-failures.json`: link de salto com foco, fila limpa), acionados por teclado ou script |
+| `TASK-E02-12-AC-2` | as famílias de fonte efetivas por nó, tiradas do dump de AC-1 | cada família é confrontada com as fontes disponíveis em Windows, Linux, macOS e Android | cada família de fonte usada tem fonte nativa ou substituta licenciada com métricas comparadas |
+| `TASK-E02-12-AC-3` | o conjunto de capturas gerado em AC-1, medido em número de arquivos e bytes | a decisão de armazenamento é registrada e a referência ao pacote é escrita no formato de design/07-pin-mvp.md §2 | armazenamento dos PNG decidido. |
 
 ## Verificação
 

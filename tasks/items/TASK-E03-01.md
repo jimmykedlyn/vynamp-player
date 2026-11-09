@@ -40,9 +40,9 @@ Schema inicial, WAL, backup e write actor com migrations.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E03-01-AC-1` | PENDENTE | PENDENTE | Kill no migrate/save preserva DB ou backup |
-| `TASK-E03-01-AC-2` | PENDENTE | PENDENTE | FTS reconstruível |
-| `TASK-E03-01-AC-3` | PENDENTE | PENDENTE | schema unknown não é apagado. |
+| `TASK-E03-01-AC-1` | um banco na versão N e a migração para N+1 em curso, com WAL ligado e backup configurado | o processo é morto em cada ponto de escrita da migração e o banco é reaberto | Kill no migrate/save preserva DB ou backup |
+| `TASK-E03-01-AC-2` | o índice FTS populado para a biblioteca | o índice é apagado por fora do app e a reconstrução roda a partir das tabelas de origem | FTS reconstruível |
+| `TASK-E03-01-AC-3` | um arquivo de banco com user_version maior que o suportado pela build | o app abre o arquivo e decide o que fazer | schema unknown não é apagado. |
 
 ## Verificação
 

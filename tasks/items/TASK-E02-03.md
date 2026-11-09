@@ -40,8 +40,8 @@ Painéis clássicos nas geometrias da spec e ligação de commands/events.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-03-AC-1` | PENDENTE | PENDENTE | Abrir/play/pause/stop/seek/volume/shuffle/repeat operam |
-| `TASK-E02-03-AC-2` | PENDENTE | PENDENTE | resizing mínimo mantém targets e pipeline status. |
+| `TASK-E02-03-AC-1` | o Classic Stack com uma faixa aberta e o engine ligado por commands e events | cada ação do transporte é disparada pela UI e o evento correspondente é observado no barramento | Abrir/play/pause/stop/seek/volume/shuffle/repeat operam |
+| `TASK-E02-03-AC-2` | a janela redimensionada para 480x660, o mínimo declarado na spec de layouts | cada região do layout é medida e o pipeline de status é lido | resizing mínimo mantém targets e pipeline status. |
 
 ## Verificação
 

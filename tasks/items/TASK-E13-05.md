@@ -40,11 +40,11 @@ Shell Compose com tokens compartilhados, transporte/fila/EQ básico e TalkBack.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E13-05-AC-1` | PENDENTE | PENDENTE | Targets de 48 dp |
-| `TASK-E13-05-AC-2` | PENDENTE | PENDENTE | fonte 200% faz reflow |
-| `TASK-E13-05-AC-3` | PENDENTE | PENDENTE | nenhuma fila duplicada |
-| `TASK-E13-05-AC-4` | PENDENTE | PENDENTE | back/rotation não reiniciam áudio |
-| `TASK-E13-05-AC-5` | PENDENTE | PENDENTE | paleta e geometria phone conferidas. |
+| `TASK-E13-05-AC-1` | o shell Compose num telefone com a densidade mais alta suportada | a árvore de layout é medida | Targets de 48 dp |
+| `TASK-E13-05-AC-2` | a tela de transporte e fila com o tamanho de fonte do sistema em 200% | a tela é medida e percorrida com TalkBack | fonte 200% faz reflow |
+| `TASK-E13-05-AC-3` | a Activity recriada por rotação com o serviço tocando | a fila exibida é comparada com o snapshot do engine | nenhuma fila duplicada |
+| `TASK-E13-05-AC-4` | a reprodução correndo durante uma rotação e um back | a posição e o device frame são lidos antes e depois | back/rotation não reiniciam áudio |
+| `TASK-E13-05-AC-5` | o gabarito phone do pacote de referência e a tela renderizada | a paleta e a geometria são comparadas | paleta e geometria phone conferidas. |
 
 ## Verificação
 

@@ -40,9 +40,9 @@ Mapa de cada recurso web usado pelo MVP para o equivalente nativo em Windows, Li
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-15-AC-1` | PENDENTE | PENDENTE | Zero lacunas sem plano |
-| `TASK-E02-15-AC-2` | PENDENTE | PENDENTE | exceções só para APIs intrínsecas do navegador com comportamento reimplementado |
-| `TASK-E02-15-AC-3` | PENDENTE | PENDENTE | toda biblioteca nova tem repositório git próprio e modular. |
+| `TASK-E02-15-AC-1` | o inventário de cada recurso web usado pelo MVP, extraído do pacote no SHA do pin | cada recurso é mapeado para o equivalente nativo em Windows, Linux, macOS e Android e confrontado com o inventário | Zero lacunas sem plano |
+| `TASK-E02-15-AC-2` | os recursos que não têm equivalente nativo direto | cada exceção é classificada como API intrínseca do navegador ou lacuna a resolver | exceções só para APIs intrínsecas do navegador com comportamento reimplementado |
+| `TASK-E02-15-AC-3` | uma lacuna cuja única saída é uma biblioteca nova | o plano da biblioteca é escrito e o repositório próprio é criado sob jimmykedlyn | toda biblioteca nova tem repositório git próprio e modular. |
 
 ## Verificação
 

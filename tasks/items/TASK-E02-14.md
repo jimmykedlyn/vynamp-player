@@ -40,9 +40,9 @@ Roteiros de interação por teclado, ponteiro e toque com estado esperado e esqu
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-14-AC-1` | PENDENTE | PENDENTE | Cada controle do MVP tem roteiro com resultado verificável |
-| `TASK-E02-14-AC-2` | PENDENTE | PENDENTE | o esquema cobre todas as chaves lidas ou escritas |
-| `TASK-E02-14-AC-3` | PENDENTE | PENDENTE | nenhuma ação fica sem roteiro. |
+| `TASK-E02-14-AC-1` | o inventário de controles do MVP extraído do pacote no SHA do pin | cada controle recebe roteiro de teclado, ponteiro e toque com o estado esperado | Cada controle do MVP tem roteiro com resultado verificável |
+| `TASK-E02-14-AC-2` | todas as chaves de localStorage e os campos de preferência lidos ou escritos pelo MVP | o esquema de preferências é escrito com default, tipo e migração e confrontado com o inventário | o esquema cobre todas as chaves lidas ou escritas |
+| `TASK-E02-14-AC-3` | o inventário de ações do MVP e os roteiros de AC-1 | a cobertura é conferida ação a ação | nenhuma ação fica sem roteiro. |
 
 ## Verificação
 

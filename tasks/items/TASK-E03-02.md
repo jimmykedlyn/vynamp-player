@@ -40,9 +40,9 @@ Queue snapshot/revisions/seed/history/repeat/stop-after.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E03-02-AC-1` | PENDENTE | PENDENTE | Reorder playlist não muda queue |
-| `TASK-E03-02-AC-2` | PENDENTE | PENDENTE | shuffle sem reposição, Previous usa histórico |
-| `TASK-E03-02-AC-3` | PENDENTE | PENDENTE | explicit next vence repeat. |
+| `TASK-E03-02-AC-1` | uma playlist de dez faixas e a fila corrente com três faixas enfileiradas | a playlist é reordenada e o snapshot da fila é comparado com o anterior | Reorder playlist não muda queue |
+| `TASK-E03-02-AC-2` | a fila com 50 faixas, shuffle ligado e a seed registrada | a fila é percorrida inteira e Previous é acionado depois de cada avanço | shuffle sem reposição, Previous usa histórico |
+| `TASK-E03-02-AC-3` | repeat ligado no modo all e uma faixa marcada como próxima explícita | a faixa corrente termina e o engine pede a próxima | explicit next vence repeat. |
 
 ## Verificação
 

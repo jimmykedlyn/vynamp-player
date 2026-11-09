@@ -40,10 +40,10 @@ Serviço foreground proprietário da reprodução, Player adapter, notificação
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E13-02-AC-1` | PENDENTE | PENDENTE | Activity não é owner do áudio |
-| `TASK-E13-02-AC-2` | PENDENTE | PENDENTE | lockscreen/play/pause usam fila única Rust |
-| `TASK-E13-02-AC-3` | PENDENTE | PENDENTE | cleanup idempotente |
-| `TASK-E13-02-AC-4` | PENDENTE | PENDENTE | serviço segue restrições do SDK. |
+| `TASK-E13-02-AC-1` | o app tocando e a Activity destruída por rotação | a reprodução é observada depois do onDestroy da Activity | Activity não é owner do áudio |
+| `TASK-E13-02-AC-2` | a MediaSession publicada e a fila em Rust como fonte única de verdade | play, pause e next são acionados pelo lockscreen e pelo headset | lockscreen/play/pause usam fila única Rust |
+| `TASK-E13-02-AC-3` | o serviço em execução com o engine aberto | o onDestroy do serviço roda duas vezes seguidas | cleanup idempotente |
+| `TASK-E13-02-AC-4` | o target SDK do app e o serviço foreground declarado no manifesto | o serviço é iniciado a partir do background e a partir do foreground | serviço segue restrições do SDK. |
 
 ## Verificação
 

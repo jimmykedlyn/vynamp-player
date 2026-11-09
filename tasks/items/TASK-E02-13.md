@@ -40,9 +40,9 @@ Transições CSS, séries rAF sob sinais determinísticos, constantes de Analyse
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E02-13-AC-1` | PENDENTE | PENDENTE | Cada animação do MVP tem duração, easing e keyframes ou série temporal |
-| `TASK-E02-13-AC-2` | PENDENTE | PENDENTE | medidores e ondas respondem a degrau, seno e rajada com tolerância documentada |
-| `TASK-E02-13-AC-3` | PENDENTE | PENDENTE | Web Audio entra só como comportamento reimplementável. |
+| `TASK-E02-13-AC-1` | a folha de estilo do MVP e um sinal determinístico injetado em requestAnimationFrame | cada transição observável é medida quanto a duração, easing e keyframes ou série temporal | Cada animação do MVP tem duração, easing e keyframes ou série temporal |
+| `TASK-E02-13-AC-2` | o medidor e o visualizador de onda do MVP recebendo degrau, seno e rajada sintéticos | os parâmetros do AnalyserNode, a balística e a resposta de cada sinal são registrados com a tolerância observada | medidores e ondas respondem a degrau, seno e rajada com tolerância documentada |
+| `TASK-E02-13-AC-3` | cada uso de Web Audio do MVP identificado na varredura | o uso é traduzido para um comportamento descrito em formato consumível pelo Rust | Web Audio entra só como comportamento reimplementável. |
 
 ## Verificação
 
