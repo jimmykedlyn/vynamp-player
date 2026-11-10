@@ -63,4 +63,28 @@ Spike Wasmtime/WIT com limites de memória, fuel, interruption e ADR-004.
 - [ ] PR aberto com template preenchido; CI Gate verde no SHA final
 ## Notas de execução
 
-Preenchido durante a execução, não antes.
+Medido em 2026-11-09. **Esta TASK não foi executada: não havia o que executar.**
+
+| Medição | Resultado |
+|---|---|
+| Tamanho do repo | `wc -l src/*.rs` → **3 linha(s)**, contendo só `pub const VERSION` e o comentário de módulo. `src/` tem 1 arquivo(s) |
+| Worktree suja? | Não: `git status --short` limpo antes da medição |
+| Especificação do módulo | `apps/player/specs/plugins.md` — **especificação proposta, implementação não iniciada** |
+
+O critério de aceite abaixo exige um host Wasmtime com fuel e limite de memória, um módulo que estoura cada limite, um módulo que tenta abrir arquivo e soquete, e medição de memória/start sem runtime carregado. Nenhum dos dois existe neste
+repositório: não há código para compilar, medir, interromper ou comparar bit a bit.
+Registrar uma nota de execução dizendo que o critério foi verificado seria falsear
+a evidência — então a TASK permanece `planned` e esta nota registra o motivo
+medido, não um resultado.
+
+**Por que o motivo é o repo vazio e não uma limitação de ambiente:** uma limitação
+de ambiente (hardware ausente, linker ausente) aparece como comando que falha. Aqui
+os comandos não têm alvo: não há função a chamar, nenhum crate de terceiro no
+`[dependencies]` para exercer. O que falta é implementação.
+
+**O que destrava:** adicionar `wasmtime` como dependência, escrever o host de plugins e os módulos `.wasip1`/WIT de teste. `apps/player` hoje é um `main` que imprime a versão; não há host, não há dependência, não há módulo
+
+**Custo de registrar assim:** se o mantenedor esperava que o spike M0 desta TASK
+fosse escrito nesta rodada do passo 42, ele não foi — o passo 42 mede e registra o
+estado, não implementa. Nenhum estado mudou: `tasks/backlog.json` continua com esta
+TASK em `planned`.
