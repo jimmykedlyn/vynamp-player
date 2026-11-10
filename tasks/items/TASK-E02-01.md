@@ -1,9 +1,8 @@
 # TASK-E02-01 — Validar toolkit Rust com UI clássica acessível
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,13 @@ Spike desktop egui/AccessKit em Windows/Linux/macOS Intel+Silicon, com Classic e
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** escolhe o toolkit. Compara egui/AccessKit com a alternativa e entrega a
+  evidência para a ADR-003; a decisão é do mantenedor, e um spike que "já decidiu"
+  não tem o que comparar.
+- **Não** porta o MVP. Tokens, painéis e movimento são `TASK-E02-02` em diante.
+- **Não** promete acessibilidade em Android: TalkBack é `TASK-E13-05`, e o mesmo
+  código de UI não roda nas duas plataformas.
+- **Não** mede áudio. O spike é de interface; a cadeia de playback é `TASK-E01-03`.
 
 ## Antes de começar
 
@@ -49,8 +54,8 @@ Spike desktop egui/AccessKit em Windows/Linux/macOS Intel+Silicon, com Classic e
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` em `vynamp-player` sobre o spike, mais NVDA e VoiceOver percorrendo as três telas de amostra em Windows e macOS | o checklist de leitor de tela é preenchido por alvo, com o que falhou nomeado; hoje o crate só imprime a versão e não há esse teste |
+| Hardware | uma máquina Windows e uma macOS com leitor de tela; **nenhuma** das duas está disponível neste ambiente, que é Windows sem NVDA instalado | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

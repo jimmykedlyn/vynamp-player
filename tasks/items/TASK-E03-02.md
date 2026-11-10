@@ -1,9 +1,8 @@
 # TASK-E03-02 — Implementar queue independente e shuffle
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,13 @@ Queue snapshot/revisions/seed/history/repeat/stop-after.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** persiste a fila no banco. O snapshot vive em memória com revisão; a
+  restauração entre sessões é `TASK-E13-05` e o restore de fila é `TASK-E10-*`.
+- **Não** toca áudio. Emite a próxima entrada e o engine `TASK-E01-03` toca.
+- **Não** decide o algoritmo de shuffle além do seed documentado: reprodutibilidade
+  com o mesmo seed é o contrato, e a distribuição é medida.
+- **Não** implementa repeat de faixa única nem stop-after em UI: a regra é aqui, o
+  controle é `TASK-E02-03`.
 
 ## Antes de começar
 
@@ -49,8 +54,8 @@ Queue snapshot/revisions/seed/history/repeat/stop-after.
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` sobre a fila com seed fixo, revisões incrementais e as combinações de repeat/stop-after, comparando duas execuções do mesmo seed | o mesmo seed produz a mesma ordem e cada mutação incrementa a revisão; hoje a fila não existe no crate |
+| Hardware | nenhum: a fila é determinística por seed | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

@@ -1,9 +1,8 @@
 # TASK-E02-13 — Gerar gabarito de movimento, medidores e ondas
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,13 @@ Transições CSS, séries rAF sob sinais determinísticos, constantes de Analyse
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** inventa curva de medidor. As constantes vêm de `AnalyserNode` e da
+  balística medidas no MVP, e o formato é o que o Rust consome.
+- **Não** implementa o visualizador: `TASK-E17-09` e `TASK-E17-10`.
+- **Não** congela o instante da captura: atributo animado por script é gravado em
+  repouso e listado em `neutralized`, para o arquivo não depender do momento.
+- **Não** reextrai as curvas de DSP: `out/svg/meters/dynamic.json` registra quais
+  elementos animam, e as curvas pertencem a esta TASK, não ao pacote de `E02-11`.
 
 ## Antes de começar
 
@@ -49,8 +54,8 @@ Transições CSS, séries rAF sob sinais determinísticos, constantes de Analyse
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | o gerador de séries `rAF` sob sinais determinísticos, comparado contra as transições CSS e as constantes de `AnalyserNode` do MVP | as séries são reproduzíveis entre duas execuções e batem com o MVP dentro da tolerância declarada; hoje não há gerador nem comparação no repo |
+| Hardware | nenhum: as séries são numéricas e não dependem de GPU real | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

@@ -1,9 +1,8 @@
 # TASK-E02-11 — Congelar MVP de referência e extrair SVGs, ícones e temas
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,14 @@ Pacote assets/reference/mvp com MVP rev.37 congelado por hash, 12 temas resolvid
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** copia nenhum arquivo do MVP para este repositório. A spec cita URL, SHA e
+  caminho no repositório de referência, e o código do MVP não é código de produto.
+- **Não** congela a rev.37 como fonte atual. O pacote registra que a extração foi
+  feita sobre a rev.37 e que a rev.38 (`0d9860b`) é a fonte; reescrever o histórico
+  para "rev.38" apagaria a diferença que a reextração precisa explicar.
+- **Não** extrai movimento, medidores nem comportamento: `TASK-E02-13` e `TASK-E02-14`.
+- **Não** aceita o pacote antigo com `SOURCE.json`. O pin virou `tools/pin.cjs`, e o
+  repositório não recebe o formato anterior.
 
 ## Antes de começar
 
@@ -51,8 +57,8 @@ Pacote assets/reference/mvp com MVP rev.37 congelado por hash, 12 temas resolvid
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `npm run verify` no `vynamp-mvp-reference` no pin `0d9860b`, que reextrai para um diretório temporário e compara byte a byte com `out/` | a comparação fecha em 499 arquivos e 0 diferem na rev.38; uma diferença de cobertura aparece em `out/svg/rendered/click-failures.json`. Esta TASK está `implemented` e o número acima é o da rev.38, não uma medição nova |
+| Hardware | nenhum: a extração é reprodutível a partir dos blobs do commit | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

@@ -1,9 +1,8 @@
 # TASK-E07-01 — Provar sandbox WASM e capabilities
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,12 @@ Spike Wasmtime/WIT com limites de memória, fuel, interruption e ADR-004.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** escolhe o runtime de plugin. Compara Wasmtime/WIT com a alternativa e
+  entrega a evidência para a ADR-004.
+- **Não** implementa o SDK nem o registry: `TASK-E07-*` seguintes e `TASK-E09-09`.
+- **Não** promete sandbox em Android ou iOS: o spike é de desktop, e no iOS plugin de
+  terceiro está fora de escopo por `platforms/05-ios.md`.
+- **Não** mede áudio em tempo real: mede limites de memória, fuel e interrupção.
 
 ## Antes de começar
 
@@ -49,8 +53,8 @@ Spike Wasmtime/WIT com limites de memória, fuel, interruption e ADR-004.
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` sobre o spike com um módulo que estoura memória, um que consome fuel até o teto e um que é interrompido no meio | os três terminam com erro tipado e o host sobrevive; hoje não há spike nem teste no crate do player |
+| Hardware | nenhum: o sandbox é medido em processo e o limite é do runtime | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

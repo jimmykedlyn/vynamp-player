@@ -1,9 +1,8 @@
 # TASK-E02-12 — Gerar gabarito visual e estratégia de fontes
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,11 @@ Capturas por tema, layout, largura e estado com dump de geometria e estilo por e
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa as telas. Produz o gabarito contra o qual `TASK-E02-16` compara.
+- **Não** escolhe fonte por conta própria: entrega a estratégia com licença por
+  plataforma, e a escolha final é do mantenedor.
+- **Não** cobre movimento nem medidores: `TASK-E02-13`.
+- **Não** mede DPI além de 100/125/150/200 nem layout além dos que a spec lista.
 
 ## Antes de começar
 
@@ -49,8 +52,8 @@ Capturas por tema, layout, largura e estado com dump de geometria e estilo por e
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | o gerador de captura, rodado sobre a rev.38, com dump de geometria e estilo por elemento e a fonte efetiva por nó | cada combinação de tema, layout, largura e estado tem captura e dump; hoje o gerador não existe no repo do player |
+| Hardware | nenhum: a captura é feita sobre o MVP de referência, sem dispositivo de áudio | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

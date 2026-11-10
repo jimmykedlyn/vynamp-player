@@ -1,9 +1,8 @@
 # TASK-E13-03 — Entregar audio focus e rotas Android
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,12 @@ AudioManager, foco/noisy/Bluetooth e output clock com formato negociado.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** escolhe o backend de saída. AAudio veio de `TASK-E13-01`; esta TASK trata
+  foco, ruído e rota.
+- **Não** implementa a sessão de mídia: `TASK-E13-02`.
+- **Não** promete latência de desktop: a meta é medida no aparelho de referência.
+- **Não** cobre Bluetooth de áudio de alta qualidade além do que o codec do sistema
+  entrega: SBC/AAC são o padrão e LDAC é do aparelho.
 
 ## Antes de começar
 
@@ -50,8 +54,8 @@ AudioManager, foco/noisy/Bluetooth e output clock com formato negociado.
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` das transições de foco e uma passada com fone com fio, Bluetooth e chamada telefônica, lendo `AudioManager` no log | cada transição aparece no log com o estado esperado e o clock negociado é o do formato; hoje nenhuma TASK de Android tem código no repo |
+| Hardware | aparelho Android real com fone Bluetooth e outro com fio; **nenhum** disponível | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 
