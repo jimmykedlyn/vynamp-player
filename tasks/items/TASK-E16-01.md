@@ -63,4 +63,28 @@ Contrato OpenRequest, limites e spikes de entrega nativa em cinco alvos.
 - [ ] PR aberto com template preenchido; CI Gate verde no SHA final
 ## Notas de execução
 
-Preenchido durante a execução, não antes.
+Medido em 2026-11-09. **Esta TASK não foi executada: não havia o que executar.**
+
+| Medição | Resultado |
+|---|---|
+| Tamanho do repo | `wc -l src/*.rs` → **3 linha(s)**, contendo só `pub const VERSION` e o comentário de módulo. `src/` tem 1 arquivo(s) |
+| Worktree suja? | Não: `git status --short` limpo antes da medição |
+| Especificação do módulo | `platforms/04-ativacao-ownership.md` — **especificação proposta, implementação não iniciada** |
+
+O critério de aceite abaixo exige o contrato `OpenRequest` implementado com limites, e cold/warm mais lotes 1/2/20/100 preservando ordem nos cinco alvos. Nenhum dos dois existe neste
+repositório: não há código para compilar, medir, interromper ou comparar bit a bit.
+Registrar uma nota de execução dizendo que o critério foi verificado seria falsear
+a evidência — então a TASK permanece `planned` e esta nota registra o motivo
+medido, não um resultado.
+
+**Por que o motivo é o repo vazio e não uma limitação de ambiente:** uma limitação
+de ambiente (hardware ausente, linker ausente) aparece como comando que falha. Aqui
+os comandos não têm alvo: não há função a chamar, nenhum crate de terceiro no
+`[dependencies]` para exercer. O que falta é implementação.
+
+**O que destrava:** implementar o handler de `OpenRequest` (o schema existe em `schemas/open-request.schema.json` e é validado pelo `xtask`, mas não há servidor) e ter os cinco alvos instaláveis para medir cold/warm. Sem app não há ativação a medir
+
+**Custo de registrar assim:** se o mantenedor esperava que o spike M0 desta TASK
+fosse escrito nesta rodada do passo 42, ele não foi — o passo 42 mede e registra o
+estado, não implementa. Nenhum estado mudou: `tasks/backlog.json` continua com esta
+TASK em `planned`.

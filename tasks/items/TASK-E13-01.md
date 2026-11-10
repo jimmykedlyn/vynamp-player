@@ -64,4 +64,28 @@ Spike NDK/ABI Rust, ownership de buffers, AAudio direto (vynamp-output) e adapte
 - [ ] PR aberto com template preenchido; CI Gate verde no SHA final
 ## Notas de execução
 
-Preenchido durante a execução, não antes.
+Medido em 2026-11-09. **Esta TASK não foi executada: não havia o que executar.**
+
+| Medição | Resultado |
+|---|---|
+| Tamanho do repo | `wc -l src/*.rs` → **3 linha(s)**, contendo só `pub const VERSION` e o comentário de módulo. `src/` tem 1 arquivo(s) |
+| Worktree suja? | Não: `git status --short` limpo antes da medição |
+| Especificação do módulo | `platforms/02-android.md` — **especificação proposta, implementação não iniciada** |
+
+O critério de aceite abaixo exige tocar WAV/FLAC em aparelho arm64 real, callback AAudio sem JNI/alloc, build nativo compatível com requisitos de página, e comparação de lifecycle com Media3. Nenhum dos dois existe neste
+repositório: não há código para compilar, medir, interromper ou comparar bit a bit.
+Registrar uma nota de execução dizendo que o critério foi verificado seria falsear
+a evidência — então a TASK permanece `planned` e esta nota registra o motivo
+medido, não um resultado.
+
+**Por que o motivo é o repo vazio e não uma limitação de ambiente:** uma limitação
+de ambiente (hardware ausente, linker ausente) aparece como comando que falha. Aqui
+os comandos não têm alvo: não há função a chamar, nenhum crate de terceiro no
+`[dependencies]` para exercer. O que falta é implementação.
+
+**O que destrava:** um aparelho Android arm64 físico — que não está disponível nesta máquina — mais o adapter AAudio em `vynamp-output` (hoje só existe `NullHost`) e o crate de plataforma Android em `apps/player`. Faltam código, hardware e NDK
+
+**Custo de registrar assim:** se o mantenedor esperava que o spike M0 desta TASK
+fosse escrito nesta rodada do passo 42, ele não foi — o passo 42 mede e registra o
+estado, não implementa. Nenhum estado mudou: `tasks/backlog.json` continua com esta
+TASK em `planned`.
