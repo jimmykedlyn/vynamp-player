@@ -1,9 +1,8 @@
 # TASK-E06-06 — Entregar visualizações avançadas
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,11 @@ Espectrograma, partículas, fullscreen, presets e fallback de CPU.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** define o catálogo de presets por binding nem a política de taps. O dono é `TASK-E17-09`, que esta TASK bloqueia; aqui existe o executor de preset e a recusa de shader, não o catálogo.
+- **Não** faz o editor de tokens e layout nem o preview por DPI, densidade e estado. O dono é `TASK-E06-07`, que depende desta TASK; fullscreen e preview parecem o mesmo trabalho e não são.
+- **Não** implementa a FFT, o VU, o espectro e o osciloscópio base. O dono é `TASK-E06-05`, dependência desta TASK; aqui se consome o sinal do canal de observação e não se refaz a transformada.
+- **Não** valida fidelidade visual com `egui_kittest` nem contra screenshots de referência. O dono é `TASK-E06-10`; um teste de fumaça de fallback não aprova fidelidade de layout.
+- **Não** define docking nem persistência de posição entre monitores. O dono é `TASK-E02-08`; entrar e sair de fullscreen muda a janela, mas restaurar multi-monitor é outro contrato.
 
 ## Antes de começar
 
@@ -40,17 +43,17 @@ Espectrograma, partículas, fullscreen, presets e fallback de CPU.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E06-06-AC-1` | PENDENTE | PENDENTE | GPU indisponível não interrompe áudio |
-| `TASK-E06-06-AC-2` | PENDENTE | PENDENTE | Escape sai do fullscreen |
-| `TASK-E06-06-AC-3` | PENDENTE | PENDENTE | presets não executam shaders arbitrários. |
+| `TASK-E06-06-AC-1` | app iniciado com o backend de renderização forçado a falhar na criação do adapter (`WGPU_BACKEND=null`) e uma faixa de 48 kHz tocando desde o início | o visualizador é aberto em fullscreen e 30 s de reprodução são observados até o fim | GPU indisponível não interrompe áudio |
+| `TASK-E06-06-AC-2` | visualizador em fullscreen num monitor de 2560x1440 com escala 100%, janela do player com foco de teclado e nenhum diálogo modal aberto | a tecla Escape é pressionada uma vez no teclado | Escape sai do fullscreen |
+| `TASK-E06-06-AC-3` | pacote `evil.vyntheme` cujo manifest declara `shader: assets/evil.wgsl`, fora do catálogo allowlisted de presets builtin (`bars`, `wave`, `particles`) | o pacote é importado pela galeria e o preset declarado nele é ativado no visualizador | presets não executam shaders arbitrários. |
 
 ## Verificação
 
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | cargo test --test viz_presets (fixtures: `fixtures/viz/evil.vyntheme` com `shader: assets/evil.wgsl`, um `evil.wgsl` de 3 KiB no pacote e o preset builtin `bars`) | hoje não existe renderer: o repo tem 1 arquivo `.rs` com `println!("vynamp_player 0.1.0")`, zero dependências e nenhum `tests/`; a evidência exigida é 0 interrupções no áudio e 0 xruns em 30 s com adapter nulo mais exatamente 1 aviso de fallback para CPU no log, saída de fullscreen com 1 evento de Escape devolvendo a janela a 1280x720, e rejeição de `evil.vyntheme` com 0 arquivos `.wgsl` do pacote compilados. |
+| Hardware | nenhum: a indisponibilidade de GPU é simulada por `WGPU_BACKEND=null` e a tela por uma janela winit em 1280x720; nenhum dos três critérios depende de GPU física desta máquina, de tela adicional ou de dispositivo de áudio. | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 
