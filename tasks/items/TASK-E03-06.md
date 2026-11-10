@@ -1,9 +1,8 @@
 # TASK-E03-06 — Entregar playlists import/export e CUE
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,11 @@ M3U/M3U8/PLS/XSPF/CUE, relative locators e virtual ranges.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa smart playlists nem o AST allowlisted de filtro; a smart playlist é TASK-E03-07, e uma playlist importada aqui é lista estática de locators, sem regra que se reavalie.
+- **Não** implementa a fila, o shuffle nem a persistência de QueueSession; fila e shuffle são TASK-E03-02, e o importador entrega entradas de playlist, não o estado de reprodução.
+- **Não** escreve tags nos arquivos nem converte o CUE em arquivos separados no disco; escrita em lote é TASK-E03-08, e aqui o range CUE é virtual por cima do mesmo media asset.
+- **Não** faz playback nem seek dentro dos virtual ranges; quem consome os offsets é a fila de TASK-E03-02, e esta TASK só prova que os offsets em 75 fps estão corretos.
+- **Não** deduplica nem reorganiza os arquivos referenciados por uma playlist; organização e dedupe são TASK-E08-04, e mover o arquivo por baixo de um locator relativo é exatamente o que a exportação relativa evita.
 
 ## Antes de começar
 
@@ -40,18 +43,18 @@ M3U/M3U8/PLS/XSPF/CUE, relative locators e virtual ranges.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E03-06-AC-1` | PENDENTE | PENDENTE | Loop de playlists bloqueado |
-| `TASK-E03-06-AC-2` | PENDENTE | PENDENTE | CUE75fps preserva offsets |
-| `TASK-E03-06-AC-3` | PENDENTE | PENDENTE | export sem token |
-| `TASK-E03-06-AC-4` | PENDENTE | PENDENTE | undo/redo100 ops da sessão. |
+| `TASK-E03-06-AC-1` | quatro fixtures de playlist: a.m3u8 apontando para b.m3u8, b.m3u8 apontando de volta para a.m3u8, self.m3u8 referenciando a si mesma e uma cadeia de 40 playlists encadeadas terminando em 5 faixas | o importador de playlists resolve as referências a partir de a.m3u8, de self.m3u8 e do topo da cadeia de 40 | Loop de playlists bloqueado |
+| `TASK-E03-06-AC-2` | um CUE sheet com 6 TRACKs sobre um FLAC de 44,1 kHz, com INDEX 00 03:27:22 e INDEX 01 03:27:37 na TRACK 02 e TRACK 03 começando em 03:45:07 | o importador cria os virtual ranges e cada faixa é aberta pelo range, com offset de início, offset de fim e duração reportados | CUE75fps preserva offsets |
+| `TASK-E03-06-AC-3` | uma playlist de 150 entradas cujos paths contêm &, # e nomes em japonês, com um token de sessão de 32 bytes presente no estado em memória do player | o usuário exporta a playlist para .m3u8, .pls e .xspf em D:\exports\ e os três arquivos são lidos de volta byte a byte | export sem token |
+| `TASK-E03-06-AC-4` | uma playlist com 200 entradas e revision 0, aberta na sessão atual | o harness aplica 100 operações de inserir, remover e reordenar, depois 100 undos seguidos de 100 redos, e compara o estado após cada passo | undo/redo100 ops da sessão. |
 
 ## Verificação
 
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | cargo test -p vynamp-player --test playlist_io com as fixtures tests/fixtures/playlists/loop (a, b, self e cadeia de 40), tests/fixtures/cue/six-tracks.cue sobre um FLAC de 44,1 kHz e um log de 100 operações de edição reaplicado em undo e redo | espera-se Cycle detectado em 2 saltos com 0 itens importados e nenhuma recursão acima de 3 níveis; TRACK 02 com INDEX 01 em 15562 frames e início no sample 9.150.456 do FLAC de 44,1 kHz (588 samples por frame) e TRACK 03 em 16882 frames e sample 9.926.616, com soma das 6 durações igual à duração total do arquivo a menos de 588 samples; os três arquivos exportados sem a string do token e reimportáveis com os mesmos 150 locators; 100 undos levando revision de 100 a 0 com as 200 entradas na ordem original e 100 redos voltando a revision 100. Hoje o repo vynamp-player tem 1 arquivo .rs (src/main.rs) com println!("vynamp_player 0.1.0"), zero dependências e nenhum tests/, então nem parser de M3U, nem de CUE, nem modelo de revision existem. |
+| Hardware | nenhum: playlists e CUE são texto e o container de teste é um FLAC gerado no próprio teste, sem placa de áudio no caminho | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

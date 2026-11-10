@@ -1,9 +1,8 @@
 # TASK-E08-04 — Entregar organização de arquivos e dedupe
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,12 @@ Templates seguros, plano de renomeação, detecção de colisão e dedupe com pr
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa a escrita das tags que alimentam o template. O fluxo de write em lote é de `TASK-E03-08`; aqui o template lê tags já existentes, e corrigir o valor para melhorar o nome do arquivo faria dois donos do write — a confusão é plausível porque organizar a pasta costuma vir junto com corrigir metadado.
+- **Não** implementa a consulta, o FTS nem os filtros que o dedupe usa para agrupar. O dono é `TASK-E03-05`, dependência declarada; esta TASK consome o conjunto de faixas já consultado e trazer a consulta para cá duplicaria o schema.
+- **Não** implementa o import incremental nem a detecção de root offline que reconcilia o arquivo movido. O dono é `TASK-E03-03`; o AC-3 exige que o `file_id` sobreviva ao move, não que a biblioteca redescubra arquivos por conta própria, e é fácil achar que mover implica reescanear a árvore.
+- **Não** executa a extração de faixas CUE nem o split de imagem única. O dono é `TASK-E03-06`; as duas coisas geram arquivos novos em disco a partir de um template de nome, então a confusão com renomear é plausível, mas aqui nenhum arquivo de áudio novo é criado.
+- **Não** converte formato durante a organização nem usa o registry de encoders. O dono é `TASK-E08-02`; a ferramenta de organizar aparece na mesma lista de ferramentas M3 que o conversor e o AC-2 fala em 12 MiB contra 11 MiB, o que parece divergência de formato e é só tamanho diferente.
+- **Não** implementa o gate de biblioteca grande nem o relatório de recovery pós-move. O dono é `TASK-E03-10`; o plano de renomeação de 100 mil arquivos e a retomada depois de interrupção pertencem a esse gate, não ao motor de template.
 
 ## Antes de começar
 
@@ -40,18 +44,18 @@ Templates seguros, plano de renomeação, detecção de colisão e dedupe com pr
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E08-04-AC-1` | PENDENTE | PENDENTE | Bloquear escape e nomes reservados |
-| `TASK-E08-04-AC-2` | PENDENTE | PENDENTE | não sobrescrever por padrão |
-| `TASK-E08-04-AC-3` | PENDENTE | PENDENTE | mover preserva identidade/bookmark |
-| `TASK-E08-04-AC-4` | PENDENTE | PENDENTE | duplicatas não são apagadas automaticamente. |
+| `TASK-E08-04-AC-1` | Um template `{album artist}/{album}/{track} - {title}.{ext}` e cinco FLAC de 1 MiB cujas tags produzem, depois da substituição, os nomes `../../evil.flac`, `CON.flac`, `NUL.flac`, `a:b.flac` e um título de 300 caracteres, numa árvore temporária NTFS com raiz em `D:\tmp\organize-root` no Windows 11. | O plano de renomeação é gerado em modo somente plano (dry-run) e depois aplicado sobre a árvore. | Bloquear escape e nomes reservados |
+| `TASK-E08-04-AC-2` | Uma raiz destino que já contém `Fixture Artist/Fixture Album/01 - Same Title.flac` de 12 MiB com hash SHA-256 diferente, e um arquivo de origem de 11 MiB cujo template resolve exatamente para esse mesmo caminho final. | O plano de organização é aplicado sem opção de overwrite habilitada. | não sobrescrever por padrão |
+| `TASK-E08-04-AC-3` | Uma faixa com `file_id` 4821 na biblioteca SQLite, bookmark de posição 123,4 s e rating 4, arquivo em `D:\Music\in\a.flac`, e uma regra de organização que move para `D:\Music\Artists\`. | O plano de renomeação e movimentação é aplicado e a biblioteca reconsulta a faixa pelo `file_id` 4821. | mover preserva identidade/bookmark |
+| `TASK-E08-04-AC-4` | Quatro arquivos numa raiz de teste: dois FLAC de 8 MiB byte a byte idênticos (mesmo SHA-256) e dois FLAC de 6 MiB com áudio decodificado igual mas tags diferentes (similaridade 0,98), sem hash de áudio comum. | O dedupe roda, agrupa as duplicatas exatas e prováveis e o usuário confirma o grupo na tela de preview. | duplicatas não são apagadas automaticamente. |
 
 ## Verificação
 
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test --test organize_dedupe` no repo `vynamp-player` sobre uma árvore montada em `D:\tmp\organize-root` com os cinco arquivos de tags hostis (`../../evil`, `CON`, `NUL`, `a:b`, título de 300 caracteres) e os quatro duplicados (2 exatos por SHA-256, 2 prováveis com similaridade 0,98), listando a árvore antes e depois com `Get-ChildItem -Recurse`. | 5 de 5 caminhos sanitizados, 0 arquivos criados fora de `D:\tmp\organize-root` (nenhum `evil.flac` no nível acima), 0 usos de `CON` e `NUL` preferidos a `_CON` e `_NUL`, 0 arquivos sobrescritos em 1 colisão de nome e 1 arquivo preservado com SHA-256 original de 12 MiB, 1 `file_id` 4821 ainda resolvendo para o caminho novo com bookmark de 123,4 s e rating 4 intactos, 0 deleções em 4 duplicatas e 4 entradas em quarentena. Hoje nada disso roda: o repo `vynamp-player` tem 1 arquivo `.rs` (`src/main.rs`) com um `println!` do texto `vynamp_player 0.1.0`, zero dependências e nenhum `tests/`, então não há runner, template nem banco para exercitar. |
+| Hardware | nenhum: tudo é filesystem local NTFS no Windows 11 x86_64, com a árvore de teste em diretório temporário; nenhum critério abre dispositivo de áudio, unidade removível ou compartilhamento de rede, e o comportamento de nome reservado depende só da API de arquivos do próprio Windows. | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

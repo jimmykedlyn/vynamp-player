@@ -1,9 +1,8 @@
 # TASK-E08-10 — Entregar controle remoto autenticado
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,12 @@ API local desligada por padrão, pairing e opção LAN com TLS/rate limits.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa casting, bridges Chromecast/UPnP/AirPlay nem o app companion. Isso é TASK-E12-09, que esta TASK bloqueia; `controle remoto` parece casting, mas aqui o cliente é um cliente HTTP qualquer contra a API local e a descoberta e os protocolos de mídia são lá.
+- **Não** implementa OIDC/PKCE, roles nem isolamento por conta do serviço Vynamp. Isso é TASK-E09-03; `token` e `revogação` aparecem nos dois escopos, e o token daqui é de pairing local, não credencial de conta na nuvem.
+- **Não** implementa o IPC de instância única nem os verbos `open/enqueue/diagnostics/validate`. Isso é TASK-E08-07, dependência direta; os dois canais coexistem na mesma máquina e quem executa tende a reusar o pipe para a API HTTP.
+- **Não** define o threat model do produto nem as regras gerais de fronteira de pacotes e sandbox. Isso é TASK-E11-02; TLS, rate limit e pairing parecem política de segurança global, mas aqui são propriedades de uma superfície concreta.
+- **Não** entrega tray, media keys, hotkeys globais nem SMTC. Isso é TASK-E08-06; `pause` e `play` remotos e `pause` por tecla de mídia parecem o mesmo caminho, e a integração com o SO tem dono separado.
+- **Não** configura proxy, túnel nem política de rede isolada para a opção LAN. Isso é TASK-E17-11; abrir a API em LAN exige regra de rede, e a regra de egress e proxy do processo inteiro é de lá.
 
 ## Antes de começar
 
@@ -40,17 +44,17 @@ API local desligada por padrão, pairing e opção LAN com TLS/rate limits.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E08-10-AC-1` | PENDENTE | PENDENTE | Cliente sem pairing não controla |
-| `TASK-E08-10-AC-2` | PENDENTE | PENDENTE | nenhum endpoint de shell/filesystem |
-| `TASK-E08-10-AC-3` | PENDENTE | PENDENTE | rotação e revogação de token funcionam. |
+| `TASK-E08-10-AC-1` | API local no estado padrão de instalação (`remote.enabled=false`) e, em seguida, ligada manualmente em `127.0.0.1:8731` com `remote.lan=false`, zero clientes pareados e rate limit de 5 tentativas de autenticação por minuto | um cliente HTTP envia `POST /v1/transport/play` sem cabeçalho de autorização, depois com um token de 32 bytes aleatórios nunca emitido e em seguida repete a chamada 10 vezes no mesmo minuto | Cliente sem pairing não controla |
+| `TASK-E08-10-AC-2` | servidor no ar com o documento de rotas publicado e o transporte em estado `playing` numa faixa local de 44,1 kHz | um cliente enumera as rotas publicadas e envia requisições para `/v1/exec`, `/v1/shell`, `/v1/fs/read` com `path=C:/Windows`, `/v1/fs/write` e `/v1/path/resolve` | nenhum endpoint de shell/filesystem |
+| `TASK-E08-10-AC-3` | dois clientes pareados A e B com tokens distintos de 32 bytes, rotação de token de A habilitada e B revogado entre duas chamadas consecutivas | o cliente A chama `POST /v1/transport/pause` com o token antigo e depois com o token rotacionado, e o cliente B chama a mesma rota com o token revogado | rotação e revogação de token funcionam. |
 
 ## Verificação
 
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test --test remote_api` no repo `vynamp-player` com o servidor iniciado em `127.0.0.1:8731` e um cliente de teste que faz as chamadas sem token, com token inventado, com token rotacionado e com token revogado, mais snapshot do documento de rotas gerado pelo binário | Hoje o repo `vynamp-player` tem 1 arquivo `.rs` (`src/main.rs`) com `println!("vynamp_player 0.1.0")`, zero dependências e nenhum `tests/`: não há servidor HTTP, rota, par TLS nem limitador de taxa, portanto o alvo de teste não compila e nenhuma destas chamadas tem onde chegar. Depois da TASK a evidência esperada é 0 rotas respondendo antes de `remote.enabled=true`, 401 nas 3 chamadas sem credencial válida com 0 mudanças de estado do transporte, 429 na sexta tentativa do mesmo minuto, 0 rotas de shell ou filesystem no documento publicado (grep de 0 correspondências para exec, shell, fs e path) e 404 nas 5 tentativas de caminho de arquivo, token antigo de A recusado com 401 logo após a rotação, token novo aceito com 200, e token revogado de B recusado com 403. |
+| Hardware | nenhum: cliente e servidor são processos na mesma máquina Windows 11 x86_64 em loopback, e a opção LAN/TLS é exercitada com certificado de teste local; não há placa de áudio, aparelho móvel nem segundo host envolvidos. | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

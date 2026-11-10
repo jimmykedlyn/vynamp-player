@@ -1,9 +1,8 @@
 # TASK-E08-06 — Integrar controles do Windows
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,12 @@ SMTC, media keys, tray/taskbar, hotkeys globais configuráveis e associações c
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa associações de arquivo, menu de contexto do Explorer nem pacotes de ícones no Windows. O dono é `TASK-E16-03`, que esta TASK bloqueia; o AC-3 fala de associação, então é muito plausível achar que o registro de ProgID e o menu de contexto entram aqui, e trazê-los faria dois donos das mesmas chaves.
+- **Não** implementa o owner único por perfil nem o protocolo de IPC autorizado entre instâncias. O dono é `TASK-E16-02`; o AC-1 pressupõe duas instâncias e uma delas dona, e a confusão é plausível porque a eleição de dono é o que garante que o SMTC aponte para a sessão certa.
+- **Não** implementa a CLI nem o encaminhamento de comandos da segunda instância para a primeira. O dono é `TASK-E08-07`, também bloqueada por esta TASK; aqui a bandeja e o tray só enviam comandos ao próprio processo, e a segunda instância chega por outro caminho.
+- **Não** implementa as janelas Mini, a tela de preferências nem os estados de erro da interface. O dono é `TASK-E02-06`, dependência declarada; esta TASK entrega o mecanismo de hotkey e tray e o AC-4 é exercitado pelo mapa salvo, não pelo formulário redesenhado.
+- **Não** implementa a integração equivalente no Linux (MIME, extensões de shell e abertura externa) nem no macOS. Os donos são `TASK-E16-04` e `TASK-E16-05`; ‘controles do sistema operacional’ soa multiplataforma, mas SMTC, tray do Windows e `RegisterHotKey` são só deste alvo e o código comum de atalho não deve prometer o que as outras TASKs decidem.
+- **Não** implementa deep links nem callbacks de provider que também abrem a instância. O dono é `TASK-E16-10`; a confusão é plausível porque registrar um app para receber ativação externa no Windows parece a mesma coisa que registrar hotkey global.
 
 ## Antes de começar
 
@@ -40,18 +44,18 @@ SMTC, media keys, tray/taskbar, hotkeys globais configuráveis e associações c
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E08-06-AC-1` | PENDENTE | PENDENTE | Controlar sessão correta |
-| `TASK-E08-06-AC-2` | PENDENTE | PENDENTE | close-to-tray explícito |
-| `TASK-E08-06-AC-3` | PENDENTE | PENDENTE | sem admin/associação involuntária |
-| `TASK-E08-06-AC-4` | PENDENTE | PENDENTE | detectar conflitos de hotkeys. |
+| `TASK-E08-06-AC-1` | Duas instâncias do binário no mesmo perfil do Windows 11: a instância 1 tocando `fixture-a.flac` e a instância 2, dona do IPC autorizado, tocando `fixture-b.flac`, com dois media players distintos publicados em SMTC. | Um `WM_APPCOMMAND` de pause é injetado na janela da sessão SMTC da instância 2 pelo flyout de mídia do Windows. | Controlar sessão correta |
+| `TASK-E08-06-AC-2` | Preferência `ação do botão fechar` definida como minimizar para a bandeja, opção de minimizar ao fechar desligada, janela principal visível e faixa tocando com o contador de reprodução em andamento. | O usuário clica no X da janela principal e depois aciona o ícone da bandeja uma vez. | close-to-tray explícito |
+| `TASK-E08-06-AC-3` | App instalado e rodando como usuário padrão no Windows 11, sem elevação e sem `runas`, com a opção de associação de arquivos nunca aceita e a árvore HKCU de associações intocada antes do primeiro start. | O app inicia, registra o SMTC e registra o ícone da bandeja, e em seguida o usuário abre a aba de associações sem confirmar nada. | sem admin/associação involuntária |
+| `TASK-E08-06-AC-4` | Um processo auxiliar já ocupa a hotkey global `Ctrl+Alt+V` por `RegisterHotKey` nesta sessão, e o mapa do app tem `Ctrl+Alt+V` para play e `Ctrl+Alt+Space` para próxima faixa, com `Ctrl+Alt+Space` livre. | O usuário salva o mapa de hotkeys globais pela tela de preferências. | detectar conflitos de hotkeys. |
 
 ## Verificação
 
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test --test windows_shell_integration` no repo `vynamp-player`, rodando em Windows 11 x86_64 com duas instâncias do binário, um processo auxiliar que segura `Ctrl+Alt+V` por `RegisterHotKey` e injeção de `WM_APPCOMMAND` de pause via `SendMessage` na janela da instância 2; conferir depois com `reg query HKCU\Software\Classes` e com a lista de janelas do processo. | 1 comando de pause entregue à instância 2 e 0 à instância 1, com 0 troca de faixa na instância 1; 1 janela escondida após o X e processo vivo com a reprodução em andamento, e 1 restauração de janela pelo ícone da bandeja; 0 chaves escritas em `HKCU\Software\Classes` para associação e 0 pedido de elevação no primeiro start; 1 conflito listado para `Ctrl+Alt+V` e 1 hotkey registrada para `Ctrl+Alt+Space`. Hoje nada disso roda: o repo `vynamp-player` tem 1 arquivo `.rs` (`src/main.rs`) com um `println!` do texto `vynamp_player 0.1.0`, zero dependências e nenhum `tests/`, então não há janela, tray, SMTC nem hotkey para exercitar. |
+| Hardware | Windows 11 x86_64 com User32, shell e SMTC disponível nesta máquina, mas parcial: não há teclado físico com teclas de mídia dedicadas nem um segundo aparelho Windows para o cenário de duas instâncias, então media keys são exercitadas por injeção de `WM_APPCOMMAND` e a segunda instância roda no mesmo host. | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 
