@@ -1,9 +1,8 @@
 # TASK-E02-02 — Implementar tokens e componentes semânticos
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,12 @@ Theme token loader builtin, buttons/sliders/list rows com estados completos.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** desenha as telas. Componentes e tokens são a base; as geometrias são
+  `TASK-E02-03` e `TASK-E02-04`.
+- **Não** copia o CSS do MVP. O contrato é o valor semântico (`surface.raised`,
+  `text.muted`), e o mapeamento de cada token está em `design/02-layouts.md`.
+- **Não** implementa tema de usuário nem editor: `TASK-E06-*` cuida disso.
+- **Não** cobre DPI além de 200%: a matriz de DPI testada é 100/125/150/200.
 
 ## Antes de começar
 
@@ -49,8 +53,8 @@ Theme token loader builtin, buttons/sliders/list rows com estados completos.
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` sobre o loader de tokens e uma passada visual por estado (hover, pressed, focused, disabled, selected) | cada um dos doze temas carrega e cada componente renderiza os cinco estados, conferidos contra os valores do token; hoje nenhum teste de UI existe no crate |
+| Hardware | nenhum: tokens e componentes são determinísticos e testáveis em processo | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

@@ -1,9 +1,8 @@
 # TASK-E16-01 — Provar envelope de ativação e protocolo comum
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,14 @@ Contrato OpenRequest, limites e spikes de entrega nativa em cinco alvos.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa `OpenRequest` no produto: fixa o envelope e os limites; quem o
+  serve é `TASK-E16-02` e o IPC do engine.
+- **Não** configura associações de arquivo: os menus por sistema são `TASK-E16-*`
+  seguintes e a spec `platforms/04-ativacao-ownership.md`.
+- **Não** inclui iOS: a FASE 6 é dona da ativação iOS, e a matriz desta TASK é a dos
+  cinco alvos de 1.0.
+- **Não** trata o handoff de `Windows.UI` nem de `NSDocumentController` em detalhe:
+  prova o spike de entrega em cada alvo e registra o que não foi provado.
 
 ## Antes de começar
 
@@ -49,8 +55,8 @@ Contrato OpenRequest, limites e spikes de entrega nativa em cinco alvos.
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | validação do exemplo contra `schemas/open-request.schema.json` em `cargo test -p xtask`, mais um spike de entrega por alvo dos cinco | o exemplo passa no schema e o limite de 1 MiB e de 8192 bytes de locator é exercitado; os spikes de entrega, porém, não foram executados e o repo registra isso em `90d7bf4` |
+| Hardware | os quatro alvos não-Windows: macOS, Linux e um aparelho Android; **nenhum** disponível, e a ausência está declarada no commit do repo | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

@@ -1,9 +1,8 @@
 # TASK-E16-02 — Implementar owner único por perfil e IPC autorizado
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,12 @@ Lock OS, encaminhamento IPC, idempotência e isolamento de perfis.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa o protocolo: `OpenRequest` é `TASK-E16-01`.
+- **Não** decide política de perfis além do owner único: quantos perfis existem e como
+  são nomeados é do mantenedor.
+- **Não** trata sync entre máquinas: `TASK-E09-08`.
+- **Não** promete lock entre sistemas de arquivos: o lock é de OS, e o que não for
+  atômico no alvo fica nomeado como limitação.
 
 ## Antes de começar
 
@@ -50,8 +54,8 @@ Lock OS, encaminhamento IPC, idempotência e isolamento de perfis.
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` no repo do player com vinte processos disputando o mesmo perfil e um lock stale de PID morto | um owner é eleito e o PID stale não autoriza reset; hoje o lock não existe e o crate não tem teste |
+| Hardware | nenhum para o lock; o teste é de processo concorrente na mesma máquina | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

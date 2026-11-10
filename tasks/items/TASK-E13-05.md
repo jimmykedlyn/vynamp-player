@@ -1,9 +1,8 @@
 # TASK-E13-05 — Entregar interface phone e navegação acessível
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,12 @@ Shell Compose com tokens compartilhados, transporte/fila/EQ básico e TalkBack.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** reusa a geometria do desktop: `platforms/01-matriz-suporte.md` §21 pede
+  compartilhar algoritmos e contratos, não copiar o layout.
+- **Não** entrega EQ avançado: o transporte e o EQ básico cabem aqui; a cadeia
+  completa é `TASK-E04-01`.
+- **Não** implementa biblioteca nem tags: a tela lê o que `TASK-E03-01` expõe.
+- **Não** valida áudio: a acessibilidade é de navegação e leitura.
 
 ## Antes de começar
 
@@ -51,8 +55,8 @@ Shell Compose com tokens compartilhados, transporte/fila/EQ básico e TalkBack.
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` no repo do player mais o Accessibility Scanner em viewport de telefone | cada controle é listado com nome e frame dentro do viewport e o TalkBack opera o transporte; hoje a shell Compose não existe |
+| Hardware | um aparelho Android real com TalkBack; **nenhum** disponível neste ambiente | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

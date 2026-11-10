@@ -1,9 +1,8 @@
 # TASK-E13-01 — Provar Android arm64, bridge Rust e output
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,13 @@ Spike NDK/ABI Rust, ownership de buffers, AAudio direto (vynamp-output) e adapte
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** porta o player para Android. Prova build, fronteira e saída; a UI é
+  `TASK-E13-05`.
+- **Não** decide Media3 contra AAudio: entrega a comparação e a decisão de runtime,
+  como o título diz.
+- **Não** usa a cadeia do desktop como prova: o `cargo check` do host passa e não diz
+  nada sobre `aarch64-linux-android`.
+- **Não** implementa serviço, foco nem sessão: `TASK-E13-02` e `TASK-E13-03`.
 
 ## Antes de começar
 
@@ -50,8 +55,8 @@ Spike NDK/ABI Rust, ownership de buffers, AAudio direto (vynamp-output) e adapte
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo check --workspace --locked --target aarch64-linux-android` no repo do player e `file` sobre o artefato, mais inspeção da callback em `simpleperf` | o artefato é ABI arm64-v8a e a callback aparece sem alocação no traço; hoje o repo não tem alvo Android configurado e o spike não foi executado |
+| Hardware | um aparelho Android arm64 real, além do NDK; **nenhum** disponível neste ambiente | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

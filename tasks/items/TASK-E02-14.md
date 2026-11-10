@@ -1,9 +1,8 @@
 # TASK-E02-14 — Gerar gabarito de comportamento e preferências
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,13 @@ Roteiros de interação por teclado, ponteiro e toque com estado esperado e esqu
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa preferências de usuário no produto: entrega o esquema com
+  defaults e migração; quem grava é `TASK-E02-06`.
+- **Não** decide atalhos que a spec não lista.
+- **Não** cobre toque no desktop: o roteiro de toque é o de Android e iOS, e os dois
+  são `TASK-E13-05` e `TASK-E20-03`.
+- **Não** mede acessibilidade: o roteiro descreve o estado esperado; a verificação
+  com leitor de tela é `TASK-E02-16` e os gates de plataforma.
 
 ## Antes de começar
 
@@ -49,8 +54,8 @@ Roteiros de interação por teclado, ponteiro e toque com estado esperado e esqu
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | o roteiro de interação, executado sobre o MVP de referência por teclado, ponteiro e toque, comparando o estado esperado com o observado | cada passo tem estado esperado e observado registrados; hoje o roteiro não existe no repo do player |
+| Hardware | um dispositivo Android para o roteiro de toque; **nenhum** disponível neste ambiente | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 
