@@ -43,10 +43,10 @@ Init/start/event/stop/unload, quotas, timeouts e estado do plugin.
 
 | ID | Given | When | Then |
 |---|---|---|---|
-| `TASK-E07-04-AC-1` | dois plugins de teste com relogio do host injetado, um cujo invoke entra em trap 3 vezes dentro de 60 s e outro que falha 2 vezes em 90 s | o host executa as chamadas e registra cada falha na janela deslizante de 60 s antes de decidir o estado de cada plugin | Três falhas em 60 s isolam plugin |
+| `TASK-E07-04-AC-1` | dois plugins de teste com relogio do host injetado, um cujo invoke entra em trap 3 vezes dentro de 60 s e outro que falha 2 vezes em 90 s | o host executa as chamadas dos dois plugins sobre o relogio injetado, avanca esse relogio e marca cada falha como ocorrida e consulta o estado de cada plugin depois de cada falha e ao fim da janela de 90 s | Três falhas em 60 s isolam plugin |
 | `TASK-E07-04-AC-2` | um plugin em estado Started com 64 MiB de memoria Wasm reservada, 2 handles de arquivo concedidos e 1 timer registrado, e em outra rodada o mesmo plugin ja saiu por trap | o host recebe stop e unload, repete cada um tres vezes e repete de novo depois do trap | cleanup é idempotente |
 | `TASK-E07-04-AC-3` | um plugin com os budgets da spec, 64 MiB de memoria, 10 chamadas concorrentes, payload de 1 MiB e taxa de 100 eventos por segundo | o gestor entrega 1 000 eventos em um segundo com payload de 1 MiB, dispara 11 chamadas concorrentes e, em seguida, uma chamada com payload de 2 MiB | floods são limitados |
-| `TASK-E07-04-AC-4` | o null host de vynamp-output renderizando um tom deterministico de crates/vynamp-output-testkit, com um plugin que falha pela terceira vez no meio de um evento | o plugin e isolado no instante da terceira falha e o host continua renderizando por mais 10 s de relogio do device | playback local continua. |
+| `TASK-E07-04-AC-4` | o null host de vynamp-output renderizando um tom deterministico de crates/vynamp-output-testkit, com um plugin que falha pela terceira vez no meio de um evento | o driver do null host roda o tom a partir do mesmo instante, a terceira falha acontece no meio de um evento e o render prossegue por mais 10 s de relogio do device, com o contador de frames lido ao fim de cada segundo | playback local continua. |
 
 ## Verificação
 
