@@ -1,9 +1,8 @@
 # TASK-E02-04 — Entregar playlist UI e keyboard workflow
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,11 @@ Lista virtualizada, drag insert, seleção, context menu e queue actions.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** constrói a fila. `TASK-E03-02` é dona do snapshot, revisões e seed; aqui
+  só se exibe e se emite intenção.
+- **Não** implementa drag entre janelas nem entre instâncias.
+- **Não** faz edição de tags: a lista mostra o que a biblioteca já leu.
+- **Não** decide atalhos novos. O mapa de teclado vem de `TASK-E02-14`.
 
 ## Antes de começar
 
@@ -48,8 +51,8 @@ Lista virtualizada, drag insert, seleção, context menu e queue actions.
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` sobre a lista virtualizada com 100 mil linhas sintéticas e um roteiro de teclado ponta a ponta | o número de linhas materializadas fica limitado ao viewport e o roteiro passa sem mouse; hoje não há lista nem teste no crate |
+| Hardware | nenhum: a lista é determinística e a virtualização é medida por contagem de nós | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

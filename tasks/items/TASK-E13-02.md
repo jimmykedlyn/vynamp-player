@@ -1,9 +1,8 @@
 # TASK-E13-02 — Entregar serviço e MediaSession com engine Rust
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,13 @@ Serviço foreground proprietário da reprodução, Player adapter, notificação
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** constrói a interface. A notificação e os controles são superfície do
+  sistema; a tela é `TASK-E13-05`.
+- **Não** decide foco nem rota: `TASK-E13-03`, e fazê-lo aqui duplicaria o dono do
+  `AudioManager`.
+- **Não** toca em biblioteca: `TASK-E03-01` é dona do banco.
+- **Não** trata conversor nem restaurador no mobile: os dois são apps separados, e o
+  build Android do player não os embarca.
 
 ## Antes de começar
 
@@ -50,8 +55,8 @@ Serviço foreground proprietário da reprodução, Player adapter, notificação
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` no repo do player para as quatro suítes de AC, mais `adb shell dumpsys media_session` com a Activity destruída por rotação | a sessão sobrevive ao `onDestroy` da Activity e o cleanup aparece idempotente no dumpsys; hoje o serviço não existe no repo |
+| Hardware | um aparelho Android real com lockscreen e fone Bluetooth; **nenhum** disponível | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

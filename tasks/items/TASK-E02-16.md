@@ -1,9 +1,8 @@
 # TASK-E02-16 — Implementar harness de fidelidade com egui_kittest
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,13 @@ Crate de testes que renderiza telas nativas e as compara com os gabaritos visual
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** roda no CI Gate. O harness depende de GPU e de captura, e o CI o marca
+  como não executado — `quality/01-estrategia-testes.md` pela QA-034 já registra isso.
+- **Não** aprova a fidelidade sozinho: compara com o gabarito e produz a diferença;
+  a decisão sobre tolerância é do mantenedor.
+- **Não** substitui a verificação em aparelho: compara render contra gabarito, não
+  áudio nem comportamento em hardware real.
+- **Não** cobre iOS, cuja UI é SwiftUI e não passa por este harness.
 
 ## Antes de começar
 
@@ -49,8 +54,8 @@ Crate de testes que renderiza telas nativas e as compara com os gabaritos visual
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test -p vynamp-player-harness -- --ignored` localmente, comparando cada tela com os gabaritos de `TASK-E02-12`, `E02-13` e `E02-14` | cada tela tem diferença calculada e a tolerância declarada; o CI Gate registra o harness como não executado em vez de verde. Hoje o crate não existe |
+| Hardware | uma GPU capaz de rodar o render de referência; a decisão de rodar localmente existe justamente porque o runner do CI não a tem | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

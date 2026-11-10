@@ -1,9 +1,8 @@
 # TASK-E03-01 — Implementar schema SQLite e migrations seguras
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,14 @@ Schema inicial, WAL, backup e write actor com migrations.
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa a fila. Snapshot, revisões e shuffle são `TASK-E03-02`; o
+  schema aqui é o da biblioteca, e a fila não é tabela.
+- **Não** escreve tag em arquivo: o write actor da biblioteca grava o banco; tag é
+  `TASK-E17-06`.
+- **Não** decide retenção de backup: entrega o mecanismo e o default; a política de
+  retenção é do mantenedor.
+- **Não** migra dados de outra ferramenta: não há importação de biblioteca alheia no
+  escopo.
 
 ## Antes de começar
 
@@ -49,8 +55,8 @@ Schema inicial, WAL, backup e write actor com migrations.
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | `cargo test` sobre migrations, com um banco de 100 mil linhas e um kill do processo no meio de uma escrita, seguido de reabertura | o WAL recupera sem perda e a migração é idempotente; hoje o crate do player não tem banco nem teste, e o `risco` alto desta TASK é o motivo de ela estar em M1 |
+| Hardware | nenhum: o banco é local e a corrupção é induzida por processo, não por energia | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 

@@ -1,9 +1,8 @@
 # TASK-E02-15 — Mapear lacunas web para nativo por plataforma
 
 > Gerado pelo passo 37 a partir de `tasks/backlog.json`. Os campos de estado vêm do
-> backlog e não devem ser editados aqui. Critério de aceite: **PENDENTE** de autoria —
-> a coluna `Then` é o requisito aprovado, copiado literal; `Given` e `When` ainda
-> não existem.
+> backlog e não devem ser editados aqui. A coluna `Then` é o requisito aprovado,
+> copiado literal do backlog; `Given` e `When` foram autorados na execução.
 
 | Campo | Valor |
 |---|---|
@@ -27,7 +26,13 @@ Mapa de cada recurso web usado pelo MVP para o equivalente nativo em Windows, Li
 
 ## Boundary
 
-<!-- PENDENTE: o que esta TASK não faz, mesmo parecendo relacionado. -->
+- **Não** implementa as bibliotecas que o mapa aponta como faltantes. Decide o que
+  precisa existir e onde; a construção é `TASK-E02-16` em diante ou repo próprio.
+- **Não** inclui iOS no mapa da 1.0. A coluna iOS entra com a FASE 6, e a
+  `platforms/05-ios.md` §1.2 já fixa que não há conversor nem restaurador no build iOS.
+- **Não** promete paridade onde a API não existe: a lacuna fica nomeada, não coberta
+  por um equivalente aproximado.
+- **Não** substitui a ADR de cada biblioteca nova.
 
 ## Antes de começar
 
@@ -49,8 +54,8 @@ Mapa de cada recurso web usado pelo MVP para o equivalente nativo em Windows, Li
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | PENDENTE | comparação numérica, não "parece certo" |
-| Hardware | PENDENTE | ausência é limitação registrada, não aprovação |
+| Oráculo independente | leitura do mapa contra a lista de APIs do MVP, item a item, com a coluna de equivalente nativo preenchida ou a lacuna declarada | nenhum recurso do MVP fica sem linha, e nenhuma linha afirma equivalente que o alvo não tem; hoje o mapa não existe no repo |
+| Hardware | nenhum: o mapa é documental | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
 
