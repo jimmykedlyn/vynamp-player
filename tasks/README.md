@@ -1,6 +1,6 @@
 # tasks — vynamp-player
 
-92tarefa(s) do backlog de produto com este repo como dono.
+98tarefa(s) do backlog de produto com este repo como dono.
 
 | ID | Título | Módulo dono | Estado |
 |---|---|---|---|
@@ -97,5 +97,11 @@
 | `TASK-E17-10` | Certificar visualizers, fallback e energia mobile | vynamp-player | planned |
 | `TASK-E17-11` | Implementar política de proxy e rede isolada | vynamp-player | planned |
 
+| `TASK-E20-01` | Provar iOS arm64, bridge Rust e CoreAudio | vynamp-player | planned |
+| `TASK-E20-02` | Entregar AVAudioSession e playback em background | vynamp-player | planned |
+| `TASK-E20-03` | Entregar shell SwiftUI touch-first e acessibilidade | vynamp-player | planned |
+| `TASK-E20-04` | Entregar acesso a arquivos e biblioteca sob sandbox | vynamp-player | planned |
+| `TASK-E20-05` | Adaptar DSP e equalização ao layout e ao orçamento iOS | vynamp-player | planned |
+| `TASK-E20-06` | Fechar assinatura, TestFlight e aceite iOS | vynamp-player | planned |
 O status oficial é o `tasks/backlog.json` do umbrella. O índice de épico fica lá
 também: uma cópia por repo divergiria.
