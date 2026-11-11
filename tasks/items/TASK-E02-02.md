@@ -30,8 +30,10 @@ Theme token loader builtin, buttons/sliders/list rows com estados completos.
   `TASK-E02-03` e `TASK-E02-04`.
 - **Não** copia o CSS do MVP. O contrato é o valor semântico (`surface.raised`,
   `text.muted`), e o mapeamento de cada token está em `design/02-layouts.md`.
-- **Não** implementa tema de usuário nem editor: `TASK-E06-*` cuida disso.
-- **Não** cobre DPI além de 200%: a matriz de DPI testada é 100/125/150/200.
+- **Não** implementa tema de usuário nem editor: a dona é `TASK-E06-07`, que entrega o
+  editor e o preview.
+- **Não** cobre DPI além de 200%: a matriz de DPI testada é 100/125/150/200, medida
+  por `TASK-E10-06`.
 
 ## Antes de começar
 

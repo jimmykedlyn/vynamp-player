@@ -28,7 +28,8 @@ Roteiros de interação por teclado, ponteiro e toque com estado esperado e esqu
 
 - **Não** implementa preferências de usuário no produto: entrega o esquema com
   defaults e migração; quem grava é `TASK-E02-06`.
-- **Não** decide atalhos que a spec não lista.
+- **Não** decide atalhos que `design/03-acessibilidade.md` não lista, e a
+  navegação por teclado continua a que o guia fixa em vez de uma inventada aqui.
 - **Não** cobre toque no desktop: o roteiro de toque é o de Android e iOS, e os dois
   são `TASK-E13-05` e `TASK-E20-03`.
 - **Não** mede acessibilidade: o roteiro descreve o estado esperado; a verificação

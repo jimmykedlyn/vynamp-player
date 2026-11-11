@@ -28,8 +28,10 @@ Lista virtualizada, drag insert, seleção, context menu e queue actions.
 
 - **Não** constrói a fila. `TASK-E03-02` é dona do snapshot, revisões e seed; aqui
   só se exibe e se emite intenção.
-- **Não** implementa drag entre janelas nem entre instâncias.
-- **Não** faz edição de tags: a lista mostra o que a biblioteca já leu.
+- **Não** implementa drag entre janelas nem entre instâncias: é `TASK-E02-08`, dona dos
+  painéis destacáveis.
+- **Não** faz edição de tags: a escrita é `TASK-E03-08`, e a lista mostra o que a
+  biblioteca já leu.
 - **Não** decide atalhos novos. O mapa de teclado vem de `TASK-E02-14`.
 
 ## Antes de começar

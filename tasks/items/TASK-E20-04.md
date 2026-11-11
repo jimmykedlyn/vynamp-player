@@ -27,11 +27,14 @@ Importação por document picker, Core File Provider e MediaPlayer, com bibliote
 ## Boundary
 
 - **Não** cria loja de mídia própria nem scanner do sistema: o acesso é por
-  document picker, Core File Provider e MediaPlayer, como a spec determina.
+  document picker, Core File Provider e MediaPlayer, como a spec determina. O scan de
+  roots é `TASK-E03-03`, que já é dono do import incremental, e duplicá-lo aqui criaria
+  dois donos do mesmo índice.
 - **Não** guarda cópia fora do container do app: a sandbox é o limite, não uma
-  conveniência a contornar.
-- **Não** implementa sincronização nem nuvem: isso não está em FASE 6.
-- **Não** trata credenciais de serviço de streaming, que pertencem a `TASK-E05-*`.
+  conveniência a contornar. O limite e a prova de isolamento são `TASK-E11-02`, e
+  afrouxá-lo aqui seria política de segurança decidida na tela.
+- **Não** implementa sincronização nem nuvem: isso não está em FASE 6, e o sync é `TASK-E09-08`.
+- **Não** trata credenciais de serviço de streaming, que pertencem a `TASK-E05-10`.
 
 ## Antes de começar
 

@@ -27,12 +27,15 @@ Transições CSS, séries rAF sob sinais determinísticos, constantes de Analyse
 ## Boundary
 
 - **Não** inventa curva de medidor. As constantes vêm de `AnalyserNode` e da
-  balística medidas no MVP, e o formato é o que o Rust consome.
+  balística medidas no MVP, como fixa `design/07-pin-mvp.md`, e o formato é o que
+  o Rust consome.
 - **Não** implementa o visualizador: `TASK-E17-09` e `TASK-E17-10`.
 - **Não** congela o instante da captura: atributo animado por script é gravado em
-  repouso e listado em `neutralized`, para o arquivo não depender do momento.
+  repouso e listado em `neutralized` pela extração de `TASK-E02-11`, para o arquivo
+  não depender do momento.
 - **Não** reextrai as curvas de DSP: `out/svg/meters/dynamic.json` registra quais
-  elementos animam, e as curvas pertencem a esta TASK, não ao pacote de `E02-11`.
+  elementos animam, e as curvas pertencem a esta TASK, não ao pacote de
+  `TASK-E02-11`, dona da extração.
 
 ## Antes de começar
 

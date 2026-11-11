@@ -31,8 +31,11 @@ Mapa de cada recurso web usado pelo MVP para o equivalente nativo em Windows, Li
 - **Não** inclui iOS no mapa da 1.0. A coluna iOS entra com a FASE 6, e a
   `platforms/05-ios.md` §1.2 já fixa que não há conversor nem restaurador no build iOS.
 - **Não** promete paridade onde a API não existe: a lacuna fica nomeada, não coberta
-  por um equivalente aproximado.
-- **Não** substitui a ADR de cada biblioteca nova.
+  por um equivalente aproximado; quem reprova o equivalente é `TASK-E02-16`, que compara
+  com os gabaritos.
+- **Não** substitui a ADR de cada biblioteca nova: a decisão de adotar uma
+  dependência é do mantenedor e vive em ADR própria, como fez a ADR-011 com a
+  pilha de áudio.
 
 ## Antes de começar
 

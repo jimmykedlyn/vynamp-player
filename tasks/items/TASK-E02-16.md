@@ -29,10 +29,13 @@ Crate de testes que renderiza telas nativas e as compara com os gabaritos visual
 - **Não** roda no CI Gate. O harness depende de GPU e de captura, e o CI o marca
   como não executado — `quality/01-estrategia-testes.md` pela QA-034 já registra isso.
 - **Não** aprova a fidelidade sozinho: compara com o gabarito e produz a diferença;
-  a decisão sobre tolerância é do mantenedor.
+  a decisão sobre tolerância é do mantenedor, e a tolerância observada é registrada em
+  `TASK-E02-13`.
 - **Não** substitui a verificação em aparelho: compara render contra gabarito, não
-  áudio nem comportamento em hardware real.
-- **Não** cobre iOS, cuja UI é SwiftUI e não passa por este harness.
+  áudio nem comportamento em hardware real — isso é `TASK-E14-04`, que roda o corpus em
+  cada alvo.
+- **Não** cobre iOS, cuja UI é SwiftUI e não passa por este harness — o shell SwiftUI é
+  `TASK-E20-03`.
 
 ## Antes de começar
 
