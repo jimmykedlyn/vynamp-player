@@ -29,9 +29,10 @@ AudioManager, foco/noisy/Bluetooth e output clock com formato negociado.
 - **Não** escolhe o backend de saída. AAudio veio de `TASK-E13-01`; esta TASK trata
   foco, ruído e rota.
 - **Não** implementa a sessão de mídia: `TASK-E13-02`.
-- **Não** promete latência de desktop: a meta é medida no aparelho de referência.
-- **Não** cobre Bluetooth de áudio de alta qualidade além do que o codec do sistema
-  entrega: SBC/AAC são o padrão e LDAC é do aparelho.
+- **Não** promete latência de desktop: a meta é medida no aparelho de referência, que é `TASK-E13-10`.
+- **Não** cobre Bluetooth de áudio de alta qualidade além do que o codec do
+  sistema entrega: SBC/AAC são o padrão e LDAC é do aparelho, conforme a matriz de
+  `platforms/01-matriz-suporte.md`.
 
 ## Antes de começar
 

@@ -30,10 +30,12 @@ Contrato OpenRequest, limites e spikes de entrega nativa em cinco alvos.
   serve é `TASK-E16-02` e o IPC do engine.
 - **Não** configura associações de arquivo: os menus por sistema são `TASK-E16-*`
   seguintes e a spec `platforms/04-ativacao-ownership.md`.
-- **Não** inclui iOS: a FASE 6 é dona da ativação iOS, e a matriz desta TASK é a dos
-  cinco alvos de 1.0.
-- **Não** trata o handoff de `Windows.UI` nem de `NSDocumentController` em detalhe:
-  prova o spike de entrega em cada alvo e registra o que não foi provado.
+- **Não** inclui iOS: a FASE 6 é dona da ativação iOS, e a matriz desta TASK é a
+  dos cinco alvos de 1.0, a de `platforms/01-matriz-suporte.md`, que não conta o
+  iOS.
+- **Não** trata o handoff de `Windows.UI` nem de `NSDocumentController` em
+  detalhe: `platforms/03-integracao-sistema.md` fixa o contrato, e aqui se prova o
+  spike de entrega em cada alvo e se registra o que não foi provado.
 
 ## Antes de começar
 

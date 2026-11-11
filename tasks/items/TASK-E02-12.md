@@ -28,9 +28,11 @@ Capturas por tema, layout, largura e estado com dump de geometria e estilo por e
 
 - **Não** implementa as telas. Produz o gabarito contra o qual `TASK-E02-16` compara.
 - **Não** escolhe fonte por conta própria: entrega a estratégia com licença por
-  plataforma, e a escolha final é do mantenedor.
+  plataforma, e a escolha final é do mantenedor, como decide
+  `product/05-decisoes.md` (decisões pendentes com dono e prazo).
 - **Não** cobre movimento nem medidores: `TASK-E02-13`.
-- **Não** mede DPI além de 100/125/150/200 nem layout além dos que a spec lista.
+- **Não** mede DPI além de 100/125/150/200 nem layout além dos que
+  `design/01-sistema-visual.md` lista na régua de screenshots de referência.
 
 ## Antes de começar
 

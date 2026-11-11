@@ -30,7 +30,8 @@ Queue snapshot/revisions/seed/history/repeat/stop-after.
   restauração entre sessões é `TASK-E13-05` e o restore de fila é `TASK-E10-*`.
 - **Não** toca áudio. Emite a próxima entrada e o engine `TASK-E01-03` toca.
 - **Não** decide o algoritmo de shuffle além do seed documentado: reprodutibilidade
-  com o mesmo seed é o contrato, e a distribuição é medida.
+  com o mesmo seed é o contrato, e a distribuição é medida por `TASK-E10-02`, que
+  prova as propriedades da fila.
 - **Não** implementa repeat de faixa única nem stop-after em UI: a regra é aqui, o
   controle é `TASK-E02-03`.
 

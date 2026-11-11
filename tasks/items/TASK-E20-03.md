@@ -31,7 +31,8 @@ Shell SwiftUI com controles de 44pt, bottom sheets e editor paramétrico em tela
 - **Não** implementa conversor nem restaurador: os dois não existem no build iOS
   (`platforms/05-ios.md` §1.2).
 - **Não** entrega editor de DSP avançado: a cadeia e os presets são `TASK-E20-05`.
-- **Não** valida áudio: a acessibilidade aqui é de navegação e leitura, não de sinal.
+- **Não** valida áudio: a acessibilidade aqui é de navegação e leitura, não de
+  sinal, conforme `design/03-acessibilidade.md`.
 
 ## Antes de começar
 

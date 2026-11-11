@@ -27,11 +27,13 @@ Lock OS, encaminhamento IPC, idempotência e isolamento de perfis.
 ## Boundary
 
 - **Não** implementa o protocolo: `OpenRequest` é `TASK-E16-01`.
-- **Não** decide política de perfis além do owner único: quantos perfis existem e como
-  são nomeados é do mantenedor.
+- **Não** decide política de perfis além do owner único: quantos perfis existem e
+  como são nomeados é decisão do mantenedor, e `platforms/04-ativacao-ownership.md`
+  fixa só a semântica do dono por perfil.
 - **Não** trata sync entre máquinas: `TASK-E09-08`.
 - **Não** promete lock entre sistemas de arquivos: o lock é de OS, e o que não for
-  atômico no alvo fica nomeado como limitação.
+  atômico no alvo fica nomeado como limitação, conforme
+  `platforms/04-ativacao-ownership.md` §"Portable, backup e consentimento".
 
 ## Antes de começar
 

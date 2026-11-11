@@ -30,10 +30,12 @@ Schema inicial, WAL, backup e write actor com migrations.
   schema aqui é o da biblioteca, e a fila não é tabela.
 - **Não** escreve tag em arquivo: o write actor da biblioteca grava o banco; tag é
   `TASK-E17-06`.
-- **Não** decide retenção de backup: entrega o mecanismo e o default; a política de
-  retenção é do mantenedor.
-- **Não** migra dados de outra ferramenta: não há importação de biblioteca alheia no
-  escopo.
+- **Não** decide retenção de backup: entrega o mecanismo e o default; a política
+  de retenção é do mantenedor, uma decisão pendente em `product/05-decisoes.md`
+  que não tem TASK dona.
+- **Não** migra dados de outra ferramenta: não há importação de biblioteca alheia
+  no escopo, e a fronteira é a de `product/01-visao-escopo.md`, não a de uma TASK
+  do backlog.
 
 ## Antes de começar
 

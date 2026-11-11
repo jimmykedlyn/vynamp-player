@@ -32,7 +32,8 @@ Serviço foreground proprietário da reprodução, Player adapter, notificação
   `AudioManager`.
 - **Não** toca em biblioteca: `TASK-E03-01` é dona do banco.
 - **Não** trata conversor nem restaurador no mobile: os dois são apps separados, e o
-  build Android do player não os embarca.
+  build Android do player não os embarca; conversor é `TASK-E18-02`, restaurador é
+  `TASK-E18-01`.
 
 ## Antes de começar
 

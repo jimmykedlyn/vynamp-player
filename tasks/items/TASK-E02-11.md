@@ -26,14 +26,17 @@ Pacote assets/reference/mvp com MVP rev.37 congelado por hash, 12 temas resolvid
 
 ## Boundary
 
-- **Não** copia nenhum arquivo do MVP para este repositório. A spec cita URL, SHA e
-  caminho no repositório de referência, e o código do MVP não é código de produto.
+- **Não** copia nenhum arquivo do MVP para este repositório. A regra é de
+  `design/07-pin-mvp.md` §1: a spec cita URL, SHA e caminho no repositório de
+  referência, e o código do MVP não é código de produto.
 - **Não** congela a rev.37 como fonte atual. O pacote registra que a extração foi
-  feita sobre a rev.37 e que a rev.38 (`0d9860b`) é a fonte; reescrever o histórico
-  para "rev.38" apagaria a diferença que a reextração precisa explicar.
+  feita sobre a rev.37 e que a rev.38 (`0d9860b`) é a fonte, como fixa
+  `design/07-pin-mvp.md` §2; reescrever o histórico para "rev.38" apagaria a
+  diferença que a reextração precisa explicar.
 - **Não** extrai movimento, medidores nem comportamento: `TASK-E02-13` e `TASK-E02-14`.
-- **Não** aceita o pacote antigo com `SOURCE.json`. O pin virou `tools/pin.cjs`, e o
-  repositório não recebe o formato anterior.
+- **Não** aceita o pacote antigo com `SOURCE.json`. `design/07-pin-mvp.md` §2
+  registra que o pin virou `tools/pin.cjs`, e o repositório não recebe o formato
+  anterior.
 
 ## Antes de começar
 

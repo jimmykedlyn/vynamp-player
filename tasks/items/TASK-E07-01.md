@@ -31,7 +31,7 @@ Spike Wasmtime/WIT com limites de memória, fuel, interruption e ADR-004.
 - **Não** implementa o SDK nem o registry: `TASK-E07-*` seguintes e `TASK-E09-09`.
 - **Não** promete sandbox em Android ou iOS: o spike é de desktop, e no iOS plugin de
   terceiro está fora de escopo por `platforms/05-ios.md`.
-- **Não** mede áudio em tempo real: mede limites de memória, fuel e interrupção.
+- **Não** mede áudio em tempo real: mede limites de memória, fuel e interrupção; áudio real é `TASK-E12-07`.
 
 ## Antes de começar
 

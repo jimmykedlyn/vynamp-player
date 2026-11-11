@@ -26,12 +26,12 @@ Editor de DSP adaptado a gestos, com cadeia de efeitos sobre o núcleo Rust comp
 
 ## Boundary
 
-- **Não** reimplementa o DSP: a cadeia é o núcleo Rust compartilhado, e a TASK só
+- **Não** reimplementa o DSP: a cadeia é o núcleo Rust compartilhado (`TASK-E04-03`), e a TASK só
   adapta a superfície de controle e mede o orçamento no aparelho.
 - **Não** promete paridade de CPU com desktop: a meta é o aparelho de referência, e
-  o que não couber não é anunciado.
-- **Não** entrega plugin de terceiro nem VST3 no iOS.
-- **Não** decide formato de preset novo; os presets continuam os do contrato comum.
+  o que não couber não é anunciado; o baseline é `TASK-E10-07`.
+- **Não** entrega plugin de terceiro nem VST3 no iOS: são `TASK-E12-07`.
+- **Não** decide formato de preset novo, que é `TASK-E04-04`; os presets continuam os do contrato comum.
 
 ## Antes de começar
 

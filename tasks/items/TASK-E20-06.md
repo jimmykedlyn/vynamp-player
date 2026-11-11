@@ -26,13 +26,15 @@ Build assinado com Apple Developer Program, distribuição por TestFlight e rela
 
 ## Boundary
 
-- **Não** publica na App Store. A entrega é TestFlight, e a promoção a produção é
-  decisão do mantenedor, fora desta TASK.
+- **Não** publica na App Store. A entrega é TestFlight, a promoção a produção é
+  decisão do mantenedor fora desta TASK, e `platforms/05-ios.md` fixa o escopo da
+  fase em vez de uma entrega em loja.
 - **Não** substitui hardware Apple: simulador não é aparelho, e ausência de device
-  bloqueia o aceite em vez de o aprovar.
-- **Não** cria instalador: iOS não tem `dist/release`, e a distribuição é pela loja.
+  bloqueia o aceite em vez de o aprovar — a matriz de `platforms/01-matriz-suporte.md`
+  declara o hardware como insumo do mantenedor.
+- **Não** cria instalador: iOS não tem `dist/release`, e a distribuição é pela loja. Isso é `TASK-E11-07`.
 - **Não** aprova o app inteiro: os gates comuns e os de iOS aqui fechados não
-  afirmam paridade com os cinco alvos de 1.0.
+  afirmam paridade com os cinco alvos de 1.0; a matriz deles é `TASK-E14-06`.
 
 ## Antes de começar
 

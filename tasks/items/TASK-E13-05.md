@@ -31,7 +31,8 @@ Shell Compose com tokens compartilhados, transporte/fila/EQ básico e TalkBack.
 - **Não** entrega EQ avançado: o transporte e o EQ básico cabem aqui; a cadeia
   completa é `TASK-E04-01`.
 - **Não** implementa biblioteca nem tags: a tela lê o que `TASK-E03-01` expõe.
-- **Não** valida áudio: a acessibilidade é de navegação e leitura.
+- **Não** valida áudio: a acessibilidade aqui é de navegação e leitura, conforme
+  `design/03-acessibilidade.md`, e não de sinal.
 
 ## Antes de começar
 

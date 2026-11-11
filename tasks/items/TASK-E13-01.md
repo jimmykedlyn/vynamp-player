@@ -29,9 +29,9 @@ Spike NDK/ABI Rust, ownership de buffers, AAudio direto (vynamp-output) e adapte
 - **Não** porta o player para Android. Prova build, fronteira e saída; a UI é
   `TASK-E13-05`.
 - **Não** decide Media3 contra AAudio: entrega a comparação e a decisão de runtime,
-  como o título diz.
+  como o título diz; congelar é do mantenedor na `ADR-006`, não de uma TASK.
 - **Não** usa a cadeia do desktop como prova: o `cargo check` do host passa e não diz
-  nada sobre `aarch64-linux-android`.
+  nada sobre `aarch64-linux-android`; a matriz dos cinco alvos é `TASK-E14-01`.
 - **Não** implementa serviço, foco nem sessão: `TASK-E13-02` e `TASK-E13-03`.
 
 ## Antes de começar

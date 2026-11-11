@@ -28,8 +28,10 @@ Spike de build `aarch64-apple-ios`, ownership de buffers entre Swift e Rust, sa�
 
 - **Não** porta o player: prova o build, a fronteira e a saída. A UI é `TASK-E20-03`.
 - **Não** promete latência de desktop. O aparelho medido é o alvo, e o resultado do
-  simulador é publicado como simulador — não como device.
-- **Não** usa o plugin Gradle nem `apps/android`: a cadeia de build é outra.
+  simulador é publicado como simulador — não como device. Publicar número de device é
+  `TASK-E20-06`, que fecha o relatório de aceite em aparelho real.
+- **Não** usa o plugin Gradle nem `apps/android`: a cadeia de build é outra, e
+  `platforms/02-android.md` fixa o caminho que o alvo Android segue.
 - **Não** implementa sessão de áudio, background nem comandos remotos: isso é
   `TASK-E20-02`, e fazê-lo aqui duplicaria a decisão de categoria de sessão.
 
