@@ -15,7 +15,7 @@ Todas de produto; as de engenharia moram no umbrella.
 | `TASK-E02-08` | Entregar docking e persistência multi-monitor | vynamp-player | planned |
 | `TASK-E02-09` | Completar localização e testes visuais | vynamp-player | planned |
 | `TASK-E02-10` | Validar experiência desktop ponta a ponta | vynamp-player | planned |
-| `TASK-E02-11` | Congelar MVP de referência e extrair SVGs, ícones e temas | vynamp-player | in_progress |
+| `TASK-E02-11` | Congelar MVP de referência e extrair SVGs, ícones e temas | vynamp-player | implemented |
 | `TASK-E02-12` | Gerar gabarito visual e estratégia de fontes | vynamp-player | planned |
 | `TASK-E02-13` | Gerar gabarito de movimento, medidores e ondas | vynamp-player | planned |
 | `TASK-E02-14` | Gerar gabarito de comportamento e preferências | vynamp-player | planned |
@@ -106,3 +106,4 @@ Todas de produto; as de engenharia moram no umbrella.
 | `TASK-E20-06` | Fechar assinatura, TestFlight e aceite iOS | vynamp-player | planned |
 O status oficial é o `tasks/backlog.json` do umbrella. O índice de épico fica lá
 também: uma cópia por repo divergiria.
+Estados conferidos contra o backlog em 2026-11-11.
