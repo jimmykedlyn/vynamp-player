@@ -69,9 +69,18 @@ Fonte de cada requisito: o documento citado na TASK (`extensions/02-plugins.md`)
 
 ## 5. Critérios de aceite
 
+> **Autoria dos `Given`/`When` em 2026-11-15.** Até esta data as 10 linhas abaixo
+> eram circulares: o `Given` era "a entrega de TASK-Exx-nn" e o `When` era "o teste de
+> aceite da TASK roda". Critério assim não pode ficar vermelho antes da implementação,
+> que é o que o `AGENTS.md` §4.3 exige. Cada `Given`/`When` abaixo foi reescrito a
+> partir da tabela de critérios do próprio doc da TASK (`tasks/items/TASK-Exx-nn.md`),
+> que já tinha o `Given`/`When` real; o `Then` é cópia literal do backlog e **não**
+> mudou. **Não aprovado** — a aprovação é do mantenedor, por `GOVERNANCE.md`, e vale
+> pelo conteúdo desta tabela no commit que a registra.
+
 | ID | Given | When | Then |
 |---|---|---|---|
-| PLG-AC-01 | a entrega de TASK-E07-01 (Provar sandbox WASM e capabilities) | o teste de aceite da TASK roda | Interromper loops e crescimento de memória; nenhum acesso ambiente a arquivos/rede; medir consumo com runtime não carregado. |
+| PLG-AC-01 | um módulo Wasm de teste com loop infinito e outro que aloca sem limite, com fuel e limite de memória configurados, e um módulo que tenta abrir arquivo e soquete pelas importações disponíveis | o host interrompe cada módulo pelo limite que estourar primeiro, e o módulo de I/O roda com as capabilities padrão | Interromper loops e crescimento de memória; nenhum acesso ambiente a arquivos/rede; medir consumo com runtime não carregado. |
 | PLG-AC-02 | a entrega de TASK-E07-02 (Definir pacote e SDK de plugins v1) | o teste de aceite da TASK roda | Validar tipo, plataformas e permissões; major incompatível não carrega; assinatura não permite ignorar políticas de acesso. |
 | PLG-AC-03 | a entrega de TASK-E07-03 (Implementar broker de permissões) | o teste de aceite da TASK roda | Negar e revogar bloqueia requests/handles; redirect revalida domínio; plugin não recebe shell, env vars ou filesystem completo. |
 | PLG-AC-04 | a entrega de TASK-E07-04 (Implementar lifecycle e circuit breaker) | o teste de aceite da TASK roda | Três falhas em 60 s isolam plugin; cleanup é idempotente; floods são limitados; playback local continua. |

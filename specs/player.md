@@ -100,6 +100,15 @@ Fonte de cada requisito: o documento citado na TASK (`delivery/01-roadmap.md`, `
 
 ## 5. Critérios de aceite
 
+> **Autoria dos `Given`/`When` em 2026-11-15.** Até esta data as 35 linhas abaixo
+> eram circulares: o `Given` era "a entrega de TASK-Exx-nn" e o `When` era "o teste de
+> aceite da TASK roda". Critério assim não pode ficar vermelho antes da implementação,
+> que é o que o `AGENTS.md` §4.3 exige. Cada `Given`/`When` abaixo foi reescrito a
+> partir da tabela de critérios do próprio doc da TASK (`tasks/items/TASK-Exx-nn.md`),
+> que já tinha o `Given`/`When` real; o `Then` é cópia literal do backlog e **não**
+> mudou. **Não aprovado** — a aprovação é do mantenedor, por `GOVERNANCE.md`, e vale
+> pelo conteúdo desta tabela no commit que a registra.
+
 | ID | Given | When | Then |
 |---|---|---|---|
 | PLY-AC-01 | a entrega de TASK-E08-03 (Entregar análise de loudness, ReplayGain e BPM) | o teste de aceite da TASK roda | Loudness conferido contra fixtures; agrupamento correto; BPM inclui confiança; scan não interfere callback; write requer preview. |
@@ -111,7 +120,7 @@ Fonte de cada requisito: o documento citado na TASK (`delivery/01-roadmap.md`, `
 | PLY-AC-07 | a entrega de TASK-E12-01 (Entregar Linux nativo e MPRIS na 1.0) | o teste de aceite da TASK roda | Passar corpus comum e gates M1–M3 no Linux nativo; Wayland/X11 e portas/saída testados; não usar Wine como substituto; instalar pacote real. |
 | PLY-AC-08 | a entrega de TASK-E12-02 (Entregar macOS Intel e Apple Silicon nativos na 1.0) | o teste de aceite da TASK roda | Fixtures, VoiceOver, device/rate changes e instalação passam em Mac Intel e Silicon reais; Universal2/helpers contêm ambas slices nativas nos DMG/ZIP Universal2 obrigatórios; sem exigir Rosetta. |
 | PLY-AC-09 | a entrega de TASK-E12-09 (Entregar casting e companion) | o teste de aceite da TASK roda | Capacidade real do destino; limites de clock/transferência visíveis; negar cliente não pareado; sem claims hi-res não verificados. |
-| PLY-AC-10 | a entrega de TASK-E13-01 (Provar Android arm64, bridge Rust e output) | o teste de aceite da TASK roda | Tocar WAV/FLAC em aparelho arm64 real; callback sem JNI/alloc; native build compatível com requisitos de páginas; comparar lifecycle e runtime antes congelar. |
+| PLY-AC-10 | um aparelho arm64-v8a real com Android 10 ou superior e o spike instalado, com a callback de áudio instrumentada para alocação e travessia JNI | um WAV e um FLAC do spike são tocados pelo `vynamp-output` via AAudio, e uma reprodução completa roda com o perfil de alocação ligado | Tocar WAV/FLAC em aparelho arm64 real; callback sem JNI/alloc; native build compatível com requisitos de páginas; comparar lifecycle e runtime antes congelar. |
 | PLY-AC-11 | a entrega de TASK-E13-02 (Entregar serviço e MediaSession com engine Rust) | o teste de aceite da TASK roda | Activity não é owner do áudio; lockscreen/play/pause usam fila única Rust; cleanup idempotente; serviço segue restrições do SDK. |
 | PLY-AC-12 | a entrega de TASK-E13-03 (Entregar audio focus e rotas Android) | o teste de aceite da TASK roda | Definir loss/transient/duck; unplug pausa sem tocar speaker; desconexão recupera fora da callback; taxa e sharing reais visíveis. |
 | PLY-AC-13 | a entrega de TASK-E13-04 (Entregar MediaStore, SAF e permissões) | o teste de aceite da TASK roda | Deny/revoke preserva biblioteca e rádio; não exigir acesso irrestrito a arquivos; Content URI não vira path fictício; backup/limites de escrita explícitos. |
@@ -121,7 +130,7 @@ Fonte de cada requisito: o documento citado na TASK (`delivery/01-roadmap.md`, `
 | PLY-AC-17 | a entrega de TASK-E13-08 (Entregar temas e plugins mobile) | o teste de aceite da TASK roda | Fallback acessível; budgets e permissões funcionam; nenhum helper nativo externo; runtime e distribuição compatíveis documentados, sem promessa de JIT não provado. |
 | PLY-AC-18 | a entrega de TASK-E13-09 (Entregar tablet/foldable e distribuição Android) | o teste de aceite da TASK roda | Phone/tablet/landscape/hinge/fonte passam; update preserva dados; target SDK e políticas revisados; aparelho arm64 real além do emulador. |
 | PLY-AC-19 | a entrega de TASK-E13-10 (Fechar aceite Android 1.0 em hardware) | o teste de aceite da TASK roda | Gates comuns e Android aprovados no aparelho real; saída hi-res apenas quando negociada; flag AAudio não é prova de bit-perfect. |
-| PLY-AC-20 | a entrega de TASK-E16-01 (Provar envelope de ativação e protocolo comum) | o teste de aceite da TASK roda | Cold/warm e lotes 1/2/20/100 preservam ordem; nomes especiais são dados; limites e ACK/generation definidos. |
+| PLY-AC-20 | o app fechado (cold) e o app aberto (warm), com lotes de arquivos enviados ao entrypoint, e arquivos cujo nome contém dois hífens, aspas, quebra de linha e espaço à esquerda | lotes de 1, 2, 20 e 100 `OpenRequest` são enviados e a ordem de chegada é registrada, e o envelope de ativação é montado e lido pelo app | Cold/warm e lotes 1/2/20/100 preservam ordem; nomes especiais são dados; limites e ACK/generation definidos. |
 | PLY-AC-21 | a entrega de TASK-E16-02 (Implementar owner único por perfil e IPC autorizado) | o teste de aceite da TASK roda | Vinte launches elegem um owner; installed/portable não escrevem o mesmo perfil simultaneamente; stale PID não libera lock; ACK e Conflict testados. |
 | PLY-AC-22 | a entrega de TASK-E16-03 (Entregar associação, menu de contexto e pacotes de ícones no Windows) | o teste de aceite da TASK roda | Explorer moderno (Win11) e clássico (Win10) abrem lote ordenado por IShellItemArray; pacote esparso registrado via PackageManager; remoção limpa; suporte às 3 famílias de ícones. |
 | PLY-AC-23 | a entrega de TASK-E16-04 (Entregar MIME, extensões de shell e abertura externa no Linux) | o teste de aceite da TASK roda | Gerenciadores (Dolphin, Nautilus, Thunar) exibem submenu Vynamp com verbos canônicos; %U repassa lote sem shell; ícones hicolor por família instalados. |
