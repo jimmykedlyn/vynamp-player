@@ -81,9 +81,18 @@ Fonte de cada requisito: o documento citado na TASK (`library/01-biblioteca-play
 
 ## 5. Critérios de aceite
 
+> **Autoria dos `Given`/`When` em 2026-11-15.** Até esta data as 13 linhas abaixo
+> eram circulares: o `Given` era "a entrega de TASK-Exx-nn" e o `When` era "o teste de
+> aceite da TASK roda". Critério assim não pode ficar vermelho antes da implementação,
+> que é o que o `AGENTS.md` §4.3 exige. Cada `Given`/`When` abaixo foi reescrito a
+> partir da tabela de critérios do próprio doc da TASK (`tasks/items/TASK-Exx-nn.md`),
+> que já tinha o `Given`/`When` real; o `Then` é cópia literal do backlog e **não**
+> mudou. **Não aprovado** — a aprovação é do mantenedor, por `GOVERNANCE.md`, e vale
+> pelo conteúdo desta tabela no commit que a registra.
+
 | ID | Given | When | Then |
 |---|---|---|---|
-| BIB-AC-01 | a entrega de TASK-E03-01 (Implementar schema SQLite e migrations seguras) | o teste de aceite da TASK roda | Kill no migrate/save preserva DB ou backup; FTS reconstruível; schema unknown não é apagado. |
+| BIB-AC-01 | um banco na versão N com WAL ligado e backup configurado, e um arquivo de banco com `user_version` maior que o suportado pela build | o processo é morto em cada ponto de escrita da migração e o banco é reaberto, e o app abre o arquivo de versão desconhecida e decide o que fazer | Kill no migrate/save preserva DB ou backup; FTS reconstruível; schema unknown não é apagado. |
 | BIB-AC-02 | a entrega de TASK-E03-02 (Implementar queue independente e shuffle) | o teste de aceite da TASK roda | Reorder playlist não muda queue; shuffle sem reposição, Previous usa histórico; explicit next vence repeat. |
 | BIB-AC-03 | a entrega de TASK-E03-03 (Implementar import incremental e roots offline) | o teste de aceite da TASK roda | NAS indisponível não deleta item; symlink loop limitado; cancel mantém itens já indexados; move preserva ratings. |
 | BIB-AC-04 | a entrega de TASK-E03-04 (Implementar leitura de tags e capas segura) | o teste de aceite da TASK roda | Unknown fields preservados para futuro write; image bomb limitada; metadata Unicode mantém representação original. |
