@@ -7,7 +7,7 @@
 | Tipo | app |
 | Versão da spec | 0.2.0 |
 | Data | 2026-11-11 |
-| Estado | **rascunho autorado, não aprovado** — §3 a §6, §9 e §10 escritos a partir de `platforms/01-matriz-suporte.md` a `05-ios.md`, `design/07-pin-mvp.md`, `delivery/01-roadmap.md` e das TASKs E08, E12, E13, E16 e E20. A aprovação é do mantenedor, por `GOVERNANCE.md` |
+| Estado | **§5 aprovada em 2026-11-18** pelo mantenedor (cartão `aaf4575d` da JKC-222, opção `approve-all`). As demais seções seguem rascunho autorado a partir de `platforms/01-matriz-suporte.md` a `05-ios.md`, `design/07-pin-mvp.md`, `delivery/01-roadmap.md` e das TASKs E08, E12, E13, E16 e E20: §3, §4, §6, §9 e §10 não foram aprovadas e não devem ser lidas como contrato. A aprovação é do mantenedor, por `GOVERNANCE.md` |
 | Dono | mantenedor do `vynamp-player` |
 | Depende de | `vynamp-engine` (unico crate do projeto) |
 | É dependido por | ninguem |
