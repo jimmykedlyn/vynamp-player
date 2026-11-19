@@ -7,7 +7,7 @@
 | Tipo | app |
 | Versão da spec | 0.2.0 |
 | Data | 2026-11-11 |
-| Estado | **rascunho autorado, não aprovado** — §3 a §6, §9 e §10 escritos a partir de `library/01-biblioteca-playlists.md`, `library/02-tags-letras.md` e das TASKs E03, E08-04, E08-09 e E17-06. A aprovação é do mantenedor, por `GOVERNANCE.md` |
+| Estado | **§5 aprovada em 2026-11-18** pelo mantenedor (cartão `aaf4575d` da JKC-222, opção `approve-all`). As demais seções seguem rascunho autorado a partir de `library/01-biblioteca-playlists.md`, `library/02-tags-letras.md` e das TASKs E03, E08-04, E08-09 e E17-06: §3, §4, §6, §9 e §10 não foram aprovadas e não devem ser lidas como contrato. A aprovação é do mantenedor, por `GOVERNANCE.md` |
 | Dono | mantenedor do `vynamp-player` |
 | Depende de | `vynamp-engine` (unico crate do projeto) |
 | É dependido por | ninguem |
