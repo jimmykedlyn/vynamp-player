@@ -8,6 +8,8 @@ license = "MIT OR Apache-2.0"
 publish = false
 
 [dependencies]
+eframe = { version = "0.37.0", default-features = false, features = ["glow", "accesskit", "x11", "wayland"] }
+egui = { version = "0.37.0", default-features = false }
 
 [[bin]]
 name = "vynamp_player"
