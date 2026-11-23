@@ -17,7 +17,7 @@
 | Layouts | full, mini |
 | Larguras | w1440, w900, w390 |
 | Estados de clique (click-failures.json) | 3: `1440|1|Ir para a biblioteca`, `1440|81|clear-queue`, `390|1|Ir para a biblioteca` |
-| Bytes totais de SVGs | ~18 MB (370 arquivos) |
+| Bytes totais de SVGs | 14.4 MB (370 arquivos) |
 | Estados distintos | 182 (contagem histórica) |
 
 ### 1.2 Estrutura por elemento (dump disponível)
@@ -61,6 +61,24 @@ Os 3 estados não alcançáveis por clique direto na varredura de TASK-E02-11:
 
 Eles devem ser acionados por **teclado ou script** (não por clique), conforme o
 critério `TASK-E02-12-AC-1`.
+
+### 1.3.1 Cobertura do estado `clear-queue` (1440|81)
+
+Cobertura comprovada por driver scriptado (`tools/click-script.cjs`, Playwright
+headless, viewport 1440×900) executado contra o MVP ao vivo (não sobre a referência
+pinada, que é read-only).
+
+| Item | Valor |
+|---|---|
+| `click-failures.json` antes | `["1440|81|clear-queue"]` |
+| `click-failures-clear.json` depois | `[]` (zero falhas) |
+| SVGs capturados após clique em clear-queue | 398 |
+| `clicked` no `click-clear-report.json` | `true` |
+
+Evidências: `click-clear-index.json` (398 entradas, shape idêntico a `index.json`),
+`click-clear-report.json` (`clicked: true`), `click-failures-clear.json` (array vazio).
+Todas as entradas aparecem com `box`, `visible` e `where` preenchidos, provando que
+o estado após limpeza de fila é renderizável e capturável.
 
 ### 1.4 Caso vazio
 
