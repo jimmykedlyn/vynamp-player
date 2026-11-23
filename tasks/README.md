@@ -104,6 +104,7 @@ Todas de produto; as de engenharia moram no umbrella.
 | `TASK-E20-04` | Entregar acesso a arquivos e biblioteca sob sandbox | vynamp-player | planned |
 | `TASK-E20-05` | Adaptar DSP e equalização ao layout e ao orçamento iOS | vynamp-player | planned |
 | `TASK-E20-06` | Fechar assinatura, TestFlight e aceite iOS | vynamp-player | planned |
-O status oficial é o `tasks/backlog.json` do umbrella. O índice de épico fica lá
-também: uma cópia por repo divergiria.
+O status oficial vive na base **TASKs** do Notion (`AGENTS.md` §7 do umbrella); o
+`tasks/backlog.json` do umbrella guarda a spec e o índice de épico. Uma cópia por repo
+divergiria.
 Estados conferidos contra o backlog em 2026-11-11.
