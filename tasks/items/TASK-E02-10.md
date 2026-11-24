@@ -12,7 +12,7 @@
 | REQ coberto | `REQ-E02-10` |
 | Critérios da spec | `specs/ui.md` §5 (rascunho, não aprovado) |
 | Fase | M3 |
-| Prioridade | P1 |
+| Prioridade | P0 |
 | Estado | planned |
 | Depende de | `TASK-E02-09`, `TASK-E06-07`, `TASK-E07-07` |
 | Bloqueia | `TASK-E10-10` |

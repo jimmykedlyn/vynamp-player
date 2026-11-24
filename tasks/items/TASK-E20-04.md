@@ -12,7 +12,7 @@
 | REQ coberto | `REQ-E20-04` |
 | Critérios da spec | `platforms/05-ios.md` §2 |
 | Fase | F6 |
-| Prioridade | P1 |
+| Prioridade | P0 |
 | Estado | planned |
 | Depende de | `TASK-E20-02`, `TASK-E02-05` |
 | Bloqueia | `TASK-E20-06` |

@@ -12,7 +12,7 @@
 | REQ coberto | `REQ-E03-04` |
 | Critérios da spec | `specs/biblioteca.md` §5 (rascunho, não aprovado) |
 | Fase | M2 |
-| Prioridade | P1 |
+| Prioridade | P0 |
 | Estado | planned |
 | Depende de | `TASK-E03-03` |
 | Bloqueia | `TASK-E03-05`, `TASK-E03-06`, `TASK-E03-08`, `TASK-E03-09`, `TASK-E05-05` |

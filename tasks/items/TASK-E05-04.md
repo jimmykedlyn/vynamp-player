@@ -12,7 +12,7 @@
 | REQ coberto | `REQ-E05-04` |
 | Critérios da spec | `specs/streaming.md` §5 (rascunho, não aprovado) |
 | Fase | M2 |
-| Prioridade | P1 |
+| Prioridade | P0 |
 | Estado | planned |
 | Depende de | `TASK-E05-02` |
 | Bloqueia | `TASK-E05-05`, `TASK-E05-06` |

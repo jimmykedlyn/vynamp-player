@@ -12,7 +12,7 @@
 | REQ coberto | `REQ-E07-07` |
 | Critérios da spec | `specs/plugins.md` §5 (rascunho, não aprovado) |
 | Fase | M3 |
-| Prioridade | P1 |
+| Prioridade | P0 |
 | Estado | planned |
 | Depende de | `TASK-E07-04`, `TASK-E07-05`, `TASK-E02-06` |
 | Bloqueia | `TASK-E02-10`, `TASK-E07-08` |
