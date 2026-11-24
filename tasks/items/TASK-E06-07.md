@@ -12,7 +12,7 @@
 | REQ coberto | `REQ-E06-07` |
 | Critérios da spec | `specs/temas.md` §5 (rascunho, não aprovado) |
 | Fase | M3 |
-| Prioridade | P1 |
+| Prioridade | P0 |
 | Estado | planned |
 | Depende de | `TASK-E06-04`, `TASK-E06-06` |
 | Bloqueia | `TASK-E02-10`, `TASK-E06-08` |

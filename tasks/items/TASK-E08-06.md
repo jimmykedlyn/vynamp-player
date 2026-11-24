@@ -12,7 +12,7 @@
 | REQ coberto | `REQ-E08-06` |
 | Critérios da spec | `specs/player.md` §5 (rascunho, não aprovado) |
 | Fase | M2 |
-| Prioridade | P1 |
+| Prioridade | P0 |
 | Estado | planned |
 | Depende de | `TASK-E02-06`, `TASK-E01-03` |
 | Bloqueia | `TASK-E08-07`, `TASK-E16-03` |
