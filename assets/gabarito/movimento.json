@@ -1,0 +1,100 @@
+{
+  "animacoes": [
+    {
+      "nome": "graph-signal",
+      "duracao": 3.0,
+      "easing": "linear",
+      "keyframes": "stroke-dashoffset -96"
+    },
+    {
+      "nome": "media-wait",
+      "duracao": 1.0,
+      "easing": "ease-in-out",
+      "keyframes": "opacity .3"
+    },
+    {
+      "nome": "switch-control",
+      "duracao": 0.1,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "transform translateX"
+    },
+    {
+      "nome": "graph-node-meter",
+      "duracao": 0.09,
+      "easing": "linear",
+      "keyframes": null,
+      "serie": "width"
+    },
+    {
+      "nome": "lyrics-line",
+      "duracao": 0.2,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "color,opacity"
+    },
+    {
+      "nome": "button-hover",
+      "duracao": 0.12,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "background-color,color"
+    },
+    {
+      "nome": "play-button",
+      "duracao": 0.15,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "transform,filter"
+    },
+    {
+      "nome": "seek-slider",
+      "duracao": 0.18,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "background"
+    },
+    {
+      "nome": "range-input",
+      "duracao": 0.18,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "background"
+    },
+    {
+      "nome": "track-row",
+      "duracao": 0.15,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "background,border-color"
+    },
+    {
+      "nome": "playback-rate",
+      "duracao": 0.12,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "background,color"
+    },
+    {
+      "nome": "modal-overlay",
+      "duracao": 0.2,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "opacity"
+    },
+    {
+      "nome": "scrollbar",
+      "duracao": 0.1,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "background"
+    },
+    {
+      "nome": "tooltip",
+      "duracao": 0.12,
+      "easing": "ease",
+      "keyframes": null,
+      "serie": "opacity"
+    }
+  ]
+}

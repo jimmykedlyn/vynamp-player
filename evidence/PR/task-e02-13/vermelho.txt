@@ -1,0 +1,33 @@
+   Compiling vynamp_player v0.1.0 (D:\Projects\vynamp\apps\player\.worktrees\claude\task-e02-13)
+warning: unused import: `super::*`
+   --> tests\gabarito_movimento.rs:119:9
+    |
+119 |     use super::*;
+    |         ^^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::*`
+   --> tests\gabarito_movimento.rs:230:9
+    |
+230 |     use super::*;
+    |         ^^^^^^^^
+
+warning: `vynamp_player` (test "gabarito_movimento") generated 2 warnings (run `cargo fix --test "gabarito_movimento" -p vynamp_player` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.99s
+     Running tests\gabarito_movimento.rs (target\debug\deps\gabarito_movimento-3181446e7fe51df9.exe)
+
+running 10 tests
+test ac1::cada_animacao_tem_duracao_positiva ... ok
+test ac1::cada_animacao_tem_keyframes_ou_serie ... ok
+test ac2::movimento_json_existe ... ok
+test ac1::cada_animacao_tem_easing_definido ... ok
+test ac2::tolerancia_json_existe ... ok
+test tolerancia_dentro_do_teto_de_espectro ... ok
+test tolerancia_dentro_do_teto_de_nivel ... ok
+test tolerancia_dentro_do_teto_de_onda ... ok
+test rms_de_seno_de_pico_0_5_e_menos_9db ... ok
+test seno_de_1khz_cai_no_bin_correto ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
