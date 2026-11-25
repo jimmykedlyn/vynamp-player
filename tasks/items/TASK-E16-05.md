@@ -10,7 +10,7 @@
 | Módulo dono | `vynamp-player` |
 | Repo | `jimmykedlyn/vynamp-player` |
 | REQ coberto | `REQ-E16-05` |
-| Critérios da spec | `specs/player.md` §5 (rascunho, não aprovado) |
+| Critérios da spec | `specs/player.md` §5 (aprovada em 2026-11-18) |
 | Fase | M2 |
 | Prioridade | P0 |
 | Estado | planned |
