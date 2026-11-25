@@ -1,9 +1,9 @@
 # TASK-E06-11 — Entregar os estilos de onda do MVP
 
-> Autorada à mão no formato do passo 37, a partir da entrada em `tasks/backlog.json` do
-> umbrella. Os campos de estado vêm do backlog e não devem ser editados aqui. A coluna
-> `Then` é o requisito aprovado, copiado literal do backlog; `Given` e `When` foram
-> autorados junto.
+> Autorada à mão no formato do passo 37. A entrada em `tasks/backlog.json` do umbrella e o
+> `REQ-E06-11` nascem no PR de spec do umbrella que segue este; até ele ser mergeado, a TASK
+> não existe no backlog e não pode ser reservada. A coluna `Then` é o texto que esse PR grava
+> literal no `acceptance`; `Given` e `When` foram autorados junto.
 
 | Campo | Valor |
 |---|---|
@@ -62,6 +62,7 @@ Os 17 estilos de onda do MVP no player, com configuração por estilo persistida
 | `TASK-E06-11-AC-4` | um estilo ao vivo tocando com movimento reduzido ligado, pela preferência do sistema ou pela opção do player | os redesenhos da onda são contados sob o relógio virtual | movimento reduzido leva a cadência a 100 ms |
 | `TASK-E06-11-AC-5` | um estilo com um parâmetro alterado pelo editor de configuração do estilo | o player é fechado e aberto de novo | configuração por estilo é editável e persiste entre sessões |
 | `TASK-E06-11-AC-6` | a onda visível com qualquer um dos 17 estilos selecionado | o usuário clica com o botão direito sobre a onda, ou pressiona Shift+F10 ou a tecla de menu com o foco no controle de busca, e escolhe outro estilo | o botão direito ou Shift+F10 sobre a onda abre o menu de estilos |
+| `TASK-E06-11-AC-7` | `bars-pulse` selecionado com uma faixa de rádio tocando e os parâmetros do ramo de rádio que `TASK-E02-13` grava no AC-3 | cada redesenho de `pulseFrame` grava o `d` das barras e a escala | com faixa de rádio, `bars-pulse` desenha barras por amostra além de escalar |
 
 ## Notas de escopo
 
@@ -70,21 +71,19 @@ Fazem parte desta TASK, como no MVP, e ficam registrados aqui para não se perde
 1. **Menu de estilos.** No MVP, o botão direito ou Shift+F10 sobre a onda abre o menu de
    estilos (`waveform-styles.js`, evento `contextmenu` e tecla `ContextMenu` ou Shift+F10 no
    controle de busca); é o AC-6.
-2. **Ramo de rádio de `bars-pulse`.** Com faixa de rádio, `bars-pulse` reescreve o `d` de
-   cada barra com barras por amostra, além de escalar as barras com `scaleBars`, que roda
-   nos dois ramos. Esse ramo não tem série em `movimento.json`; o comportamento vem do AC-3
-   de `TASK-E02-13`.
-3. **`peakDecay` sem efeito.** `spectrum-pulse` tem `peakDecay` em `defaultConfigs`, e o
-   editor de configuração o mostra, mas o código do MVP não o lê. Esta TASK replica o MVP:
-   o parâmetro existe, é editável e persiste (AC-1 e AC-5), e não muda o desenho. Dar efeito
-   a ele é mudança de comportamento e entra por PR de spec, não pela implementação.
+2. **Ramo de rádio de `bars-pulse`.** É o AC-7; o comportamento está descrito no item 4 de
+   "Estilos de onda" de `TASK-E02-13` e não é repetido aqui.
+3. **`peakDecay` sem efeito.** O fato está no item 3 de "Estilos de onda" de `TASK-E02-13`.
+   Decisão desta TASK: replicar o MVP. O parâmetro existe, é editável e persiste (AC-1 e
+   AC-5), e não muda o desenho. Dar efeito a ele entra por PR de spec, não pela
+   implementação.
 
 ## Verificação
 
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | `assets/gabarito/movimento.json` e a descrição dos estilos de `TASK-E02-13`, gerados a partir do MVP no commit `0d9860b901510021bcca4c31a25014373ea7c452`, e não do código desta TASK | cada série dos 14 estilos ao vivo dentro do teto da `TASK-E02-13`; os parâmetros dos 17 estilos iguais aos gravados; 100 ms de cadência com movimento reduzido; a configuração alterada relida depois de reabrir o player. Hoje não há estilo de onda no player nem `movimento.json` no repo |
+| Oráculo independente | `assets/gabarito/movimento.json` e a descrição dos estilos de `TASK-E02-13`, gerados a partir do MVP no commit `0d9860b901510021bcca4c31a25014373ea7c452`, e não do código desta TASK | cada série dos 14 estilos ao vivo dentro do teto da `TASK-E02-13`; os parâmetros dos 17 estilos iguais aos gravados; o envelope dos 3 estilos de envelope igual ao que `envelope()` gera com as alturas gravadas no AC-3 de `TASK-E02-13`, sobre o envelope do arquivo; o ramo de rádio de `bars-pulse` igual ao descrito no AC-3 de `TASK-E02-13`; 100 ms de cadência com movimento reduzido; a configuração alterada relida depois de reabrir o player. Hoje não há estilo de onda no player nem `movimento.json` no repo |
 | Hardware | nenhum: as séries são numéricas e rodam com relógio virtual, sem dispositivo de áudio | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
