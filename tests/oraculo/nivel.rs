@@ -1,6 +1,6 @@
 //! Cálculo de nível RMS → dB (item 7).
 
-use super::sinal::{sinal, Tipo};
+use super::sinal::{Tipo, sinal};
 
 /// Limite inferior de recorte.
 const DB_FLOOR: f64 = -60.0;
@@ -20,6 +20,6 @@ pub fn nivel_db(tipo: Tipo, amostra_fim: u64) -> f64 {
         return DB_FLOOR;
     }
     let rms = (soma / cont as f64).sqrt();
-    let db = 20.0 * rms.log10();
-    db.clamp(-60.0, 0.0)
+    let db = 20.0 * rms.max(1e-8).log10();
+    db.clamp(DB_FLOOR, 0.0)
 }

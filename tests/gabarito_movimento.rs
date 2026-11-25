@@ -5,7 +5,9 @@
 
 mod oraculo;
 
-use oraculo::grade::{amostra_suspensao, quadros_medidor, quadros_pulse_33, quadros_spectrum_pulse, t_k};
+use oraculo::grade::{
+    amostra_suspensao, quadros_medidor, quadros_pulse_33, quadros_spectrum_pulse, t_k,
+};
 use oraculo::nivel::nivel_db;
 use oraculo::sinal::{Tipo, sinal};
 
@@ -26,7 +28,12 @@ fn degrau_n23999_n24000() {
 #[test]
 fn rajada_n2399_n2400() {
     // [0, 50ms) => n=2399 ligado, n=2400 = 50ms desligado
-    assert!((sinal(Tipo::Rajada, 2399) - 0.5 * (std::f64::consts::PI * 1000.0 * 2399.0 / 48000.0).sin() as f32).abs() < 1e-6);
+    assert!(
+        (sinal(Tipo::Rajada, 2399)
+            - 0.5 * (std::f64::consts::PI * 1000.0 * 2399.0 / 48000.0).sin() as f32)
+            .abs()
+            < 1e-6
+    );
     assert_eq!(0.0, sinal(Tipo::Rajada, 2400));
 }
 
