@@ -61,7 +61,7 @@ nativa (egui, sem navegador).
 > construídos. Não entrega binário em execução e não afirma resultado medido. Não contém
 > código do Winamp nem assets de terceiros.
 
-**Specs:** todos os arquivos em [`specs/`](specs/) estão em v0.2.0, rascunho autorado ainda não aprovado pelo mantenedor. Nenhum número neles é contrato antes da aprovação.
+**Specs:** todos os arquivos em [`specs/`](specs/) estão em v0.2.0. A §5 de `ui`, `player`, `biblioteca` e `plugins` foi aprovada pelo mantenedor em 2026-11-18; o resto delas, e `streaming` e `temas` inteiras, seguem rascunho autorado, e nenhum número ali é contrato antes da aprovação.
 
 Licença: `MIT OR Apache-2.0` — ver [LICENSE](LICENSE), [LICENSE-MIT](LICENSE-MIT) e
 [LICENSE-APACHE](LICENSE-APACHE).

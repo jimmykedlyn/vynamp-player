@@ -18,7 +18,8 @@ Specs deste módulo. Normativas: o código segue a spec, não o contrário.
 | `temas.md` | E06, E17-09, E17-10 | TEM |
 | `plugins.md` | E07 | PLG |
 
-O estado de cada uma está no cabeçalho. Todas estão em **rascunho autorado, não
-aprovado** (v0.2.0): §4 e §5 cobrem as 98 TASKs do backlog, com o critério `Then`
+O estado de cada uma está no cabeçalho. Todas estão em v0.2.0; a §5 de `ui`, `player`,
+`biblioteca` e `plugins` foi **aprovada em 2026-11-18**, e o resto é **rascunho autorado,
+não aprovado**: §4 e §5 cobrem as 98 TASKs do backlog, com o critério `Then`
 copiado literal. Rascunho não é contrato: a TASK fica `planned` até o mantenedor
 aprovar a spec, e o primeiro passo de cada TASK é o teste vermelho de §5.
