@@ -87,7 +87,7 @@ Fonte de cada requisito: o documento citado na TASK (`library/01-biblioteca-play
 > que é o que o `AGENTS.md` §4.3 exige. Cada `Given`/`When` abaixo foi reescrito a
 > partir da tabela de critérios do próprio doc da TASK (`tasks/items/TASK-Exx-nn.md`),
 > que já tinha o `Given`/`When` real; o `Then` é cópia literal do backlog e **não**
-> mudou. **Não aprovado** — a aprovação é do mantenedor, por `GOVERNANCE.md`, e vale
+> mudou. **Aprovado em 2026-11-18** pelo mantenedor (cartão `aaf4575d` da JKC-222, opção `approve-all`); a aprovação vale
 > pelo conteúdo desta tabela no commit que a registra.
 
 | ID | Given | When | Then |
