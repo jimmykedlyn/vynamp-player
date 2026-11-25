@@ -60,7 +60,7 @@ fn analyser_node(samples: &[f64], fft_size: usize) -> Vec<f64> {
     mags.iter()
         .map(|&m| {
             let db = 20.0 * m.log10();
-            db.clamp(-90.0, 0.0)
+            db.max(-90.0).min(0.0)
         })
         .collect()
 }
@@ -74,10 +74,7 @@ fn rms_de_seno_de_pico_0_5_e_menos_9db() {
     let scaled: Vec<f64> = samples.iter().map(|&s| s * peak).collect();
     let rms = (scaled.iter().map(|&s| s * s).sum::<f64>() / scaled.len() as f64).sqrt();
     let db = rms_to_db(rms);
-    assert!(
-        (db - (-9.03)).abs() < 0.1,
-        "RMS→dB: esperado ≈−9,03 dB, obtido {db:.2} dB"
-    );
+    assert!((db - (-9.03)).abs() < 0.1, "RMS→dB: esperado ≈−9,03 dB, obtido {db:.2} dB");
 }
 
 #[test]
@@ -90,10 +87,7 @@ fn seno_de_1khz_cai_no_bin_correto() {
     let bin42_db = bins[42];
     let bin43_db = bins[43];
     let max_db = bin42_db.max(bin43_db);
-    assert!(
-        max_db > -10.0,
-        "seno de 1 kHz deve aparecer forte no bin 42/43, obtido {max_db:.1} dB"
-    );
+    assert!(max_db > -10.0, "seno de 1 kHz deve aparecer forte no bin 42/43, obtido {max_db:.1} dB");
 }
 
 #[test]
@@ -101,10 +95,7 @@ fn tolerancia_dentro_do_teto_de_nivel() {
     // Teto de nível: 0,1 dB. Simula desvio máximo aceitável.
     let desvio = 0.05; // dentro do teto
     let teto = 0.1;
-    assert!(
-        desvio <= teto,
-        "desvio {desvio} dB deve ficar no teto {teto} dB"
-    );
+    assert!(desvio <= teto, "desvio {desvio} dB deve ficar no teto {teto} dB");
 }
 
 #[test]
@@ -112,10 +103,7 @@ fn tolerancia_dentro_do_teto_de_espectro() {
     // Teto de espectro: 0,5 dB.
     let desvio = 0.3;
     let teto = 0.5;
-    assert!(
-        desvio <= teto,
-        "desvio {desvio} dB deve ficar no teto {teto} dB"
-    );
+    assert!(desvio <= teto, "desvio {desvio} dB deve ficar no teto {teto} dB");
 }
 
 #[test]
@@ -128,6 +116,8 @@ fn tolerancia_dentro_do_teto_de_onda() {
 
 /// AC-1: cada animação observável do MVP tem duração, easing e keyframes ou série.
 mod ac1 {
+    use super::*;
+
     /// Uma animação observável do MVP, extraída de CSS @keyframes/transições ou rAF.
     struct Animacao {
         nome: &'static str,
@@ -138,77 +128,15 @@ mod ac1 {
     }
 
     /// Animações do MVP estático (fonte: CSS do MVP e varredura rAF).
-    /// Valores lidos dos ficheiros CSS em `reference/vynamp-mvp/mvp/*.css`:
-    /// - `graph-editor.css`: `animation:graph-signal 3s linear infinite`, keyframes
-    ///   `stroke-dashoffset -96`; `transition:width 90ms linear` para o medidor.
-    /// - `library-workspace.css`: `animation:media-wait 1s ease-in-out infinite`,
-    ///   keyframes `opacity .3`.
-    /// - `audio-controls.css`: `transition:transform 100ms var(--ease)`.
-    /// - `lyrics.css`: `transition:color 200ms var(--ease),opacity 200ms var(--ease)`.
-    /// - `player.css`: `transition:background-color 120ms var(--ease),color ...`.
+    /// Ainda não implementada: deve vir da varredura estática do MVP.
     fn animacoes_do_mvp() -> Vec<Animacao> {
-        vec![
-            Animacao {
-                nome: "graph-signal",
-                duracao: 3.0,
-                easing: Some("linear"),
-                keyframes: Some("stroke-dashoffset -96"),
-                serie: None,
-            },
-            Animacao {
-                nome: "media-wait",
-                duracao: 1.0,
-                easing: Some("ease-in-out"),
-                keyframes: Some("opacity .3"),
-                serie: None,
-            },
-            Animacao {
-                nome: "switch-control",
-                duracao: 0.1,
-                easing: Some("ease"),
-                keyframes: None,
-                serie: Some("transform"),
-            },
-            Animacao {
-                nome: "graph-node-meter",
-                duracao: 0.09,
-                easing: Some("linear"),
-                keyframes: None,
-                serie: Some("width"),
-            },
-            Animacao {
-                nome: "lyrics-line",
-                duracao: 0.2,
-                easing: Some("ease"),
-                keyframes: None,
-                serie: Some("color,opacity"),
-            },
-            Animacao {
-                nome: "button-hover",
-                duracao: 0.12,
-                easing: Some("ease"),
-                keyframes: None,
-                serie: Some("background-color,color"),
-            },
-            Animacao {
-                nome: "track-row",
-                duracao: 0.15,
-                easing: Some("ease"),
-                keyframes: None,
-                serie: Some("background,border-color"),
-            },
-        ]
+        Vec::new() // vermelho: nenhuma animação cadastrada ainda
     }
 
     #[test]
     fn cada_animacao_tem_duracao_positiva() {
         for a in &animacoes_do_mvp() {
-            assert!(
-                a.duracao > 0.0,
-                "animação '{}' sem duração: {}",
-                a.nome,
-                a.duracao
-            );
+            assert!(a.duracao > 0.0, "animação '{}' sem duração", a.nome);
         }
         assert!(
             !animacoes_do_mvp().is_empty(),
@@ -219,7 +147,11 @@ mod ac1 {
     #[test]
     fn cada_animacao_tem_easing_definido() {
         for a in &animacoes_do_mvp() {
-            assert!(a.easing.is_some(), "animação '{}' sem easing", a.nome);
+            assert!(
+                a.easing.is_some(),
+                "animação '{}' sem easing",
+                a.nome
+            );
         }
     }
 
@@ -238,6 +170,7 @@ mod ac1 {
 /// AC-2: `movimento.json` e `tolerancia.json` existem e a tolerância documentada
 /// é igual à recalculada.
 mod ac2 {
+    use super::*;
 
     #[test]
     fn movimento_json_existe() {
