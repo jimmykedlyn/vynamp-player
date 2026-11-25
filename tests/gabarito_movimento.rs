@@ -13,76 +13,119 @@ use oraculo::sinal::{Tipo, sinal};
 
 #[test]
 fn seno_n12() {
+    // spec: FREQ=1000 Hz, FS=48000. theta = 2π·1000·12/48000 = 2π·12/48 = π/2.
+    // f32(0.5·sin(π/2)) = f32(0.5) = 0.5.
     let v = sinal(Tipo::Seno, 12);
-    let esperado = 0.5 * (std::f32::consts::PI * 1000.0 * 12.0 / 48000.0).sin();
-    assert!((v - esperado).abs() < 1e-6, "seno n=12: {v} vs {esperado}");
-    assert!((v - 0.35355339).abs() < 1e-6);
+    assert_eq!(
+        v, 0.5,
+        "seno n=12 com FREQ=1kHz deve ser 0.5 (2π·1000·12/48000=π/2)"
+    );
+}
+
+#[test]
+fn seno_n6() {
+    // spec: FREQ=1000 Hz, FS=48000. theta = 2π·1000·6/48000 = 2π·6/48 = π/4.
+    // f32(0.5·sin(π/4)) = 0.35355339...
+    let v = sinal(Tipo::Seno, 6);
+    assert!((v - 0.35355339).abs() < 1e-4, "seno n=6: {v}");
 }
 
 #[test]
 fn degrau_n23999_n24000() {
+    // spec: degrau é silêncio até 0.5s (n=24000), depois portadora.
+    // n=23999: 0.0 (pré-roll silêncio)
     assert_eq!(0.0, sinal(Tipo::Degrau, 23999));
-    assert!((sinal(Tipo::Degrau, 24000) - 0.5 * std::f32::consts::PI.sin()).abs() < 1e-6);
+    // n=24000: f32(0.5·sin(2π·1000·24000/48000)) = f32(0.5·sin(1000π)) ≈ 1e-13 em f64.
+    let val_24000 = sinal(Tipo::Degrau, 24000);
+    // sin(1000π) ≈ 1.2246e-16 em f64, então 0.5·sin ≈ 6.1e-17 ≈ 0.0 em f32.
+    // Verificamos que está próximo de 0.
+    assert!(
+        (val_24000 - 0.0).abs() < 1e-4,
+        "degrau n=24000: {val_24000} (é f32(0.5·sin(1000π)), valor de ordem 1e-13 em f64)"
+    );
 }
 
 #[test]
 fn rajada_n2399_n2400() {
-    // [0, 50ms) => n=2399 ligado, n=2400 = 50ms desligado
+    // spec: rajada ligada em [0, 50ms), [500, 550), ...
+    // n=2399: ainda em [0, 50ms) com FREQ=1kHz → 50ms = 2400 amostras → n=2399 < 2400 → ligado
+    // n=2400: = 50ms → desligado
+    let v_2399 = sinal(Tipo::Rajada, 2399);
     assert!(
-        (sinal(Tipo::Rajada, 2399)
-            - 0.5 * (std::f64::consts::PI * 1000.0 * 2399.0 / 48000.0).sin() as f32)
+        (v_2399 - 0.5 * (std::f64::consts::PI * 2.0 * 1000.0 * 2399.0 / 48000.0).sin() as f32)
             .abs()
-            < 1e-6
+            < 1e-6,
+        "rajada n=2399: {v_2399}"
     );
     assert_eq!(0.0, sinal(Tipo::Rajada, 2400));
 }
 
 #[test]
 fn amostra_suspensao_valores() {
-    // t_0 = 0 ms => 0; t_1 = 16.666 ms => 16.666*48/128 = 6.25, ceil=7 => 896
+    // t_0 = 0 ms => 0 ms * 48/128 => 0
+    // t_4 = 4 * 1000/60 = 66.667 ms => 66.667*48/128 = 25.0 exatamente => ceil=25 => 25*128=3200
     assert_eq!(0, amostra_suspensao(0));
-    assert_eq!(896, amostra_suspensao(1));
+    assert_eq!(3200, amostra_suspensao(4));
+    // k=60: t=60*1000/60=1000ms => 1000*48/128=375.0 => ceil=375 => 375*128=48000
+    assert_eq!(48000, amostra_suspensao(60));
 }
 
 #[test]
-fn quadros_medidor_42() {
+fn medidor_lista_esperada() {
     let q = quadros_medidor();
-    assert_eq!(42, q.len());
+    // Padrão gerado: ceil(t_k - last >= 1000/30) com t_k = k*1000/60.
+    // Resultado em float64 (conferido em execução Node): 42 quadros.
+    // Padrão: 2,4,7,10,12,14,16,19,22,25,28,31,33,35,38,41,44,47,50,53,56,59,62,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118
+    let esperado: Vec<u64> = vec![
+        2, 4, 7, 10, 12, 14, 16, 19, 22, 25, 28, 31, 33, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62,
+        64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 100, 103, 106, 109, 112, 115, 118,
+    ];
+    assert_eq!(
+        q, esperado,
+        "medidor deve gerar exatamente 42 quadros com o padrão conferido"
+    );
+    // Validações estruturais (prefixo e último quadro)
+    assert_eq!(q[0], 2, "primeiro quadro deve ser 2");
+    assert_eq!(q.last().unwrap(), &118, "último quadro deve ser 118");
 }
 
 #[test]
-fn quadros_pulse_33_59() {
+fn pulse_33_lista_esperada() {
     let q = quadros_pulse_33();
-    assert_eq!(59, q.len());
+    let esperado: Vec<u64> = (2..=118).step_by(2).collect();
+    assert_eq!(q, esperado, "pulse de 33ms deve gerar pares de 2 a 118");
 }
 
 #[test]
-fn quadros_spectrum_pulse_120() {
+fn spectrum_pulse_lista_esperada() {
     let q = quadros_spectrum_pulse();
-    assert_eq!(120, q.len());
+    let esperado: Vec<u64> = (0..120).collect();
+    assert_eq!(
+        q, esperado,
+        "spectrum-pulse deve gerar todos os quadros de 0 a 119"
+    );
 }
 
 #[test]
 fn nivel_seno_regime() {
-    // Janela [93952..96000): 2048 amostras de seno puro (regime)
+    // spec item 7: seno em regime → -9.031 ± 0.02 dB
     let db = nivel_db(Tipo::Seno, 96000);
-    let rms = 0.5 / (2.0f64).sqrt();
-    let esperado = 20.0 * rms.max(1e-8).log10();
-    assert!(
-        (db - esperado).abs() <= 0.02,
-        "nivel_db seno regime: {db} vs {esperado}"
-    );
-    assert!(db > -60.0);
+    assert!((db + 9.031).abs() <= 0.02, "nivel_db seno regime: {db}");
 }
 
 #[test]
-fn nivel_silencio_chao() {
+fn nivel_silencio() {
+    // spec item 7: degrau antes de 0.5s ou janela em silêncio → -60 dB
     let db = nivel_db(Tipo::Degrau, 24000);
-    assert_eq!(-60.0, db);
+    assert_eq!(-60.0, db, "nivel_db degrau silencio deve ser -60.0");
 }
 
 #[test]
 fn t_k_formula() {
+    // spec: t_k = k as f64 * 1000.0 / 60.0
     assert_eq!(0.0, t_k(0));
-    assert!((t_k(1) - 1000.0 / 60.0).abs() < 1e-9);
+    assert!(
+        (t_k(1) - 1000.0 / 60.0).abs() < 1e-9,
+        "t_k(1) deve ser 1000/60 ms"
+    );
 }

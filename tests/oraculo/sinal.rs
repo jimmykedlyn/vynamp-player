@@ -11,8 +11,8 @@ pub enum Tipo {
     Rajada,
 }
 
-/// Frequência da portadora em Hz (2π·FREQ·n/FS = 2π·1000·n/48000).
-const FREQ: f64 = 500.0;
+/// Frequência da portadora em Hz. Spec: 1 kHz (REQ-E02-13).
+const FREQ: f64 = 1000.0;
 /// Taxa de amostragem em Hz.
 const FS: f64 = 48000.0;
 
@@ -30,6 +30,7 @@ pub fn sinal(tipo: Tipo, n: i64) -> f32 {
         Tipo::Degrau => (24000.0..2.0 * FS).contains(&nn),
         Tipo::Seno => (0.0..2.0 * FS).contains(&nn),
         Tipo::Rajada => {
+            // 500 ms per cycle, 50 ms on within each cycle
             let ciclo = 500.0 / 1000.0 * FS; // = 24000 amostras = 500ms
             let dentro_ciclo = (nn % ciclo) < 50.0 / 1000.0 * FS; // 50ms = 2400 amostras
             nn < 2.0 * FS && dentro_ciclo
