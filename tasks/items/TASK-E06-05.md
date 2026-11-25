@@ -15,7 +15,7 @@
 | Prioridade | P0 |
 | Estado | planned |
 | Depende de | `TASK-E01-05`, `TASK-E02-03` |
-| Bloqueia | `TASK-E06-06` |
+| Bloqueia | `TASK-E06-06`, `TASK-E06-11` |
 | Modelo executor | Opus — áudio/RT, concorrência, segurança ou release |
 | Esforço | 5–12 dias úteis |
 | Risco | alto |
