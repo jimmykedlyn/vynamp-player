@@ -49,7 +49,7 @@ Transições CSS, séries rAF sob sinais determinísticos, constantes de Analyse
 | ID | Given | When | Then |
 |---|---|---|---|
 | `TASK-E02-13-AC-1` | a folha de estilo do MVP e um sinal determinístico injetado em requestAnimationFrame | cada transição observável é medida quanto a duração, easing e keyframes ou série temporal | Cada animação do MVP tem duração, easing e keyframes ou série temporal |
-| `TASK-E02-13-AC-2` | o medidor e o visualizador de onda do MVP recebendo degrau, seno e rajada sintéticos | os parâmetros do AnalyserNode, a balística e a resposta de cada sinal são registrados com a tolerância observada | medidores e ondas respondem a degrau, seno e rajada com tolerância documentada |
+| `TASK-E02-13-AC-2` | o medidor e o visualizador de onda do MVP recebendo, a 48 kHz e em estéreo idêntico injetado no lugar da fonte de mídia: degrau (silêncio até 0,5 s, depois amplitude 0,5, −6 dBFS, até 2,0 s), seno de 1 kHz com amplitude 0,5 por 2,0 s, rajada de 1 kHz com amplitude 0,5, 50 ms ligada e 450 ms desligada, por 2,0 s, e o sinal demo do próprio MVP | os parâmetros do AnalyserNode, a balística e a resposta de cada sinal são registrados, e a tolerância de cada série é medida como o maior desvio absoluto entre o gabarito e um oráculo Rust independente que reimplementa RMS → dB → fração e o AnalyserNode | medidores e ondas respondem aos quatro sinais com a tolerância observada documentada por série, nunca acima de 0,1 dB no medidor nem de 0,5 dB no espectro; acima do teto, o critério falha |
 | `TASK-E02-13-AC-3` | cada uso de Web Audio do MVP identificado na varredura | o uso é traduzido para um comportamento descrito em formato consumível pelo Rust | Web Audio entra só como comportamento reimplementável. |
 
 ## Verificação
@@ -57,7 +57,7 @@ Transições CSS, séries rAF sob sinais determinísticos, constantes de Analyse
 | Item | Comando / fixture | Evidência esperada |
 |---|---|---|
 | Teste automatizado | `cargo test` no repo `vynamp-player` | verde no CI Gate |
-| Oráculo independente | o gerador de séries `rAF` sob sinais determinísticos, comparado contra as transições CSS e as constantes de `AnalyserNode` do MVP | as séries são reproduzíveis entre duas execuções e batem com o MVP dentro da tolerância declarada; hoje não há gerador nem comparação no repo |
+| Oráculo independente | o gerador de séries `rAF` sob tempo virtual e os sinais determinísticos do AC-2, comparado contra as transições CSS e as constantes de `AnalyserNode` do MVP | duas execuções do gerador produzem `movimento.json` com sha256 idêntico, e as séries batem com o oráculo Rust dentro da tolerância declarada e dos tetos do AC-2; hoje não há gerador nem comparação no repo |
 | Hardware | nenhum: as séries são numéricas e não dependem de GPU real | ausência é limitação registrada, não aprovação |
 
 ## DoD — pronto para review
