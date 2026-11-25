@@ -40,6 +40,10 @@ Os 17 estilos de onda do MVP no player, com configuração por estilo persistida
   visualizador em tela cheia.
 - **Não** monta o harness de fidelidade visual. A comparação de pixel com o MVP roda no
   harness de `TASK-E02-16`; esta TASK fornece os estilos que ele compara.
+- **Não** entrega a busca por arraste sobre a onda. No MVP, arrastar sobre a onda é o
+  `input` do controle de busca (`player.js`, `$('seek')`), que é o seek de `TASK-E02-03`;
+  aqui a onda só é desenhada sobre essa área, e dar outro dono ao seek daria dois
+  caminhos para a mesma posição.
 
 ## Antes de começar
 
@@ -57,19 +61,23 @@ Os 17 estilos de onda do MVP no player, com configuração por estilo persistida
 | `TASK-E06-11-AC-3` | os estilos `original`, `dj` e `overview` e um arquivo local com envelope conhecido | cada um desses estilos é selecionado com o arquivo carregado, com e sem reprodução | os 3 de envelope desenham o envelope do arquivo |
 | `TASK-E06-11-AC-4` | um estilo ao vivo tocando com movimento reduzido ligado, pela preferência do sistema ou pela opção do player | os redesenhos da onda são contados sob o relógio virtual | movimento reduzido leva a cadência a 100 ms |
 | `TASK-E06-11-AC-5` | um estilo com um parâmetro alterado pelo editor de configuração do estilo | o player é fechado e aberto de novo | configuração por estilo é editável e persiste entre sessões |
+| `TASK-E06-11-AC-6` | a onda visível com qualquer um dos 17 estilos selecionado | o usuário clica com o botão direito sobre a onda, ou pressiona Shift+F10 ou a tecla de menu com o foco no controle de busca, e escolhe outro estilo | o botão direito ou Shift+F10 sobre a onda abre o menu de estilos |
 
 ## Notas de escopo
 
 Fazem parte desta TASK, como no MVP, e ficam registrados aqui para não se perderem:
 
-1. **Busca por arraste sobre a onda.** No MVP, a onda é a área de busca: arrastar busca, e
-   o botão direito ou Shift+F10 abre o menu de estilos.
-2. **Ramo de rádio de `bars-pulse`.** Com faixa de rádio, `bars-pulse` desenha barras por
-   amostra em vez de escalar as barras do envelope. Esse ramo não tem série em
-   `movimento.json`; o comportamento vem do AC-3 de `TASK-E02-13`.
-3. **`peakDecay` sem efeito.** `spectrum-pulse` tem `peakDecay` em `defaultConfigs`, mas o
-   código do MVP não o lê. A implementação replica esse comportamento ou registra a
-   decisão de dar efeito ao parâmetro, com o motivo, antes do código.
+1. **Menu de estilos.** No MVP, o botão direito ou Shift+F10 sobre a onda abre o menu de
+   estilos (`waveform-styles.js`, evento `contextmenu` e tecla `ContextMenu` ou Shift+F10 no
+   controle de busca); é o AC-6.
+2. **Ramo de rádio de `bars-pulse`.** Com faixa de rádio, `bars-pulse` reescreve o `d` de
+   cada barra com barras por amostra, além de escalar as barras com `scaleBars`, que roda
+   nos dois ramos. Esse ramo não tem série em `movimento.json`; o comportamento vem do AC-3
+   de `TASK-E02-13`.
+3. **`peakDecay` sem efeito.** `spectrum-pulse` tem `peakDecay` em `defaultConfigs`, e o
+   editor de configuração o mostra, mas o código do MVP não o lê. Esta TASK replica o MVP:
+   o parâmetro existe, é editável e persiste (AC-1 e AC-5), e não muda o desenho. Dar efeito
+   a ele é mudança de comportamento e entra por PR de spec, não pela implementação.
 
 ## Verificação
 
