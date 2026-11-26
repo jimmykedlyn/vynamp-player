@@ -448,3 +448,33 @@ thread 'neon_crystal_quatro_segmentos_bloco_padrao' panicked at tests\oraculo\es
 not implemented: fase 3c: camadas (true, 4, 2, 2, 21, 16)
   left: [M(0.0, 24.0), Z]
  right: []
+
+## Fase 4 — vermelho (node --test tools/gabarito-movimento/grade.test.cjs)
+
+Lógica pura do gerador contra stub que lança "não implementado" e MVP_COMMIT vazio.
+Node v26.13.1, Windows 11 Pro 10.0.26300. Saída do runner, com as pilhas reduzidas à linha do erro:
+
+✖ SHA do MVP é o literal do pin (2.1624ms)
+✖ t_k é k*1000/60 em float64 nessa ordem (item 5) (0.1797ms)
+✖ amostra de suspensão é ceil(t_k*48/128)*128 (item 6) (0.1196ms)
+✖ grade tem 120 quadros distintos, em ordem, múltiplos de 128 e dentro de 96000 (1.0085ms)
+✖ sinal: portadora de 1 kHz, amplitude 0,5, fase 0, em f32 (item 3) (0.2237ms)
+✖ degrau: silêncio até 0,5 s e portadora depois (0.1351ms)
+✖ rajada: 50 ms ligada e 450 ms desligada desde t = 0 (0.1397ms)
+✖ amostrasSinal devolve 96000 amostras iguais a sinal(tipo, n) (0.1653ms)
+✖ WAV é PCM 16 bits, 48 kHz, estéreo, com as 96000 amostras nos dois canais (0.1899ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 0
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 152.93
+    actual: '',
+    expected: '0d9860b901510021bcca4c31a25014373ea7c452',
+  Error: não implementado: tK
+  Error: não implementado: amostraSuspensao
+  Error: não implementado: quadros
+  Error: não implementado: sinal
+  Error: não implementado: amostrasSinal
