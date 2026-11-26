@@ -265,33 +265,42 @@ pub fn geometria_spectrum(
     right: &[f64],
     h: f64,
 ) -> (Vec<(&'static str, Vec<Comando>)>, f64) {
+    // `Math.max(...left, ...right)`, sem valor absoluto, como no MVP.
     let data_level = left
         .iter()
         .chain(right.iter())
         .cloned()
-        .fold(0.0f64, |a, b| a.max(b.abs()));
+        .fold(f64::NEG_INFINITY, f64::max);
     let mut paths = Vec::new();
 
     match estilo {
-        "spectrum-stereo" => {
-            // left: M (i+.5)*1000/bands 24, v-left*h; right: M (i+.5)*1000/bands 24, v-right*h
+        "spectrum-stereo" | "spectrum-aurora" => {
+            // top: M (i+.5)*1000/bands 24, v-left*h; bottom: M (i+.5)*1000/bands 24, v right*h
             let bands = left.len();
-            let mut left_cmds = Vec::new();
-            let mut right_cmds = Vec::new();
+            let mut top = Vec::new();
+            let mut bottom = Vec::new();
 
             for (i, &v) in left.iter().enumerate() {
                 let x = (i as f64 + 0.5) * 1000.0 / bands as f64;
-                left_cmds.push(Comando::M(x, 24.0));
-                left_cmds.push(Comando::V(-v * h));
+                top.push(Comando::M(x, 24.0));
+                top.push(Comando::V(-v * h));
             }
             for (i, &v) in right.iter().enumerate() {
                 let x = (i as f64 + 0.5) * 1000.0 / bands as f64;
-                right_cmds.push(Comando::M(x, 24.0));
-                right_cmds.push(Comando::V(v * h));
+                bottom.push(Comando::M(x, 24.0));
+                bottom.push(Comando::V(v * h));
             }
 
-            paths.push(("wave-spectrum-left", left_cmds));
-            paths.push(("wave-spectrum-right", right_cmds));
+            if estilo == "spectrum-stereo" {
+                paths.push(("wave-spectrum-left", top));
+                paths.push(("wave-spectrum-right", bottom));
+            } else {
+                // spectrum-aurora: left e halo recebem top+bottom.
+                let mut top_bottom = top;
+                top_bottom.extend(bottom);
+                paths.push(("wave-spectrum-left", top_bottom.clone()));
+                paths.push(("wave-spectrum-halo", top_bottom));
+            }
         }
         "spectrum-ribbon" => {
             // ribbon: envelope da suavização 1-2-1 de left (borders: left[i-1] ?? v)
@@ -307,9 +316,12 @@ pub fn geometria_spectrum(
             let envelope_cmds = envelope(&smoothed, h);
             paths.push(("wave-spectrum-fill", envelope_cmds));
         }
-        _ => {
-            // estilos não mapeados deixam paths vazios
-        }
+        // O drawSpectrum do MVP só desenha estes três estilos (spectrum-pulse tem
+        // geometria_spectrum_pulse); outro estilo aqui é erro do chamador no teste.
+        outro => unreachable!(
+            "geometria_spectrum recebeu o estilo {outro:?}; só spectrum-stereo, \
+             spectrum-aurora e spectrum-ribbon passam por drawSpectrum"
+        ),
     }
 
     (paths, data_level)
