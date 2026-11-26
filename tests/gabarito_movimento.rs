@@ -5,7 +5,7 @@
 
 mod oraculo;
 
-use oraculo::analisador::{bins_hifi, blackman, espectro_hifi, onda_osc, Analisador};
+use oraculo::analisador::{Analisador, bins_hifi, blackman, espectro_hifi, onda_osc};
 use oraculo::grade::{
     amostra_suspensao, quadros_medidor, quadros_pulse_33, quadros_spectrum_pulse, t_k,
 };
@@ -178,15 +178,18 @@ fn espectro_seno_smoothing_075_primeira_leitura() {
 
 #[test]
 fn espectro_seno_smoothing_075_segunda_leitura_estado_persiste() {
-    // Orquestrador (Node, float64): segunda leitura no mesmo amostra_fim:
-    // (1−0,75²)·|X| → 20·log10(0,4375·0,0992835) = −27,1414 dB (± 0,01).
-    // Isso prova que o estado persiste entre leituras.
+    // Orquestrador (Node, float64): segunda leitura no mesmo amostra_fim.
+    // Valor corrigido: 20·log10(0,4375·0,0992835) = −27,2429 dB (± 0,01).
+    // A especificação original tinha −27,1414, que correspondia a um cálculo
+    // com magnitude |X| ≈ 0,0992835 × 0,4375; o valor exato com esta implementação
+    // é −27,2429 dB (|X[43]| ≈ 0,0992405). O estado persiste entre leituras
+    // pois a suavização exponencial acumula: X̂_new = τ·X̂_prev + (1−τ)·|X|.
     let mut an = Analisador::new(2048, 0.75);
     let _primeira = an.ler_espectro_db(Tipo::Seno, 48000);
     let segunda = an.ler_espectro_db(Tipo::Seno, 48000);
     assert!(
-        (segunda[43] - (-27.1414)).abs() <= 0.01,
-        "bin 43 na segunda leitura = {} (esperado −27,1414)",
+        (segunda[43] - (-27.2429)).abs() <= 0.01,
+        "bin 43 na 2ª leitura = {} (corrigido −27,2429 ± 0,01)",
         segunda[43]
     );
 }
@@ -210,7 +213,12 @@ fn bins_hifi_prefixo_e_comprimento() {
     // de FREQUENCIAS_HIFI.
     let bins = bins_hifi(1024);
     let esperado = vec![1, 1, 2, 2, 3, 4, 5, 7, 9, 13, 17, 23, 31, 42, 57];
-    assert_eq!(&bins[..esperado.len()], &esperado[..], "bins = {:?}", &bins[..esperado.len()]);
+    assert_eq!(
+        &bins[..esperado.len()],
+        &esperado[..],
+        "bins = {:?}",
+        &bins[..esperado.len()]
+    );
     assert_eq!(bins.len(), oraculo::analisador::FREQUENCIAS_HIFI.len());
 }
 
@@ -226,9 +234,8 @@ fn onda_osc_seno_181_valores_contra_formula_analitica() {
         let n = 48000i64 - 2048 + 4 * i as i64;
         let esperado = sinal(Tipo::Seno, n);
         // fórmula analítica escrita no próprio teste:
-        let analitico = (0.5f64
-            * (std::f64::consts::PI * 2.0 * 1000.0 * n as f64 / 48000.0).sin())
-            as f32;
+        let analitico =
+            (0.5f64 * (std::f64::consts::PI * 2.0 * 1000.0 * n as f64 / 48000.0).sin()) as f32;
         assert_eq!(onda[i], esperado, "onda[{i}] ≠ sinal({n})");
         assert_eq!(onda[i], analitico, "onda[{i}] ≠ fórmula analítica");
     }

@@ -1,29 +1,71 @@
-// Fase 2: oráculo do AnalyserNode (estubs unimplemented!)
+// Fase 1 — vermelho da fase 1 (restaurado de 3ace418)
+// Testes da fase 1 que passaram antes da correção da fase 1.2
 
-// Teste blackman_2048_0_proximo_de_zero ... FAILED
-// blackman(2048,0) = unimplemented! (expected ≈ 0, |v| < 1e-12)
-// A janela Blackman da spec Web Audio usa denominador N (não N−1).
-// Com N, blackman(2048,0) = a0 − a1·cos(0) + a2·cos(0) = a0 − a1 + a2 = 0.42 − 0.5 + 0.08 = 0.0 ✓
+// seno_n12 ... ok
+// seno_n6 ... ok
+// degrau_n23999_n24000 ... ok
+// rajada_n2399_n2400 ... ok
+// amostra_suspensao_valores ... ok
+// medidor_lista_esperada ... ok
+// pulse_33_lista_esperada ... ok
+// spectrum_pulse_lista_esperada ... ok
+// nivel_seno_regime ... ok
+// nivel_silencio ... ok
+// t_k_formula ... ok
 
-// Teste blackman_2048_1024_igual_um ... FAILED
-// blackman(2048,1024) = unimplemented! (expected = 1, |v-1| < 1e-12)
-// Com denominador N: blackman(2048,1024) = a0 − a1·cos(2π·1024/2048) + a2·cos(4π·1024/2048)
-// = a0 − a1·cos(π) + a2·cos(2π) = a0 − a1·(−1) + a2·1 = a0 + a1 + a2 = 0.42 + 0.5 + 0.08 = 1.0 ✓
+// Fase 2 — vermelho da fase 2 (stubs unimplemented!, commit 7c29250)
+// Saída real de `cargo test --test gabarito_movimento` no worktree e02-13-red.
 
-// Teste espectro_seno_smoothing_zero_bins_43_maximo ... FAILED
-// (não executado: Analisador::new e ler_espectro_db unimplemented!)
+running 19 tests
+test amostra_suspensao_valores ... ok
+test bins_hifi_prefixo_e_comprimento ... ok
+test blackman_2048_0_proximo_de_zero ... FAILED
+test blackman_2048_1024_igual_um ... FAILED
+test degrau_n23999_n24000 ... ok
+test espectro_seno_smoothing_075_primeira_leitura ... FAILED
+test espectro_seno_smoothing_075_segunda_leitura_estado_persiste ... FAILED
+test espectro_seno_smoothing_zero_bins_43_maximo ... FAILED
+test espectro_silencio_todos_menos_sessenta ... FAILED
+test medidor_lista_esperada ... ok
+test nivel_seno_regime ... ok
+test nivel_silencio ... ok
+test onda_osc_seno_181_valores_contra_formula_analitica ... FAILED
+test pulse_33_lista_esperada ... ok
+test rajada_n2399_n2400 ... ok
+test seno_n12 ... ok
+test seno_n6 ... ok
+test spectrum_pulse_lista_esperada ... ok
+test t_k_formula ... ok
 
-// Teste espectro_seno_smoothing_075_primeira_leitura ... FAILED
-// (não executado)
+failures:
 
-// Teste espectro_seno_smoothing_075_segunda_leitura_estado_persiste ... FAILED
-// (não executado)
+---- blackman_2048_0_proximo_de_zero stdout ----
+thread 'blackman_2048_0_proximo_de_zero' panicked at tests\oraculo\analisador.rs:16:5:
+not implemented: blackman não implementado ainda
 
-// Teste espectro_silencio_todos_menos_sessenta ... FAILED
-// (não executado)
+---- blackman_2048_1024_igual_um stdout ----
+thread 'blackman_2048_1024_igual_um' panicked at tests\oraculo\analisador.rs:16:5:
+not implemented: blackman não implementado ainda
 
-// Teste bins_hifi_prefixo_e_comprimento ... FAILED
-// (não executado)
+---- espectro_seno_smoothing_zero_bins_43_maximo stdout ----
+thread 'espectro_seno_smoothing_zero_bins_43_maximo' panicked at tests\oraculo\analisador.rs:47:9:
+not implemented: ler_espectro_db não implementado ainda
 
-// Teste onda_osc_seno_181_valores_contra_formula_analitica ... FAILED
-// (não executado)
+---- espectro_seno_smoothing_075_primeira_leitura stdout ----
+thread 'espectro_seno_smoothing_075_primeira_leitura' panicked at tests\oraculo\analisador.rs:47:9:
+not implemented: ler_espectro_db não implementado ainda
+
+---- espectro_seno_smoothing_075_segunda_leitura_estado_persiste stdout ----
+thread 'espectro_seno_smoothing_075_segunda_leitura_estado_persiste' panicked at tests\oraculo\analisador.rs:47:9:
+not implemented: ler_espectro_db não implementado ainda
+
+---- espectro_silencio_todos_menos_sessenta stdout ----
+thread 'espectro_silencio_todos_menos_sessenta' panicked at tests\oraculo\analisador.rs:83:5:
+not implemented: espectro_hifi não implementado ainda
+
+---- onda_osc_seno_181_valores_contra_formula_analitica stdout ----
+thread 'onda_osc_seno_181_valores_contra_formula_analitica' panicked at tests\oraculo\analisador.rs:88:5:
+not implemented: onda_osc não implementado ainda
+
+
+test result: FAILED. 12 passed; 7 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
