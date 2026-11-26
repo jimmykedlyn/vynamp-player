@@ -14,6 +14,9 @@ pub enum Comando {
     H(f64),
     /// `Z` — fecha o path.
     Z,
+    /// `a(rx ry rotação arco-grande varredura dx dy)` — arco relativo, usado
+    /// nos nós de `aurora-constellation` (waveform-styles.js:84).
+    A(f64, f64, f64, f64, f64, f64, f64),
 }
 
 /// `clamp(v, 0, 1)` — limita ao intervalo [0, 1].

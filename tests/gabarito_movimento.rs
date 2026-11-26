@@ -6,6 +6,10 @@
 mod oraculo;
 
 use oraculo::analisador::{Analisador, bins_hifi, blackman, bloco, espectro_hifi, onda_osc};
+use oraculo::estilos_arquivo::{EstiloArquivo, alturas, geometria_arquivo};
+use oraculo::estilos_criativos::{
+    geometria_aurora_weave, geometria_camadas, geometria_constelacao,
+};
 use oraculo::estilos_espectro::{
     Comando, SpectrumPulse, audivel, envelope, geometria_spectrum, geometria_spectrum_pulse,
     limites_bandas, merge, spectrum_bands,
@@ -618,6 +622,17 @@ fn assert_comandos(obtido: &[Comando], esperado: &[Comando], rotulo: &str) {
             }
             (Comando::V(d0), Comando::V(d1)) | (Comando::H(d0), Comando::H(d1)) => perto(*d0, *d1),
             (Comando::Z, Comando::Z) => true,
+            (Comando::A(a0, b0, c0, d0, e0, f0, g0), Comando::A(a1, b1, c1, d1, e1, f1, g1)) => [
+                (a0, a1),
+                (b0, b1),
+                (c0, c1),
+                (d0, d1),
+                (e0, e1),
+                (f0, f1),
+                (g0, g1),
+            ]
+            .iter()
+            .all(|(x, y)| perto(**x, **y)),
             _ => false,
         };
         assert!(igual, "{rotulo}: comando {i} obtido {a:?}, esperado {b:?}");
@@ -933,4 +948,473 @@ fn bars_pulse_radio_sem_amostras() {
         Comando::V(0.0),
     ];
     assert_comandos(&d, &esperado, "bars rádio vazio");
+}
+
+// ---------------------------------------------------------------------------
+// Fase 3c — estilos criativos e envelope do arquivo ("Estilos de onda",
+// itens 1, 2 e 4; AC-3).
+//
+// Os literais esperados vêm do código do MVP (waveform-styles.js, commit
+// 0d9860b9, linhas 7, 64, 66, 76, 84 a 87 e 93) rodado por um script Node de
+// scratch, fora do repo, que recusa o MVP em outro commit, com
+// `Number.prototype.toFixed` neutralizado para devolver o valor cheio.
+// ---------------------------------------------------------------------------
+
+/// Espectro sintético de 1024 bins em dB, o mesmo do script Node:
+/// −83,5 nos bins 0 a 39 e `−100 + (j·53 mod 97)` nos demais (todos exatos em f32).
+fn db_sintetico() -> Vec<f64> {
+    (0..1024u64)
+        .map(|j| {
+            if j < 40 {
+                -83.5
+            } else {
+                -100.0 + ((j * 53) % 97) as f64
+            }
+        })
+        .collect()
+}
+
+#[test]
+fn aurora_weave_quatro_amostras_dois_canais() {
+    // Given: esquerda bloco padrão, direita seno até 26048; samples 4, amplitude 22.
+    let padrao = bloco_padrao();
+    let seno = bloco(Tipo::Seno, 26048, 2048);
+    // When
+    let w = geometria_aurora_weave(Some(&padrao), Some(&seno), 4, 22.0);
+    // Then: data-level = maior |amostra| dos dois canais (waveform-styles.js:85).
+    assert!(
+        (w.nivel - 1.23291015625).abs() <= EPS_TEMPORAL,
+        "nível {}",
+        w.nivel
+    );
+    assert_comandos(
+        &w.esquerda,
+        &[
+            Comando::M(0.0, 24.0),
+            Comando::L(333.3333333333333, 23.037500016391277),
+            Comando::L(666.6666666666666, 34.17500013113022),
+            Comando::L(1000.0, 15.75),
+        ],
+        "weave esquerda",
+    );
+    assert_comandos(
+        &w.direita,
+        &[
+            Comando::M(0.0, 23.999999999998533),
+            Comando::L(333.3333333333333, 33.526279270648956),
+            Comando::L(666.6666666666666, 14.473720729351044),
+            Comando::L(1000.0, 24.00000000000612),
+        ],
+        "weave direita",
+    );
+}
+
+#[test]
+fn aurora_weave_canal_ausente_desenha_linha_em_24_e_sai_do_nivel() {
+    // Given: só a esquerda (seno). When
+    let seno = bloco(Tipo::Seno, 26048, 2048);
+    let w = geometria_aurora_weave(Some(&seno), None, 4, 22.0);
+    // Then: o nível ignora a direita e a direita fica em 24.
+    assert!((w.nivel - 0.5).abs() <= EPS_TEMPORAL, "nível {}", w.nivel);
+    let em_24 = [
+        Comando::M(0.0, 24.0),
+        Comando::L(333.3333333333333, 24.0),
+        Comando::L(666.6666666666666, 24.0),
+        Comando::L(1000.0, 24.0),
+    ];
+    assert_comandos(&w.direita, &em_24, "weave sem direita");
+    // Given: só a direita (bloco padrão).
+    let padrao = bloco_padrao();
+    let w = geometria_aurora_weave(None, Some(&padrao), 4, 22.0);
+    assert!(
+        (w.nivel - 1.23291015625).abs() <= EPS_TEMPORAL,
+        "nível {}",
+        w.nivel
+    );
+    assert_comandos(&w.esquerda, &em_24, "weave sem esquerda");
+}
+
+#[test]
+fn aurora_weave_padrao_256_recorta_em_mais_e_menos_um() {
+    // Given: defaultConfigs de aurora-weave (samples 256, amplitude 22).
+    let padrao = bloco_padrao();
+    let seno = bloco(Tipo::Seno, 26048, 2048);
+    // When
+    let w = geometria_aurora_weave(Some(&padrao), Some(&seno), 256, 22.0);
+    // Then
+    assert_eq!(w.esquerda.len(), 256, "weave esquerda: contagem");
+    assert_eq!(w.direita.len(), 256, "weave direita: contagem");
+    for (i, esperado) in [
+        (0, Comando::M(0.0, 24.0)),
+        (1, Comando::L(3.9215686274509802, 23.90546874795109)),
+        (231, Comando::L(905.8823529411765, 2.0)),
+        (245, Comando::L(960.7843137254902, 46.0)),
+        (255, Comando::L(1000.0, 33.3134765625)),
+    ] {
+        assert_comandos(
+            &w.esquerda[i..=i],
+            &[esperado],
+            &format!("weave esquerda [{i}]"),
+        );
+    }
+    for (i, esperado) in [
+        (0, Comando::M(0.0, 23.999999999998533)),
+        (1, Comando::L(3.9215686274509802, 14.473720729351044)),
+        (64, Comando::L(250.98039215686273, 33.526279270648956)),
+        (255, Comando::L(1000.0, 23.99999999999514)),
+    ] {
+        assert_comandos(
+            &w.direita[i..=i],
+            &[esperado],
+            &format!("weave direita [{i}]"),
+        );
+    }
+}
+
+#[test]
+fn neon_crystal_quatro_segmentos_bloco_padrao() {
+    // Given: segments 4, peakGain 2, rmsGain 2, alturas 21 e 16 (padrões do código).
+    let padrao = bloco_padrao();
+    // When
+    let c = geometria_camadas(Some(&padrao), 4, 2.0, 2.0, 21.0, 16.0);
+    // Then: waveform-styles.js:87; inner com round(16/2) = 8.
+    assert!(
+        (c.nivel - 1.23291015625).abs() <= EPS_TEMPORAL,
+        "nível {}",
+        c.nivel
+    );
+    assert_comandos(
+        &c.externa,
+        &[
+            Comando::M(0.0, 24.0),
+            Comando::L(0.0, 11.054443359375),
+            Comando::L(333.3333333333333, 3.0),
+            Comando::L(666.6666666666666, 3.0),
+            Comando::L(1000.0, 3.0),
+            Comando::L(1000.0, 24.0),
+            Comando::L(1000.0, 45.0),
+            Comando::L(666.6666666666666, 45.0),
+            Comando::L(333.3333333333333, 45.0),
+            Comando::L(0.0, 36.945556640625),
+            Comando::Z,
+        ],
+        "crystal outer",
+    );
+    assert_comandos(
+        &c.media,
+        &[
+            Comando::M(0.0, 24.0),
+            Comando::L(0.0, 20.636764940500896),
+            Comando::L(333.3333333333333, 15.100947048714525),
+            Comando::L(666.6666666666666, 9.32990919805449),
+            Comando::L(1000.0, 8.0),
+            Comando::L(1000.0, 24.0),
+            Comando::L(1000.0, 40.0),
+            Comando::L(666.6666666666666, 38.670090801945506),
+            Comando::L(333.3333333333333, 32.899052951285476),
+            Comando::L(0.0, 27.363235059499104),
+            Comando::Z,
+        ],
+        "crystal middle",
+    );
+    assert_comandos(
+        &c.interna,
+        &[
+            Comando::M(0.0, 24.0),
+            Comando::L(0.0, 22.318382470250448),
+            Comando::L(333.3333333333333, 19.550473524357262),
+            Comando::L(666.6666666666666, 16.664954599027247),
+            Comando::L(1000.0, 16.0),
+            Comando::L(1000.0, 24.0),
+            Comando::L(1000.0, 32.0),
+            Comando::L(666.6666666666666, 31.335045400972753),
+            Comando::L(333.3333333333333, 28.449526475642738),
+            Comando::L(0.0, 25.681617529749552),
+            Comando::Z,
+        ],
+        "crystal inner",
+    );
+}
+
+#[test]
+fn neon_crystal_padrao_degrau_na_borda_do_ataque() {
+    // Given: degrau, bloco que termina em 24576; defaultConfigs de neon-crystal (32).
+    let degrau = bloco(Tipo::Degrau, 24576, 2048);
+    // When
+    let c = geometria_camadas(Some(&degrau), 32, 2.0, 2.0, 21.0, 16.0);
+    // Then: 32·2 + 3 comandos por camada; silêncio até o segmento 22.
+    assert!((c.nivel - 0.5).abs() <= EPS_TEMPORAL, "nível {}", c.nivel);
+    for (rotulo, d, esperado) in [
+        ("outer", &c.externa, [3.0, 3.0, 3.0, 45.0, 45.0]),
+        (
+            "middle",
+            &c.media,
+            [
+                12.464051247635014,
+                13.283481649198663,
+                12.334747601980407,
+                35.66525239801959,
+                35.66525239801959,
+            ],
+        ),
+        (
+            "inner",
+            &c.interna,
+            [
+                18.232025623817506,
+                18.64174082459933,
+                18.167373800990205,
+                29.832626199009795,
+                29.832626199009795,
+            ],
+        ),
+    ] {
+        assert_eq!(d.len(), 67, "crystal degrau {rotulo}: contagem");
+        for (i, cmd) in [
+            (0, Comando::M(0.0, 24.0)),
+            (1, Comando::L(0.0, 24.0)),
+            (23, Comando::L(709.6774193548387, 24.0)),
+            (24, Comando::L(741.9354838709677, esperado[0])),
+            (25, Comando::L(774.1935483870968, esperado[1])),
+            (32, Comando::L(1000.0, esperado[2])),
+            (33, Comando::L(1000.0, 24.0)),
+            (34, Comando::L(1000.0, esperado[3])),
+            (40, Comando::L(806.4516129032259, esperado[4])),
+            (66, Comando::Z),
+        ] {
+            assert_comandos(&d[i..=i], &[cmd], &format!("crystal degrau {rotulo} [{i}]"));
+        }
+    }
+}
+
+#[test]
+fn aurora_layers_padrao_seno_e_sem_amostras() {
+    // Given: seno; defaultConfigs de aurora-layers (64, peakHeight 21, rmsHeight 16).
+    let seno = bloco(Tipo::Seno, 26048, 2048);
+    // When
+    let c = geometria_camadas(Some(&seno), 64, 2.0, 2.0, 21.0, 16.0);
+    // Then
+    assert!((c.nivel - 0.5).abs() <= EPS_TEMPORAL, "nível {}", c.nivel);
+    for (rotulo, d, cima, baixo) in [
+        ("outer", &c.externa, 3.0, 45.0),
+        ("middle", &c.media, 13.424378709940907, 34.57562129005909),
+        ("inner", &c.interna, 18.712189354970455, 29.287810645029545),
+    ] {
+        assert_eq!(d.len(), 131, "layers seno {rotulo}: contagem");
+        for (i, cmd) in [
+            (0, Comando::M(0.0, 24.0)),
+            (1, Comando::L(0.0, cima)),
+            (64, Comando::L(1000.0, cima)),
+            (65, Comando::L(1000.0, 24.0)),
+            (66, Comando::L(1000.0, baixo)),
+            (130, Comando::Z),
+        ] {
+            assert_comandos(&d[i..=i], &[cmd], &format!("layers seno {rotulo} [{i}]"));
+        }
+    }
+    // Sem amostras: nível 0 e envelope achatado em 24.
+    let c = geometria_camadas(None, 64, 2.0, 2.0, 21.0, 16.0);
+    assert_eq!(c.nivel, 0.0, "layers sem amostras: nível");
+    assert_eq!(c.externa.len(), 131, "layers sem amostras: contagem");
+    for (i, x) in [(1, 0.0), (64, 1000.0), (66, 1000.0)] {
+        assert_comandos(
+            &c.interna[i..=i],
+            &[Comando::L(x, 24.0)],
+            &format!("layers sem amostras inner [{i}]"),
+        );
+    }
+}
+
+#[test]
+fn aurora_constellation_quatro_nos() {
+    // Given: bandas de spectrumBands(0, 84) sobre o espectro sintético, com
+    // amostra audível; nodes 4, nodeRadius 1.7, height 21.
+    let (bandas, freq) = spectrum_bands(&db_sintetico(), true, NYQUIST, 84.0);
+    assert!((freq - 2015.625).abs() <= EPS_TEMPORAL, "frequência {freq}");
+    // When
+    let c = geometria_constelacao(&bandas, 4, 1.7, 21.0);
+    // Then: waveform-styles.js:84; só nós acima de 0,01 têm círculo.
+    assert!(
+        (c.nivel - 0.9523809523809523).abs() <= EPS_TEMPORAL,
+        "nível {}",
+        c.nivel
+    );
+    let ida = Comando::A(1.7, 1.7, 0.0, 1.0, 0.0, 3.4, 0.0);
+    let volta = Comando::A(1.7, 1.7, 0.0, 1.0, 0.0, -3.4, 0.0);
+    assert_comandos(
+        &c.nos,
+        &[
+            Comando::M(623.3, 4.0),
+            ida.clone(),
+            volta.clone(),
+            Comando::M(623.3, 44.0),
+            ida.clone(),
+            volta.clone(),
+            Comando::M(873.3, 4.0),
+            ida.clone(),
+            volta.clone(),
+            Comando::M(873.3, 44.0),
+            ida,
+            volta,
+        ],
+        "constellation nós",
+    );
+    assert_comandos(
+        &c.malha,
+        &[
+            Comando::M(125.0, 23.875),
+            Comando::L(375.0, 23.875),
+            Comando::L(625.0, 4.0),
+            Comando::L(875.0, 4.0),
+            Comando::M(125.0, 24.125),
+            Comando::L(375.0, 24.125),
+            Comando::L(625.0, 44.0),
+            Comando::L(875.0, 44.0),
+        ],
+        "constellation malha",
+    );
+}
+
+#[test]
+fn aurora_constellation_padrao_32_nos() {
+    // Given: defaultConfigs de aurora-constellation (nodes 32, nodeRadius 1.7, height 21).
+    let (bandas, _) = spectrum_bands(&db_sintetico(), true, NYQUIST, 84.0);
+    // When
+    let c = geometria_constelacao(&bandas, 32, 1.7, 21.0);
+    // Then: 16 nós acima do limiar, 3 comandos por círculo, 2 círculos por nó.
+    assert!(
+        (c.nivel - 0.9523809523809523).abs() <= EPS_TEMPORAL,
+        "nível {}",
+        c.nivel
+    );
+    assert_eq!(c.nos.len(), 96, "constellation nós: contagem");
+    let volta = Comando::A(1.7, 1.7, 0.0, 1.0, 0.0, -3.4, 0.0);
+    for (i, esperado) in [
+        (0, Comando::M(513.925, 5.0)),
+        (1, Comando::A(1.7, 1.7, 0.0, 1.0, 0.0, 3.4, 0.0)),
+        (2, volta.clone()),
+        (3, Comando::M(513.925, 43.0)),
+        (95, volta),
+    ] {
+        assert_comandos(&c.nos[i..=i], &[esperado], &format!("nós [{i}]"));
+    }
+    assert_eq!(c.malha.len(), 64, "constellation malha: contagem");
+    for (i, esperado) in [
+        (0, Comando::M(15.625, 23.875)),
+        (15, Comando::L(484.375, 23.875)),
+        (16, Comando::L(515.625, 5.0)),
+        (17, Comando::L(546.875, 4.75)),
+        (31, Comando::L(984.375, 4.0)),
+        (32, Comando::M(15.625, 24.125)),
+        (47, Comando::L(484.375, 24.125)),
+        (48, Comando::L(515.625, 43.0)),
+        (63, Comando::L(984.375, 44.0)),
+    ] {
+        assert_comandos(&c.malha[i..=i], &[esperado], &format!("malha [{i}]"));
+    }
+}
+
+#[test]
+fn aurora_constellation_silencio_sem_nos_e_malha_em_24() {
+    // Given: nenhuma amostra audível: spectrumBands zera as bandas.
+    let (bandas, freq) = spectrum_bands(&db_sintetico(), false, NYQUIST, 84.0);
+    assert_eq!(freq, 0.0, "frequência no silêncio");
+    // When
+    let c = geometria_constelacao(&bandas, 32, 1.7, 21.0);
+    // Then: d de nós vazio e malha achatada em 24.
+    assert_eq!(c.nivel, 0.0, "nível no silêncio");
+    assert!(c.nos.is_empty(), "nós no silêncio: {:?}", c.nos);
+    assert_eq!(c.malha.len(), 64, "malha no silêncio: contagem");
+    for (i, esperado) in [
+        (0, Comando::M(15.625, 24.0)),
+        (31, Comando::L(984.375, 24.0)),
+        (32, Comando::M(15.625, 24.0)),
+        (63, Comando::L(984.375, 24.0)),
+    ] {
+        assert_comandos(
+            &c.malha[i..=i],
+            &[esperado],
+            &format!("malha silêncio [{i}]"),
+        );
+    }
+}
+
+#[test]
+fn estilos_de_arquivo_alturas_do_envelope() {
+    // Given/When/Then: render (waveform-styles.js:93) sem peakHeight/bodyHeight
+    // em defaultConfigs: 22 e 20, e 15 e 7 em overview.
+    assert_eq!(alturas(EstiloArquivo::Original), (22.0, 20.0));
+    assert_eq!(alturas(EstiloArquivo::Dj), (22.0, 20.0));
+    assert_eq!(alturas(EstiloArquivo::Overview), (15.0, 7.0));
+}
+
+/// Envelope de três valores (x = 0, 500, 1000) com as ordenadas de cima
+/// `c0, c1, c2` e as de baixo `b0, b1, b2`.
+fn envelope_de_tres(c0: f64, c1: f64, c2: f64, b0: f64, b1: f64, b2: f64) -> Vec<Comando> {
+    vec![
+        Comando::M(0.0, 24.0),
+        Comando::L(0.0, c0),
+        Comando::L(500.0, c1),
+        Comando::L(1000.0, c2),
+        Comando::L(1000.0, 24.0),
+        Comando::L(1000.0, b2),
+        Comando::L(500.0, b1),
+        Comando::L(0.0, b0),
+        Comando::Z,
+    ]
+}
+
+#[test]
+fn estilos_de_arquivo_geometria_de_picos_e_corpo() {
+    // Given: picos [0.25, 1.5, −0.5] e rms [0.1, 0.6, 0.3] (recorte em [0, 1]).
+    let picos = [0.25, 1.5, -0.5];
+    let rms = [0.1, 0.6, 0.3];
+    for (estilo, pico, corpo) in [
+        (
+            EstiloArquivo::Original,
+            envelope_de_tres(18.5, 2.0, 24.0, 29.5, 46.0, 24.0),
+            envelope_de_tres(22.0, 12.0, 18.0, 26.0, 36.0, 30.0),
+        ),
+        (
+            EstiloArquivo::Dj,
+            envelope_de_tres(18.5, 2.0, 24.0, 29.5, 46.0, 24.0),
+            envelope_de_tres(22.0, 12.0, 18.0, 26.0, 36.0, 30.0),
+        ),
+        (
+            EstiloArquivo::Overview,
+            envelope_de_tres(20.25, 9.0, 24.0, 27.75, 39.0, 24.0),
+            envelope_de_tres(23.3, 19.8, 21.9, 24.7, 28.2, 26.1),
+        ),
+    ] {
+        // When
+        let (p, b) = geometria_arquivo(estilo, &picos, &rms);
+        // Then
+        assert_comandos(&p, &pico, &format!("{estilo:?} picos"));
+        assert_comandos(&b, &corpo, &format!("{estilo:?} corpo"));
+    }
+}
+
+#[test]
+fn envelope_vazio_nao_tem_comandos() {
+    // Given: values vazio. When/Then: `if(!values.length)return ''`
+    // (waveform-styles.js:64): nenhum comando.
+    assert_eq!(envelope(&[], 22.0), Vec::<Comando>::new());
+}
+
+#[test]
+fn envelope_nan_vale_zero() {
+    // Given: valor NaN. When/Then: `Number(values[i])||0` o troca por 0
+    // (waveform-styles.js:64), então a ordenada fica em 24.
+    let d = envelope(&[f64::NAN], 10.0);
+    assert_comandos(
+        &d,
+        &[
+            Comando::M(0.0, 24.0),
+            Comando::L(0.0, 24.0),
+            Comando::L(1000.0, 24.0),
+            Comando::L(0.0, 24.0),
+            Comando::Z,
+        ],
+        "envelope NaN",
+    );
 }

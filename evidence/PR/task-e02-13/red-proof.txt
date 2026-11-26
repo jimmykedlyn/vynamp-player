@@ -395,3 +395,56 @@ failures:
     ribbon_quatro_segmentos_bloco_padrao
 
 test result: FAILED. 35 passed; 16 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s
+
+## Fase 3c — vermelho (cargo test --test gabarito_movimento)
+
+Estilos criativos (aurora-weave, neon-crystal, aurora-layers, aurora-constellation)
+e envelope dos estilos de arquivo (original, dj, overview). 11 falhas são o
+unimplemented! dos stubs em tests/oraculo/estilos_criativos.rs e
+tests/oraculo/estilos_arquivo.rs; 2 são divergências reais do envelope() da fase 3a
+contra waveform-styles.js:64 (values vazio devolve string vazia; NaN vale 0).
+
+running 64 tests
+test aurora_constellation_quatro_nos ... FAILED
+test aurora_constellation_silencio_sem_nos_e_malha_em_24 ... FAILED
+test aurora_layers_padrao_seno_e_sem_amostras ... FAILED
+test aurora_constellation_padrao_32_nos ... FAILED
+test aurora_weave_canal_ausente_desenha_linha_em_24_e_sai_do_nivel ... FAILED
+test aurora_weave_padrao_256_recorta_em_mais_e_menos_um ... FAILED
+test aurora_weave_quatro_amostras_dois_canais ... FAILED
+test envelope_nan_vale_zero ... FAILED
+test envelope_vazio_nao_tem_comandos ... FAILED
+test estilos_de_arquivo_alturas_do_envelope ... FAILED
+test estilos_de_arquivo_geometria_de_picos_e_corpo ... FAILED
+test neon_crystal_padrao_degrau_na_borda_do_ataque ... FAILED
+test neon_crystal_quatro_segmentos_bloco_padrao ... FAILED
+test result: FAILED. 51 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.57s
+
+thread 'aurora_constellation_quatro_nos' panicked at tests\oraculo\estilos_criativos.rs:76:5:
+not implemented: fase 3c: aurora-constellation (128 bandas, 4 nós, raio 1.7, h 21)
+thread 'aurora_constellation_silencio_sem_nos_e_malha_em_24' panicked at tests\oraculo\estilos_criativos.rs:76:5:
+not implemented: fase 3c: aurora-constellation (128 bandas, 32 nós, raio 1.7, h 21)
+thread 'aurora_layers_padrao_seno_e_sem_amostras' panicked at tests\oraculo\estilos_criativos.rs:57:5:
+not implemented: fase 3c: camadas (true, 64, 2, 2, 21, 16)
+thread 'aurora_constellation_padrao_32_nos' panicked at tests\oraculo\estilos_criativos.rs:76:5:
+not implemented: fase 3c: aurora-constellation (128 bandas, 32 nós, raio 1.7, h 21)
+thread 'aurora_weave_canal_ausente_desenha_linha_em_24_e_sai_do_nivel' panicked at tests\oraculo\estilos_criativos.rs:29:5:
+not implemented: fase 3c: aurora-weave (true, false, ns 4, amp 22)
+thread 'aurora_weave_padrao_256_recorta_em_mais_e_menos_um' panicked at tests\oraculo\estilos_criativos.rs:29:5:
+not implemented: fase 3c: aurora-weave (true, true, ns 256, amp 22)
+thread 'aurora_weave_quatro_amostras_dois_canais' panicked at tests\oraculo\estilos_criativos.rs:29:5:
+not implemented: fase 3c: aurora-weave (true, true, ns 4, amp 22)
+thread 'envelope_nan_vale_zero' panicked at tests\gabarito_movimento.rs:638:9:
+envelope NaN: comando 1 obtido L(0.0, 14.0), esperado L(0.0, 24.0)
+thread 'envelope_vazio_nao_tem_comandos' panicked at tests\gabarito_movimento.rs:1401:5:
+assertion `left == right` failed
+thread 'estilos_de_arquivo_alturas_do_envelope' panicked at tests\oraculo\estilos_arquivo.rs:25:5:
+not implemented: fase 3c: alturas(Original) do envelope do arquivo
+thread 'estilos_de_arquivo_geometria_de_picos_e_corpo' panicked at tests\oraculo\estilos_arquivo.rs:35:5:
+not implemented: fase 3c: geometria_arquivo(Original) com 3 picos e 3 rms
+thread 'neon_crystal_padrao_degrau_na_borda_do_ataque' panicked at tests\oraculo\estilos_criativos.rs:57:5:
+not implemented: fase 3c: camadas (true, 32, 2, 2, 21, 16)
+thread 'neon_crystal_quatro_segmentos_bloco_padrao' panicked at tests\oraculo\estilos_criativos.rs:57:5:
+not implemented: fase 3c: camadas (true, 4, 2, 2, 21, 16)
+  left: [M(0.0, 24.0), Z]
+ right: []
