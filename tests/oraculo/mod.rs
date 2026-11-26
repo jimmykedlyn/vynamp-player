@@ -4,6 +4,7 @@
 //! a partir do índice de amostra e reimplementa a cadência de quadros
 //! e o cálculo de RMS → dB do protocolo de medição.
 
+pub mod analisador;
 pub mod grade;
 pub mod nivel;
 pub mod sinal;
