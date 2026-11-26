@@ -5,7 +5,7 @@
 //! O que o código fixa fora de `defaultConfigs`: `peakHeight` 22 e
 //! `bodyHeight` 20 por padrão, 15 e 7 em `overview`.
 
-use super::estilos_espectro::Comando;
+use super::estilos_espectro::{Comando, envelope};
 
 /// Estilo de onda que desenha o envelope do arquivo, sem série ao vivo.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -22,7 +22,10 @@ pub enum EstiloArquivo {
 /// `cfg.peakHeight ?? (overview ? 15 : 22)` e `cfg.bodyHeight ?? (overview ? 7 : 20)`,
 /// com `cfg` sem essas chaves em `defaultConfigs`.
 pub fn alturas(estilo: EstiloArquivo) -> (f64, f64) {
-    unimplemented!("fase 3c: alturas({estilo:?}) do envelope do arquivo")
+    match estilo {
+        EstiloArquivo::Original | EstiloArquivo::Dj => (22.0, 20.0),
+        EstiloArquivo::Overview => (15.0, 7.0),
+    }
 }
 
 /// `d` de `.wave-peaks` e de `.wave-body` — waveform-styles.js:93:
@@ -32,9 +35,6 @@ pub fn geometria_arquivo(
     picos: &[f64],
     rms: &[f64],
 ) -> (Vec<Comando>, Vec<Comando>) {
-    unimplemented!(
-        "fase 3c: geometria_arquivo({estilo:?}) com {} picos e {} rms",
-        picos.len(),
-        rms.len()
-    )
+    let (altura_pico, altura_corpo) = alturas(estilo);
+    (envelope(picos, altura_pico), envelope(rms, altura_corpo))
 }

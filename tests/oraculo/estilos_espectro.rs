@@ -26,14 +26,19 @@ fn clamp01(v: f64) -> f64 {
 
 /// `envelope(values, height)` — waveform-styles.js linha 64.
 /// Gera o path SVG do envelope: M0 24, L forward, L1000 24, L backward, Z.
+/// Sem valores, o MVP devolve a string vazia (`if(!values.length)return ''`):
+/// nenhum comando.
 pub fn envelope(values: &[f64], height: f64) -> Vec<Comando> {
     let n = values.len();
     if n == 0 {
-        return vec![Comando::M(0.0, 24.0), Comando::Z];
+        return Vec::new();
     }
     let denominator = (n - 1).max(1) as f64;
-    // amp(i) = clamp(values[i], 0, 1) * height
-    let amp = |i: usize| clamp01(values[i]) * height;
+    // amp(i) = clamp(Number(values[i]) || 0, 0, 1) * height: NaN vale 0.
+    let amp = |i: usize| {
+        let v = if values[i].is_nan() { 0.0 } else { values[i] };
+        clamp01(v) * height
+    };
 
     // M0 24
     let mut comandos = vec![Comando::M(0.0, 24.0)];

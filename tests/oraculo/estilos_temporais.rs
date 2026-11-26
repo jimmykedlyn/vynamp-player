@@ -24,9 +24,9 @@ fn pico(amostras: &[f32], de: usize, ate: usize) -> f64 {
 
 /// Linha `M/L` de `ns` pontos com `x = i·1000/(ns−1)` e
 /// `y = 24 − clamp(s[floor(i·len/ns)], −1, 1)·amp`; sem amostras, `v = 0`.
-/// É a construção comum de `pulse` (waveform-styles.js:89) e `aurora-neon`
-/// (waveform-styles.js:72).
-fn linha_amostrada(amostras: Option<&[f32]>, ns: usize, amp: f64) -> Vec<Comando> {
+/// É a construção comum de `pulse` (waveform-styles.js:89), `aurora-neon`
+/// (waveform-styles.js:72) e de cada canal de `aurora-weave` (waveform-styles.js:86).
+pub fn linha_amostrada(amostras: Option<&[f32]>, ns: usize, amp: f64) -> Vec<Comando> {
     (0..ns)
         .map(|i| {
             let v = match amostras {
