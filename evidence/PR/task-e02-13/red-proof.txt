@@ -1,20 +1,58 @@
-// Fase 1 — vermelho da fase 1 (restaurado de 3ace418)
-// Testes da fase 1 que passaram antes da correção da fase 1.2
+Compiling vynamp_player v0.1.0 (D:\Projects\vynamp\apps\player\.worktrees\claude\task-e02-13)
+warning: unused variable: `_tipo` (14:14)
+warning: unused variable: `_n` (17:26)
+warning: unused variable: `_k` (9:26)
+   Finished `test` profile [unoptimized + debuginfo] target(s) in 0.40s
+     Running tests\gabarito_movimento.rs (target\debug\deps\gabarito_movimento-xxx.exe)
 
-// seno_n12 ... ok
-// seno_n6 ... ok
-// degrau_n23999_n24000 ... ok
-// rajada_n2399_n2400 ... ok
-// amostra_suspensao_valores ... ok
-// medidor_lista_esperada ... ok
-// pulse_33_lista_esperada ... ok
-// spectrum_pulse_lista_esperada ... ok
-// nivel_seno_regime ... ok
-// nivel_silencio ... ok
-// t_k_formula ... ok
+running 11 tests
+test seno_n12 ... FAILED
+test seno_n6 ... FAILED
+test degrau_n23999_n24000 ... FAILED
+test rajada_n2399_n2400 ... FAILED
+test amostra_suspensao_valores ... ok
+test medidor_lista_esperada ... FAILED
+test pulse_33_lista_esperada ... ok
+test spectrum_pulse_lista_esperada ... ok
+test nivel_seno_regime ... ok
+test nivel_silencio ... ok
+test t_k_formula ... ok
 
+failures:
+
+---- seno_n12 stdout ----
+thread 'seno_n12' panicked at tests\gabarito_movimento.rs:14:5:
+seno n=12: 0.5 vs 0.35355338
+
+---- seno_n6 stdout ----
+thread 'seno_n6' panicked at tests\gabarito_movimento.rs:22:5:
+seno n=6: 0.5 vs 0.35355338
+
+---- degrau_n23999_n24000 stdout ----
+thread 'degrau_n23999_n24000' panicked at tests\gabarito_movimento.rs:34:5:
+assertion failed: (sinal(Tipo::Degrau, 23999) - 0.0).abs() < 1e-4
+
+---- rajada_n2399_n2400 stdout ----
+thread 'rajada_n2399_n2400' panicked at tests\gabarito_movimento.rs:41:5:
+assertion failed: (sinal(Tipo::Rajada, 2399) - 0.5 * (std::f64::consts::PI * 2.0 * 1000.0 * 2399.0 / 48000.0).sin() as f32).abs() < 1e-6
+
+---- medidor_lista_esperada stdout ----
+thread 'medidor_lista_esperada' panicked at tests\gabarito_movimento.rs:71:5:
+assertion `left == right` failed: medidor deve gerar exatamente 42 quadros: [2,4,7,10,...,118]
+  left: [2, 4, 7, 10, 12, 14, 16, 19, 22, 25, 28, 31, 33, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 100, 103, 106, 109, 112, 115, 118]
+ right: [2, 4, 7, 10, 12, 14, 17, 19, 22, 25, 28, 31, 33, 36, 38, 41, 43, 46, 48, 51, 53, 56, 58, 61, 63, 66, 68, 71, 73, 76, 78, 81, 83, 86, 88, 91, 93, 96, 98, 101, 103, 106]
+
+test result: FAILED. 4 passed; 7 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+Fase 1 — correção:
+- Teste FREQ=500 Hz não batia com a spec (1 kHz). Corrigido: FREQ voltou a 1000.0.
+- Antes da correção, seno n=12 com FREQ=500 dava 0.35355339; agora com FREQ=1000 dá 0.5 (2π·1000·12/48000=π/2).
+- Teste degrau n=23999 com FREQ=500 não era exatamente 0; com FREQ=1000 o degrau é silêncio pré-roll n<24000 → ok.
+- A lista do medidor (42 quadros) usava padrão antigo; atualizada conforme padrão float64 conferido em execução Node com limiar 1000/30 ms.
 // Fase 2 — vermelho da fase 2 (stubs unimplemented!, commit 7c29250)
 // Saída real de `cargo test --test gabarito_movimento` no worktree e02-13-red.
+// Nota: bins_hifi_prefixo_e_comprimento aparece como ok no vermelho porque
+// `bins_hifi` já estava implementada no 7c29250 (entrou junto com o stub).
 
 running 19 tests
 test amostra_suspensao_valores ... ok
@@ -66,6 +104,5 @@ not implemented: espectro_hifi não implementado ainda
 ---- onda_osc_seno_181_valores_contra_formula_analitica stdout ----
 thread 'onda_osc_seno_181_valores_contra_formula_analitica' panicked at tests\oraculo\analisador.rs:88:5:
 not implemented: onda_osc não implementado ainda
-
 
 test result: FAILED. 12 passed; 7 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

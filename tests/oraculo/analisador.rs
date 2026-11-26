@@ -73,12 +73,12 @@ impl Analisador {
 
     /// Lê o espectro em dB: X̂ = τ·X̂_prev + (1−τ)·|X|; devolve 20·log10(X̂).
     /// Pode dar -inf; o recorte é de quem consome.
-    #[allow(clippy::needless_range_loop)]
     pub fn ler_espectro_db(&mut self, tipo: Tipo, amostra_fim: u64) -> Vec<f64> {
         let blk = bloco(tipo, amostra_fim, self.fft_size);
         let mags = magnitudes(&blk);
-        for k in 0..(self.fft_size / 2) {
-            self.estado[k] = self.smoothing * self.estado[k] + (1.0 - self.smoothing) * mags[k];
+        // Suavização exponencial: X̂_new[k] = τ·X̂_prev[k] + (1−τ)·|X[k]|
+        for (est, &m) in self.estado.iter_mut().zip(mags.iter()) {
+            *est = self.smoothing * *est + (1.0 - self.smoothing) * m;
         }
         self.estado.iter().map(|x| 20.0 * x.log10()).collect()
     }
@@ -114,11 +114,10 @@ pub fn bins_hifi(bins_len: usize) -> Vec<usize> {
 }
 
 /// Lê os bins hi-fi do espectro, recortados em [−60, 0] dB.
-#[allow(clippy::manual_clamp)]
 pub fn espectro_hifi(an: &mut Analisador, tipo: Tipo, amostra_fim: u64) -> Vec<f64> {
     let db = an.ler_espectro_db(tipo, amostra_fim);
     let bins = bins_hifi(db.len());
-    bins.iter().map(|&b| db[b].max(-60.0).min(0.0)).collect()
+    bins.iter().map(|&b| db[b].clamp(-60.0, 0.0)).collect()
 }
 
 /// Onda do osciloscópio: amostra [i*4] do bloco de 2048, para i em 0..=180.
