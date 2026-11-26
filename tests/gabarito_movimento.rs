@@ -545,3 +545,34 @@ fn geometria_spectrum_ribbon_suavizacao() {
         "wave-spectrum-fill deve ser envelope da suavização"
     );
 }
+
+#[test]
+fn geometria_spectrum_aurora_left_e_halo_top_mais_bottom() {
+    // Given: bandas de spectrum-aurora; o MVP usa right = left fora de spectrum-stereo.
+    let left = vec![0.5, 0.0];
+    let right = left.clone();
+    // When
+    let (paths, level) = geometria_spectrum("spectrum-aurora", &left, &right, 21.0);
+    // Then: left e halo são top+bottom (waveform-styles.js linha 80, drawSpectrum).
+    let expected = vec![
+        Comando::M(250.0, 24.0),
+        Comando::V(-10.5),
+        Comando::M(750.0, 24.0),
+        Comando::V(-0.0),
+        Comando::M(250.0, 24.0),
+        Comando::V(10.5),
+        Comando::M(750.0, 24.0),
+        Comando::V(0.0),
+    ];
+    let left_path = paths
+        .iter()
+        .find(|(k, _)| *k == "wave-spectrum-left")
+        .map(|(_, d)| d.clone());
+    let halo_path = paths
+        .iter()
+        .find(|(k, _)| *k == "wave-spectrum-halo")
+        .map(|(_, d)| d.clone());
+    assert_eq!(left_path, Some(expected.clone()), "wave-spectrum-left");
+    assert_eq!(halo_path, Some(expected), "wave-spectrum-halo");
+    assert_eq!(level, 0.5, "data_level");
+}

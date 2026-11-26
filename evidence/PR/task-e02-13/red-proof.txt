@@ -206,3 +206,29 @@ thread 'spectrum_bands_sem_disponibilidade' panicked at tests\oraculo\estilos_es
 not implemented: spectrum_bands não implementado ainda
 
 test result: FAILED. 19 passed; 15 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+## Fase 3a — aurora — vermelho (cargo test --test gabarito_movimento geometria_spectrum_aurora)
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.31s
+     Running tests\gabarito_movimento.rs (target\debug\deps\gabarito_movimento-f01a759d2d8be514.exe)
+
+running 1 test
+test geometria_spectrum_aurora_left_e_halo_top_mais_bottom ... FAILED
+
+failures:
+
+---- geometria_spectrum_aurora_left_e_halo_top_mais_bottom stdout ----
+
+thread 'geometria_spectrum_aurora_left_e_halo_top_mais_bottom' (93020) panicked at tests\gabarito_movimento.rs:575:5:
+assertion `left == right` failed: wave-spectrum-left
+  left: None
+ right: Some([M(250.0, 24.0), V(-10.5), M(750.0, 24.0), V(-0.0), M(250.0, 24.0), V(10.5), M(750.0, 24.0), V(0.0)])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    geometria_spectrum_aurora_left_e_halo_top_mais_bottom
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 34 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test gabarito_movimento`
