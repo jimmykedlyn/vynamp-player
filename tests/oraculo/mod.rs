@@ -5,6 +5,7 @@
 //! e o cálculo de RMS → dB do protocolo de medição.
 
 pub mod analisador;
+pub mod estilos_espectro;
 pub mod grade;
 pub mod nivel;
 pub mod sinal;
