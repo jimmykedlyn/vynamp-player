@@ -10,6 +10,10 @@ use oraculo::estilos_espectro::{
     Comando, SpectrumPulse, audivel, envelope, geometria_spectrum, geometria_spectrum_pulse,
     limites_bandas, merge, spectrum_bands,
 };
+use oraculo::estilos_temporais::{
+    BarsPulse, data_peak, geometria_aurora_neon, geometria_bars_radio, geometria_colunas,
+    geometria_pulse, geometria_ribbon,
+};
 use oraculo::grade::{
     amostra_suspensao, quadros_medidor, quadros_pulse_33, quadros_spectrum_pulse, t_k,
 };
@@ -575,4 +579,358 @@ fn geometria_spectrum_aurora_left_e_halo_top_mais_bottom() {
     assert_eq!(left_path, Some(expected.clone()), "wave-spectrum-left");
     assert_eq!(halo_path, Some(expected), "wave-spectrum-halo");
     assert_eq!(level, 0.5, "data_level");
+}
+
+// ---------------------------------------------------------------------------
+// Fase 3b — estilos de leitura temporal ("Estilos de onda", item 4).
+//
+// Os literais esperados vêm do código do MVP (waveform-styles.js, commit
+// 0d9860b9) rodado por um script Node de scratch, fora do repo, com
+// `Number.prototype.toFixed` neutralizado para devolver o valor cheio:
+// o oráculo compara sem arredondar.
+// ---------------------------------------------------------------------------
+
+/// Tolerância de igualdade entre o oráculo e o MVP sem `toFixed`: só a
+/// diferença de último ulp entre `Math.sin` do V8 e `f64::sin`.
+const EPS_TEMPORAL: f64 = 1e-9;
+
+/// Bloco determinístico de 2048 amostras que passa de ±1 (exercita o recorte):
+/// `f32(((j·37 mod 101) − 50)·j / (40·2048))`, o mesmo do script Node.
+fn bloco_padrao() -> Vec<f32> {
+    (0..2048u64)
+        .map(|j| ((((j * 37) % 101) as f64 - 50.0) * j as f64 / (40.0 * 2048.0)) as f32)
+        .collect()
+}
+
+/// Compara duas sequências de comandos: mesma letra, mesma contagem e cada
+/// número a até `EPS_TEMPORAL`.
+fn assert_comandos(obtido: &[Comando], esperado: &[Comando], rotulo: &str) {
+    assert_eq!(
+        obtido.len(),
+        esperado.len(),
+        "{rotulo}: contagem de comandos (obtido {obtido:?})"
+    );
+    for (i, (a, b)) in obtido.iter().zip(esperado).enumerate() {
+        let perto = |x: f64, y: f64| (x - y).abs() <= EPS_TEMPORAL;
+        let igual = match (a, b) {
+            (Comando::M(x0, y0), Comando::M(x1, y1)) | (Comando::L(x0, y0), Comando::L(x1, y1)) => {
+                perto(*x0, *x1) && perto(*y0, *y1)
+            }
+            (Comando::V(d0), Comando::V(d1)) | (Comando::H(d0), Comando::H(d1)) => perto(*d0, *d1),
+            (Comando::Z, Comando::Z) => true,
+            _ => false,
+        };
+        assert!(igual, "{rotulo}: comando {i} obtido {a:?}, esperado {b:?}");
+    }
+}
+
+#[test]
+fn pulse_padrao_16_amostras_com_recorte() {
+    // Given: bloco padrão (valores fora de ±1), samples 16, amplitude 22.
+    let amostras = bloco_padrao();
+    // When
+    let d = geometria_pulse(Some(&amostras), 16, 22.0);
+    // Then: M/L com x = i·1000/15 e y = 24 − clamp(s[floor(i·2048/16)], −1, 1)·22
+    // (waveform-styles.js:89).
+    let esperado = vec![
+        Comando::M(0.0, 24.0),
+        Comando::L(66.66666666666667, 22.625),
+        Comando::L(133.33333333333334, 22.00624993443489),
+        Comando::L(200.0, 22.143749967217445),
+        Comando::L(266.6666666666667, 23.037500016391277),
+        Comando::L(333.3333333333333, 24.6875),
+        Comando::L(400.0, 27.09375),
+        Comando::L(466.6666666666667, 30.256250262260437),
+        Comando::L(533.3333333333334, 34.17500013113022),
+        Comando::L(600.0, 38.85000026226044),
+        Comando::L(666.6666666666666, 9.5625),
+        Comando::L(733.3333333333334, 12.278125524520874),
+        Comando::L(800.0, 15.75),
+        Comando::L(866.6666666666666, 19.97812506556511),
+        Comando::L(933.3333333333334, 24.962499983608723),
+        Comando::L(1000.0, 30.703125),
+    ];
+    assert_comandos(&d, &esperado, "pulse ns16");
+}
+
+#[test]
+fn pulse_padrao_256_amostras_recorta_em_mais_e_menos_um() {
+    // Given: bloco padrão; s[1848] = 1.1279… e s[1960] = −1.1484… passam de ±1.
+    let amostras = bloco_padrao();
+    // When: samples 256, amplitude 22 (defaultConfigs, waveform-styles.js:11).
+    let d = geometria_pulse(Some(&amostras), 256, 22.0);
+    // Then: 256 comandos; os índices 231 e 245 recortam em 24 ∓ 22.
+    assert_eq!(d.len(), 256, "pulse ns256: contagem");
+    for (i, esperado) in [
+        (0, Comando::M(0.0, 24.0)),
+        (1, Comando::L(3.9215686274509802, 23.90546874795109)),
+        (230, Comando::L(901.9607843137255, 45.7421875)),
+        (231, Comando::L(905.8823529411765, 2.0)),
+        (245, Comando::L(960.7843137254902, 46.0)),
+        (246, Comando::L(964.7058823529412, 2.0)),
+        (255, Comando::L(1000.0, 33.3134765625)),
+    ] {
+        assert_comandos(&d[i..=i], &[esperado], &format!("pulse ns256 [{i}]"));
+    }
+}
+
+#[test]
+fn pulse_seno_quadro_em_26048() {
+    // Given: seno, bloco que termina na amostra 26048 (exclusivo).
+    let amostras = bloco(Tipo::Seno, 26048, 2048);
+    // When
+    let d = geometria_pulse(Some(&amostras), 256, 22.0);
+    // Then
+    assert_eq!(d.len(), 256, "pulse seno: contagem");
+    for (i, esperado) in [
+        (0, Comando::M(0.0, 23.999999999998533)),
+        (1, Comando::L(3.9215686274509802, 14.473720729351044)),
+        (64, Comando::L(250.98039215686273, 33.526279270648956)),
+        (255, Comando::L(1000.0, 23.99999999999514)),
+    ] {
+        assert_comandos(&d[i..=i], &[esperado], &format!("pulse seno [{i}]"));
+    }
+}
+
+#[test]
+fn pulse_sem_amostras_e_linha_central() {
+    // Given: copyLiveSamples devolveu false. When
+    let d = geometria_pulse(None, 256, 22.0);
+    // Then: o MVP grava `M0 24H1000`.
+    assert_eq!(d, vec![Comando::M(0.0, 24.0), Comando::H(1000.0)]);
+}
+
+#[test]
+fn data_peak_bloco_padrao_seno_e_sem_amostras() {
+    // Given/When/Then: maior |amostra| do bloco (waveform-styles.js:69).
+    let padrao = bloco_padrao();
+    assert!((data_peak(Some(&padrao)) - 1.23291015625).abs() <= EPS_TEMPORAL);
+    let seno = bloco(Tipo::Seno, 26048, 2048);
+    assert!((data_peak(Some(&seno)) - 0.5).abs() <= EPS_TEMPORAL);
+    assert_eq!(data_peak(None), 0.0);
+}
+
+#[test]
+fn colunas_quatro_colunas_bloco_padrao() {
+    // Given: columns 4, gain 1.4, height 21.
+    let amostras = bloco_padrao();
+    // When
+    let d = geometria_colunas(Some(&amostras), 4, 1.4, 21.0);
+    // Then: M x (24−bh) v (2bh), bh = min(1, pico·1.4)·21, x = (i+.5)·1000/4.
+    let esperado = vec![
+        Comando::M(125.0, 14.9381103515625),
+        Comando::V(18.123779296875),
+        Comando::M(375.0, 5.876220703125),
+        Comando::V(36.24755859375),
+        Comando::M(625.0, 3.0),
+        Comando::V(42.0),
+        Comando::M(875.0, 3.0),
+        Comando::V(42.0),
+    ];
+    assert_comandos(&d, &esperado, "columns 4");
+}
+
+#[test]
+fn colunas_padrao_128_bloco_padrao_e_seno() {
+    // Given: defaultConfigs de columns-pulse e prisma-neon (128, 1.4, 21).
+    let padrao = bloco_padrao();
+    let d = geometria_colunas(Some(&padrao), 128, 1.4, 21.0);
+    assert_eq!(d.len(), 256, "columns 128: contagem");
+    for (i, esperado) in [
+        (0, Comando::M(3.90625, 23.81409668242559)),
+        (1, Comando::V(0.37180663514882323)),
+        (2, Comando::M(11.71875, 23.461669921875)),
+        (3, Comando::V(1.07666015625)),
+        (246, Comando::M(964.84375, 3.0)),
+        (247, Comando::V(42.0)),
+    ] {
+        assert_comandos(&d[i..=i], &[esperado], &format!("columns padrão [{i}]"));
+    }
+    let seno = bloco(Tipo::Seno, 26048, 2048);
+    let d = geometria_colunas(Some(&seno), 128, 1.4, 21.0);
+    assert_eq!(d.len(), 256, "columns seno: contagem");
+    for (i, esperado) in [
+        (0, Comando::M(3.90625, 9.3)),
+        (1, Comando::V(29.4)),
+        (254, Comando::M(996.09375, 11.269426792860031)),
+        (255, Comando::V(25.461146414279938)),
+    ] {
+        assert_comandos(&d[i..=i], &[esperado], &format!("columns seno [{i}]"));
+    }
+}
+
+#[test]
+fn colunas_sem_amostras_tem_altura_zero() {
+    let d = geometria_colunas(None, 2, 1.4, 21.0);
+    let esperado = vec![
+        Comando::M(250.0, 24.0),
+        Comando::V(0.0),
+        Comando::M(750.0, 24.0),
+        Comando::V(0.0),
+    ];
+    assert_comandos(&d, &esperado, "columns sem amostras");
+}
+
+#[test]
+fn ribbon_quatro_segmentos_bloco_padrao() {
+    // Given: segments 4, gain 2.0, height 21.
+    let amostras = bloco_padrao();
+    // When
+    let d = geometria_ribbon(Some(&amostras), 4, 2.0, 21.0);
+    // Then: envelope do RMS por segmento recortado em 1 e suavizado 1-2-1
+    // (waveform-styles.js:71).
+    let esperado = vec![
+        Comando::M(0.0, 24.0),
+        Comando::L(0.0, 17.769313738665023),
+        Comando::L(333.3333333333333, 12.242811452432393),
+        Comando::L(666.6666666666666, 6.202751161582711),
+        Comando::L(1000.0, 3.4363764556116294),
+        Comando::L(1000.0, 24.0),
+        Comando::L(1000.0, 44.56362354438837),
+        Comando::L(666.6666666666666, 41.79724883841729),
+        Comando::L(333.3333333333333, 35.75718854756761),
+        Comando::L(0.0, 30.230686261334977),
+        Comando::Z,
+    ];
+    assert_comandos(&d, &esperado, "ribbon 4");
+}
+
+#[test]
+fn ribbon_padrao_degrau_na_borda_do_ataque() {
+    // Given: degrau; o bloco que termina em 24576 tem silêncio até 24000.
+    let amostras = bloco(Tipo::Degrau, 24576, 2048);
+    // When: defaultConfigs de ribbon-pulse (64, 2.0, 21).
+    let d = geometria_ribbon(Some(&amostras), 64, 2.0, 21.0);
+    // Then: 64·2 + 3 comandos; a suavização espalha o ataque para o segmento 45.
+    assert_eq!(d.len(), 131, "ribbon degrau: contagem");
+    for (i, esperado) in [
+        (0, Comando::M(0.0, 24.0)),
+        (1, Comando::L(0.0, 24.0)),
+        (32, Comando::L(492.06349206349205, 24.0)),
+        (45, Comando::L(698.4126984126984, 24.0)),
+        (46, Comando::L(714.2857142857143, 20.52987426419936)),
+        (47, Comando::L(730.1587301587301, 12.983695548144151)),
+        (48, Comando::L(746.031746031746, 8.81577887461734)),
+        (49, Comando::L(761.9047619047619, 9.32984242579903)),
+        (64, Comando::L(1000.0, 9.237978732526784)),
+        (65, Comando::L(1000.0, 24.0)),
+        (66, Comando::L(1000.0, 38.762021267473216)),
+        (130, Comando::Z),
+    ] {
+        assert_comandos(&d[i..=i], &[esperado], &format!("ribbon degrau [{i}]"));
+    }
+}
+
+#[test]
+fn aurora_neon_line_e_halo_iguais_e_recorte() {
+    // Given: bloco padrão, samples 4, amplitude 22.
+    let amostras = bloco_padrao();
+    // When
+    let (line, halo) = geometria_aurora_neon(Some(&amostras), 4, 22.0);
+    // Then: mesma aritmética de pulse (waveform-styles.js:72), mesmo d nos dois.
+    let esperado = vec![
+        Comando::M(0.0, 24.0),
+        Comando::L(333.3333333333333, 23.037500016391277),
+        Comando::L(666.6666666666666, 34.17500013113022),
+        Comando::L(1000.0, 15.75),
+    ];
+    assert_comandos(&line, &esperado, "aurora-neon line");
+    assert_comandos(&halo, &esperado, "aurora-neon halo");
+    // Recorte em ±1 com o padrão de 256 amostras.
+    let (line, _) = geometria_aurora_neon(Some(&amostras), 256, 22.0);
+    assert_comandos(
+        &line[231..=231],
+        &[Comando::L(905.8823529411765, 2.0)],
+        "aurora-neon [231]",
+    );
+    assert_comandos(
+        &line[245..=245],
+        &[Comando::L(960.7843137254902, 46.0)],
+        "aurora-neon [245]",
+    );
+}
+
+#[test]
+fn aurora_neon_sem_amostras_desenha_linha_em_24() {
+    // Diferente de pulse: sem amostras, aurora-neon desenha os ns pontos em 24.
+    let (line, halo) = geometria_aurora_neon(None, 4, 22.0);
+    let esperado = vec![
+        Comando::M(0.0, 24.0),
+        Comando::L(333.3333333333333, 24.0),
+        Comando::L(666.6666666666666, 24.0),
+        Comando::L(1000.0, 24.0),
+    ];
+    assert_comandos(&line, &esperado, "aurora-neon line vazia");
+    assert_comandos(&halo, &esperado, "aurora-neon halo vazia");
+}
+
+#[test]
+fn bars_pulse_sequencia_de_niveis() {
+    // Given: pulseLevel começa em 1 (scaleBars(1), waveform-styles.js:65);
+    // gain 1.0, smoothing 0.3 (defaultConfigs).
+    let mut estado = BarsPulse::new();
+    assert_eq!(estado.nivel, 1.0, "nível inicial");
+    // When/Then: zeros dão alvo 0 e o nível desce com fator sm: 1 + (0−1)·0.3 = 0.7.
+    let zeros = vec![0.0f32; 2048];
+    let n = estado.update(Some(&zeros), 1.0, 0.3);
+    assert!((n - 0.7).abs() <= EPS_TEMPORAL, "zeros: {n}");
+    // Degrau parcial (64 amostras ligadas): alvo abaixo, desce.
+    let n = estado.update(Some(&bloco(Tipo::Degrau, 24064, 2048)), 1.0, 0.3);
+    assert!(
+        (n - 0.6593442411092251).abs() <= EPS_TEMPORAL,
+        "degrau 24064: {n}"
+    );
+    // Degrau pleno: alvo acima, sobe com fator 1−sm.
+    let n = estado.update(Some(&bloco(Tipo::Degrau, 26048, 2048)), 1.0, 0.3);
+    assert!(
+        (n - 0.8978032723327675).abs() <= EPS_TEMPORAL,
+        "degrau 26048: {n}"
+    );
+    // Sem amostras: alvo 0.
+    let n = estado.update(None, 1.0, 0.3);
+    assert!(
+        (n - 0.6284622906329372).abs() <= EPS_TEMPORAL,
+        "sem amostras: {n}"
+    );
+    assert_eq!(estado.nivel, n, "o estado guarda o último nível");
+}
+
+#[test]
+fn bars_pulse_alvo_recortado_em_um() {
+    // Given: bloco padrão, gain 0.5: sqrt(min(1, rms·5·0.5)) = 1, nível segue 1.
+    let mut estado = BarsPulse::new();
+    let n = estado.update(Some(&bloco_padrao()), 0.5, 0.6);
+    assert_eq!(n, 1.0);
+}
+
+#[test]
+fn bars_pulse_radio_quatro_barras() {
+    // Given: ramo de rádio, bars 4, gain 1.0, bloco padrão.
+    let amostras = bloco_padrao();
+    // When
+    let d = geometria_bars_radio(Some(&amostras), 4, 1.0);
+    // Then: M x (24−h) v (2h), h = min(1, pico·g)·22, x = i·1000/bars.
+    let esperado = vec![
+        Comando::M(0.0, 17.218994140625),
+        Comando::V(13.56201171875),
+        Comando::M(250.0, 10.43798828125),
+        Comando::V(27.1240234375),
+        Comando::M(500.0, 3.656982421875),
+        Comando::V(40.68603515625),
+        Comando::M(750.0, 2.0),
+        Comando::V(44.0),
+    ];
+    assert_comandos(&d, &esperado, "bars rádio 4");
+}
+
+#[test]
+fn bars_pulse_radio_sem_amostras() {
+    let d = geometria_bars_radio(None, 2, 1.0);
+    let esperado = vec![
+        Comando::M(0.0, 24.0),
+        Comando::V(0.0),
+        Comando::M(500.0, 24.0),
+        Comando::V(0.0),
+    ];
+    assert_comandos(&d, &esperado, "bars rádio vazio");
 }

@@ -232,3 +232,166 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 34 filtered out; finished in 0.00s
 
 error: test failed, to rerun pass `--test gabarito_movimento`
+
+## Fase 3b — vermelho (cargo test --test gabarito_movimento)
+
+Estilos de leitura temporal: pulse, bars-pulse (com o ramo de rádio), columns-pulse,
+ribbon-pulse, prisma-neon e aurora-neon. Stubs com unimplemented! em
+tests/oraculo/estilos_temporais.rs; as 16 falhas são todas desse panic.
+
+running 51 tests
+test amostra_suspensao_valores ... ok
+test bars_pulse_alvo_recortado_em_um ... FAILED
+test bars_pulse_radio_sem_amostras ... FAILED
+test aurora_neon_sem_amostras_desenha_linha_em_24 ... FAILED
+test bars_pulse_radio_quatro_barras ... FAILED
+test bars_pulse_sequencia_de_niveis ... FAILED
+test audivel_silencio_e_seno ... ok
+test aurora_neon_line_e_halo_iguais_e_recorte ... FAILED
+test bins_hifi_prefixo_e_comprimento ... ok
+test blackman_2048_0_proximo_de_zero ... ok
+test blackman_2048_1024_igual_um ... ok
+test colunas_padrao_128_bloco_padrao_e_seno ... FAILED
+test colunas_sem_amostras_tem_altura_zero ... FAILED
+test colunas_quatro_colunas_bloco_padrao ... FAILED
+test data_peak_bloco_padrao_seno_e_sem_amostras ... FAILED
+test degrau_n23999_n24000 ... ok
+test envelope_valores ... ok
+test geometria_spectrum_aurora_left_e_halo_top_mais_bottom ... ok
+test geometria_spectrum_pulse_com_valores ... ok
+test geometria_spectrum_pulse_vazio ... ok
+test geometria_spectrum_ribbon_suavizacao ... ok
+test geometria_spectrum_stereo ... ok
+test limites_bandas_prefixo_e_valores ... ok
+test limites_pulse_prefixo_e_valores ... ok
+test medidor_lista_esperada ... ok
+test merge_max_bin_a_bin ... ok
+test nivel_seno_regime ... ok
+test nivel_silencio ... ok
+test onda_osc_seno_181_valores_contra_formula_analitica ... ok
+test pulse_33_lista_esperada ... ok
+test pulse_padrao_16_amostras_com_recorte ... FAILED
+test pulse_padrao_256_amostras_recorta_em_mais_e_menos_um ... FAILED
+test pulse_sem_amostras_e_linha_central ... FAILED
+test rajada_n2399_n2400 ... ok
+test pulse_seno_quadro_em_26048 ... FAILED
+test seno_n12 ... ok
+test ribbon_quatro_segmentos_bloco_padrao ... FAILED
+test ribbon_padrao_degrau_na_borda_do_ataque ... FAILED
+test seno_n6 ... ok
+test spectrum_pulse_lista_esperada ... ok
+test spectrum_pulse_update_com_bins_now_zero ... ok
+test spectrum_bands_sem_disponibilidade ... ok
+test spectrum_bands_valores_esperados ... ok
+test spectrum_pulse_update_dt_16_667 ... ok
+test t_k_formula ... ok
+test espectro_seno_smoothing_075_primeira_leitura ... ok
+test espectro_silencio_todos_menos_sessenta ... ok
+test espectro_seno_smoothing_zero_bins_43_maximo ... ok
+test spectrum_pulse_update_sem_bins_now_zero ... ok
+test spectrum_pulse_update_dt_250 ... ok
+test espectro_seno_smoothing_075_segunda_leitura_estado_persiste ... ok
+
+failures:
+
+---- bars_pulse_alvo_recortado_em_um stdout ----
+
+thread 'bars_pulse_alvo_recortado_em_um' (89532) panicked at tests\oraculo\estilos_temporais.rs:59:9:
+not implemented: BarsPulse::new ainda não implementado (fase 3b, vermelho)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- bars_pulse_radio_sem_amostras stdout ----
+
+thread 'bars_pulse_radio_sem_amostras' (75840) panicked at tests\oraculo\estilos_temporais.rs:74:5:
+not implemented: geometria_bars_radio ainda não implementada (fase 3b, vermelho)
+
+---- aurora_neon_sem_amostras_desenha_linha_em_24 stdout ----
+
+thread 'aurora_neon_sem_amostras_desenha_linha_em_24' (92272) panicked at tests\oraculo\estilos_temporais.rs:45:5:
+not implemented: geometria_aurora_neon ainda não implementada (fase 3b, vermelho)
+
+---- bars_pulse_radio_quatro_barras stdout ----
+
+thread 'bars_pulse_radio_quatro_barras' (85252) panicked at tests\oraculo\estilos_temporais.rs:74:5:
+not implemented: geometria_bars_radio ainda não implementada (fase 3b, vermelho)
+
+---- bars_pulse_sequencia_de_niveis stdout ----
+
+thread 'bars_pulse_sequencia_de_niveis' (75564) panicked at tests\oraculo\estilos_temporais.rs:59:9:
+not implemented: BarsPulse::new ainda não implementado (fase 3b, vermelho)
+
+---- aurora_neon_line_e_halo_iguais_e_recorte stdout ----
+
+thread 'aurora_neon_line_e_halo_iguais_e_recorte' (78784) panicked at tests\oraculo\estilos_temporais.rs:45:5:
+not implemented: geometria_aurora_neon ainda não implementada (fase 3b, vermelho)
+
+---- colunas_padrao_128_bloco_padrao_e_seno stdout ----
+
+thread 'colunas_padrao_128_bloco_padrao_e_seno' (94892) panicked at tests\oraculo\estilos_temporais.rs:28:5:
+not implemented: geometria_colunas ainda não implementada (fase 3b, vermelho)
+
+---- colunas_sem_amostras_tem_altura_zero stdout ----
+
+thread 'colunas_sem_amostras_tem_altura_zero' (96836) panicked at tests\oraculo\estilos_temporais.rs:28:5:
+not implemented: geometria_colunas ainda não implementada (fase 3b, vermelho)
+
+---- colunas_quatro_colunas_bloco_padrao stdout ----
+
+thread 'colunas_quatro_colunas_bloco_padrao' (88764) panicked at tests\oraculo\estilos_temporais.rs:28:5:
+not implemented: geometria_colunas ainda não implementada (fase 3b, vermelho)
+
+---- data_peak_bloco_padrao_seno_e_sem_amostras stdout ----
+
+thread 'data_peak_bloco_padrao_seno_e_sem_amostras' (80912) panicked at tests\oraculo\estilos_temporais.rs:22:5:
+not implemented: data_peak ainda não implementado (fase 3b, vermelho)
+
+---- pulse_padrao_16_amostras_com_recorte stdout ----
+
+thread 'pulse_padrao_16_amostras_com_recorte' (85648) panicked at tests\oraculo\estilos_temporais.rs:16:5:
+not implemented: geometria_pulse ainda não implementada (fase 3b, vermelho)
+
+---- pulse_padrao_256_amostras_recorta_em_mais_e_menos_um stdout ----
+
+thread 'pulse_padrao_256_amostras_recorta_em_mais_e_menos_um' (77176) panicked at tests\oraculo\estilos_temporais.rs:16:5:
+not implemented: geometria_pulse ainda não implementada (fase 3b, vermelho)
+
+---- pulse_sem_amostras_e_linha_central stdout ----
+
+thread 'pulse_sem_amostras_e_linha_central' (69060) panicked at tests\oraculo\estilos_temporais.rs:16:5:
+not implemented: geometria_pulse ainda não implementada (fase 3b, vermelho)
+
+---- pulse_seno_quadro_em_26048 stdout ----
+
+thread 'pulse_seno_quadro_em_26048' (82744) panicked at tests\oraculo\estilos_temporais.rs:16:5:
+not implemented: geometria_pulse ainda não implementada (fase 3b, vermelho)
+
+---- ribbon_quatro_segmentos_bloco_padrao stdout ----
+
+thread 'ribbon_quatro_segmentos_bloco_padrao' (87472) panicked at tests\oraculo\estilos_temporais.rs:34:5:
+not implemented: geometria_ribbon ainda não implementada (fase 3b, vermelho)
+
+---- ribbon_padrao_degrau_na_borda_do_ataque stdout ----
+
+thread 'ribbon_padrao_degrau_na_borda_do_ataque' (91868) panicked at tests\oraculo\estilos_temporais.rs:34:5:
+not implemented: geometria_ribbon ainda não implementada (fase 3b, vermelho)
+
+
+failures:
+    aurora_neon_line_e_halo_iguais_e_recorte
+    aurora_neon_sem_amostras_desenha_linha_em_24
+    bars_pulse_alvo_recortado_em_um
+    bars_pulse_radio_quatro_barras
+    bars_pulse_radio_sem_amostras
+    bars_pulse_sequencia_de_niveis
+    colunas_padrao_128_bloco_padrao_e_seno
+    colunas_quatro_colunas_bloco_padrao
+    colunas_sem_amostras_tem_altura_zero
+    data_peak_bloco_padrao_seno_e_sem_amostras
+    pulse_padrao_16_amostras_com_recorte
+    pulse_padrao_256_amostras_recorta_em_mais_e_menos_um
+    pulse_sem_amostras_e_linha_central
+    pulse_seno_quadro_em_26048
+    ribbon_padrao_degrau_na_borda_do_ataque
+    ribbon_quatro_segmentos_bloco_padrao
+
+test result: FAILED. 35 passed; 16 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s

@@ -6,6 +6,7 @@
 
 pub mod analisador;
 pub mod estilos_espectro;
+pub mod estilos_temporais;
 pub mod grade;
 pub mod nivel;
 pub mod sinal;
