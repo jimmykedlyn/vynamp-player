@@ -106,3 +106,103 @@ thread 'onda_osc_seno_181_valores_contra_formula_analitica' panicked at tests\or
 not implemented: onda_osc não implementado ainda
 
 test result: FAILED. 12 passed; 7 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+## Fase 3a — vermelho (cargo test --test gabarito_movimento)
+
+running 34 tests
+test amostra_suspensao_valores ... ok
+test audivel_silencio_e_seno ... FAILED
+test degrau_n23999_n24000 ... ok
+test envelope_valores ... FAILED
+test espectro_hifi_seno_bins_esperados ... ok
+test espectro_seno_smoothing_0_bins_43_maximo ... ok
+test espectro_seno_smoothing_075_primeira_leitura ... ok
+test espectro_seno_smoothing_075_segunda_leitura_estado_persiste ... ok
+test espectro_silencio_todos_menos_sessenta ... ok
+test geometria_spectrum_pulse_com_valores ... FAILED
+test geometria_spectrum_pulse_vazio ... FAILED
+test geometria_spectrum_ribbon_suavizacao ... FAILED
+test geometria_spectrum_stereo ... FAILED
+test limites_bandas_prefixo_e_valores ... FAILED
+test limites_pulse_prefixo_e_valores ... FAILED
+test medidor_lista_esperada ... ok
+test merge_max_bin_a_bin ... FAILED
+test nivel_sen0_regime ... ok
+test nivel_silencio ... ok
+test onda_osc_seno_181_valores_contra_formula_analitica ... ok
+test pulse_33_lista_esperada ... ok
+test rajada_n2399_n2400 ... ok
+test seno_n6 ... ok
+test seno_n12 ... ok
+test spectrum_bands_valores_esperados ... FAILED
+test spectrum_pulse_update_com_bins_now_zero ... FAILED
+test spectrum_pulse_update_dt_16_667 ... FAILED
+test spectrum_pulse_update_dt_250 ... FAILED
+test spectrum_pulse_update_sem_bins_now_zero ... FAILED
+test spectrum_bands_sem_disponibilidade ... FAILED
+test spectrum_pulse_lista_esperada ... ok
+test t_k_formula ... ok
+
+failures:
+
+---- audivel_silencio_e_seno stdout ----
+thread 'audivel_silencio_e_seno' panicked at tests\oraculo\estilos_espectro.rs:32:5:
+not implemented: audivel não implementado ainda
+
+---- envelope_valores stdout ----
+thread 'envelope_valores' panicked at tests\oraculo\estilos_espectro.rs:27:5:
+not implemented: envelope não implementado ainda
+
+---- geometria_spectrum_pulse_com_valores stdout ----
+thread 'geometria_spectrum_pulse_com_valores' panicked at tests\oraculo\estilos_espectro.rs:115:5:
+not implemented: geometria_spectrum_pulse não implementado ainda
+
+---- geometria_spectrum_pulse_vazio stdout ----
+thread 'geometria_spectrum_pulse_vazio' panicked at tests\oraculo\estilos_espectro.rs:115:5:
+not implemented: geometria_spectrum_pulse não implementado ainda
+
+---- geometria_spectrum_ribbon_suavizacao stdout ----
+thread 'geometria_spectrum_ribbon_suavizacao' panicked at tests\oraculo\estilos_espectro.rs:106:5:
+not implemented: geometria_spectrum não implementado ainda
+
+---- geometria_spectrum_stereo stdout ----
+thread 'geometria_spectrum_stereo' panicked at tests\oraculo\estilos_espectro.rs:106:5:
+not implemented: geometria_spectrum não implementado ainda
+
+---- limites_bandas_prefixo_e_valores stdout ----
+thread 'limites_bandas_prefixo_e_valores' panicked at tests\oraculo\estilos_espectro.rs:44:5:
+not implemented: limites_bandas não implementado ainda
+
+---- limites_pulse_prefixo_e_valores stdout ----
+thread 'limites_pulse_prefixo_e_valores' panicked at tests\oraculo\estilos_espectro.rs:82:9:
+not implemented: limites_pulse não implementado ainda
+
+---- merge_max_bin_a_bin stdout ----
+thread 'merge_max_bin_a_bin' panicked at tests\oraculo\estilos_espectro.rs:95:5:
+not implemented: merge não implementado ainda
+
+---- spectrum_bands_valores_esperados stdout ----
+thread 'spectrum_bands_valores_esperados' panicked at tests\oraculo\estilos_espectro.rs:55:5:
+not implemented: spectrum_bands não implementado ainda
+
+---- spectrum_pulse_update_com_bins_now_zero stdout ----
+thread 'spectrum_pulse_update_com_bins_now_zero' panicked at tests\oraculo\estilos_espectro.rs:72:9:
+not implemented: SpectrumPulse::new não implementado ainda
+
+---- spectrum_pulse_update_dt_16_667 stdout ----
+thread 'spectrum_pulse_update_dt_16_667' panicked at tests\oraculo\estilos_espectro.rs:72:9:
+not implemented: SpectrumPulse::new não implementado ainda
+
+---- spectrum_pulse_update_sem_bins_now_zero stdout ----
+thread 'spectrum_pulse_update_sem_bins_now_zero' panicked at tests\oraculo\estilos_espectro.rs:72:9:
+not implemented: SpectrumPulse::new não implementado ainda
+
+---- spectrum_pulse_update_dt_250 stdout ----
+thread 'spectrum_pulse_update_dt_250' panicked at tests\oraculo\estilos_espectro.rs:72:9:
+not implemented: SpectrumPulse::new não implementado ainda
+
+---- spectrum_bands_sem_disponibilidade stdout ----
+thread 'spectrum_bands_sem_disponibilidade' panicked at tests\oraculo\estilos_espectro.rs:55:5:
+not implemented: spectrum_bands não implementado ainda
+
+test result: FAILED. 19 passed; 15 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
