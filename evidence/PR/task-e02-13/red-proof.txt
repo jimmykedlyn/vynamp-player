@@ -556,8 +556,37 @@ Restaurado com `git checkout -- assets/gabarito/movimento.json`.
 
 ## Testes de apoio — vermelho (prova tirada depois da implementacao)
 
-mesmo_valor_compara_numero_pelo_valor — sabotagem: `mesmo_valor` retorna false para arrays.
-Comando: `cargo test --locked --test gabarito_movimento mesmo_valor_compara_numero_pelo_valor`
-Falha: `panicked at testsiteriojson.rs:115:5: assertion failed: mesmo_valor(...)`
+mesmo_valor_compara_numero_pelo_valor
+  Funcao sabotada: tests\criterio\json.rs:96 (mesmo_valor, retorna false para arrays)
+  Sabotagem: mesmo_valor retorna false para arrays.
+  Comando: cargo test --locked --test gabarito_movimento mesmo_valor_compara_numero_pelo_valor
+  Panico: panicked at tests\criterio\json.rs:115:5: assertion failed: mesmo_valor(...)
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
 
-testes restantes: ler_d_de_cada_forma_do_mvp, comparar_aplica_teto_por_papel, fft_rapida_bate_com_a_dft_do_oraculo, preroll_e_zero_antes_da_amostra_zero — sabotagem analogica (vazio/zeros/Ok sem conferir/nao-zero), provas capturadas; restaurado com `git checkout --`.
+ler_d_de_cada_forma_do_mvp
+  Funcao sabotada: tests\criterio\svg.rs:35 (ler_d, retorna Vec vazio)
+  Sabotagem: ler_d retorna Vec vazio para entrada nao-vazia.
+  Comando: cargo test --locked --test gabarito_movimento ler_d_de_cada_forma_do_mvp
+  Panico: panicked at tests\criterio\svg.rs:217:5: assertion `left == right` failed, left: [], right: [M(532.75, 46.0), ...]
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
+
+comparar_aplica_teto_por_papel
+  Funcao sabotada: tests\criterio\svg.rs:151 (comparar, retorna (0.0, Vec::new()))
+  Sabotagem: comparar retorna (0.0, Vec::new()) sem conferir.
+  Comando: cargo test --locked --test gabarito_movimento comparar_aplica_teto_por_papel
+  Panico: panicked at tests\criterio\svg.rs:280:5: assertion failed: (d - 0.0069).abs() < 1e-12
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
+
+fft_rapida_bate_com_a_dft_do_oraculo
+  Funcao sabotada: tests\criterio\medicao.rs:324 (magnitudes_fft, retorna zeros)
+  Sabotagem: magnitudes_fft retorna vec![0.0; bloco.len()].
+  Comando: cargo test --locked --test gabarito_movimento fft_rapida_bate_com_a_dft_do_oraculo
+  Panico: panicked at tests\criterio\medicao.rs:1102:5: assertion `left == right` failed, left: 2048, right: 1024
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
+
+preroll_e_zero_antes_da_amostra_zero
+  Funcao sabotada: tests\criterio\medicao.rs:316 (nivel_preroll, retorna 0.0)
+  Sabotagem: nivel_preroll retorna 0.0 (nao-zero esperado).
+  Comando: cargo test --locked --test gabarito_movimento preroll_e_zero_antes_da_amostra_zero
+  Panico: panicked at tests\criterio\medicao.rs:1125:5: nivel 0
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
