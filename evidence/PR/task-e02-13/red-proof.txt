@@ -533,17 +533,31 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 76 filtered out;
 
 ## AC-3 — vermelho da varredura de Web Audio (prova tirada depois do commit 6ec1ae6)
 
-Sabotagem local: revertido o `RE_WEB_AUDIO` de `tools/gabarito-movimento/descricao.cjs`
-para a regex de `416066d:tools/gabarito-movimento/descricao.cjs` (sem o construtor
-`new (window.AudioContext||window.webkitAudioContext)()`).
+Sabotagem 1 (node): revertido o arquivo inteiro com `git show 416066d:tools/gabarito-movimento/descricao.cjs > tools/gabarito-movimento/descricao.cjs`.
 Comando: `node --test tools/gabarito-movimento/descricao.test.cjs`
 Saída real (linha da falha):
-  tools/gabarito-movimento/descricao.cjs:63
-  SyntaxError: Invalid regular expression: /new (window.)?(Offline)?AudioContext|.../g: Unterminated group
-  ✖ tools\gabarito-movimento\descricao.test.cjs (122.5672ms)
-  ℹ pass 0
+  ✖ AC-3: a API Web Audio de restore.js:274 e reconhecida (1.7698ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + []
+  - [ 'new (window.AudioContext||window.webkitAudioContext)' ]
+  ✖ failing tests:
+  test at toolsgabarito-movimentodescricao.test.cjs:41:1
+  ℹ tests 8
+  ℹ pass 7
   ℹ fail 1
-A cópia literal tirava as barras invertidas de escape e virava regex inválida, o que
-não exercita o comportamento da varredura. O arquivo foi restaurado (`git checkout --`)
-e `git diff` ficou vazio. A prova válida da varredura antiga é a do commit 416066d já
-registrada acima; não foi possível reproduzi-la aqui por copiar o literal sem escapes.
+Restaurado com `git checkout -- tools/gabarito-movimento/descricao.cjs`.
+
+Sabotagem 2 (Rust): revertido o arquivo inteiro com `git show 416066d:assets/gabarito/movimento.json > assets/gabarito/movimento.json`.
+Comando: `cargo test --locked --test gabarito_movimento ac3_cada_uso_de_web_audio`
+Saída real (linha da falha):
+  Error: "1 falha(s): ... restore.js:275\"], esperadas [... restore.js:274\", \"restore.js:275\"]"
+  test result: FAILED.
+Restaurado com `git checkout -- assets/gabarito/movimento.json`.
+
+## Testes de apoio — vermelho (prova tirada depois da implementacao)
+
+mesmo_valor_compara_numero_pelo_valor — sabotagem: `mesmo_valor` retorna false para arrays.
+Comando: `cargo test --locked --test gabarito_movimento mesmo_valor_compara_numero_pelo_valor`
+Falha: `panicked at testsiteriojson.rs:115:5: assertion failed: mesmo_valor(...)`
+
+testes restantes: ler_d_de_cada_forma_do_mvp, comparar_aplica_teto_por_papel, fft_rapida_bate_com_a_dft_do_oraculo, preroll_e_zero_antes_da_amostra_zero — sabotagem analogica (vazio/zeros/Ok sem conferir/nao-zero), provas capturadas; restaurado com `git checkout --`.
