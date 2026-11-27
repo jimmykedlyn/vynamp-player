@@ -16,4 +16,5 @@ name = "vynamp_player"
 path = "src/main.rs"
 
 [dev-dependencies]
+libm = "0.2.16"
 serde_json = { version = "1", features = ["float_roundtrip"] }

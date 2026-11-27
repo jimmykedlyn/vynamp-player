@@ -25,7 +25,7 @@ pub fn sinal(tipo: Tipo, n: i64) -> f32 {
     }
     let nn = n as f64;
     let theta = std::f64::consts::PI * 2.0 * FREQ * nn / FS;
-    let portadora = 0.5f32 * theta.sin() as f32;
+    let portadora = 0.5f32 * libm::sin(theta) as f32;
     let ligado = match tipo {
         Tipo::Degrau => (24000.0..2.0 * FS).contains(&nn),
         Tipo::Seno => (0.0..2.0 * FS).contains(&nn),

@@ -316,7 +316,7 @@ pub fn bloco_com_preroll(tipo: Tipo, fim: u64) -> Vec<f32> {
 pub fn nivel_preroll(bloco: &[f32]) -> f64 {
     let soma: f64 = bloco.iter().map(|&v| v as f64 * v as f64).sum();
     let rms = (soma / bloco.len() as f64).sqrt();
-    (20.0 * rms.max(1e-8).log10()).clamp(-60.0, 0.0)
+    (20.0 * libm::log10(rms.max(1e-8))).clamp(-60.0, 0.0)
 }
 
 /// `|X[k]|/N`, `k` em `0..N/2`, com a janela Blackman do oráculo, por FFT radix-2.
@@ -346,7 +346,7 @@ pub fn magnitudes_fft(bloco: &[f32]) -> Vec<f64> {
         let passo = -2.0 * std::f64::consts::PI / tamanho as f64;
         for inicio in (0..n).step_by(tamanho) {
             for j in 0..tamanho / 2 {
-                let (s, c) = (passo * j as f64).sin_cos();
+                let (s, c) = libm::sincos(passo * j as f64);
                 let a = inicio + j;
                 let b = a + tamanho / 2;
                 let tr = re[b] * c - im[b] * s;
@@ -595,7 +595,7 @@ fn ler_quadro(
                 lido.db[o] = Some(
                     estado.suavizado[o]
                         .iter()
-                        .map(|x| 20.0 * x.log10())
+                        .map(|x| 20.0 * libm::log10(*x))
                         .collect(),
                 );
             }

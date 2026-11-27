@@ -25,8 +25,8 @@ pub fn blackman(n: usize, i: usize) -> f64 {
     // Isso garante blackman(2048, 1024) = a0 + a1 + a2 = 1.0 exatamente.
     let n_f64 = n as f64;
     let i_f64 = i as f64;
-    a0 - a1 * (2.0 * std::f64::consts::PI * i_f64 / n_f64).cos()
-        + a2 * (4.0 * std::f64::consts::PI * i_f64 / n_f64).cos()
+    a0 - a1 * libm::cos(2.0 * std::f64::consts::PI * i_f64 / n_f64)
+        + a2 * libm::cos(4.0 * std::f64::consts::PI * i_f64 / n_f64)
 }
 
 /// Magnitudes da janela Blackman: |X[k]|/N para k em 0..N/2 (N=2048).
@@ -46,8 +46,8 @@ pub fn magnitudes(bloco: &[f32]) -> Vec<f64> {
             let w = blackman(n, j);
             let angle = 2.0 * std::f64::consts::PI * k as f64 * j as f64 / n as f64;
             let s = bloco[j] as f64;
-            re += s * w * angle.cos();
-            im -= s * w * angle.sin();
+            re += s * w * libm::cos(angle);
+            im -= s * w * libm::sin(angle);
         }
         mags[k] = (re * re + im * im).sqrt() / n as f64;
     }
@@ -82,7 +82,7 @@ impl Analisador {
         for (est, &m) in self.estado.iter_mut().zip(mags.iter()) {
             *est = self.smoothing * *est + (1.0 - self.smoothing) * m;
         }
-        self.estado.iter().map(|x| 20.0 * x.log10()).collect()
+        self.estado.iter().map(|x| 20.0 * libm::log10(*x)).collect()
     }
 }
 

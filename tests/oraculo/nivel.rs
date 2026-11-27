@@ -20,6 +20,6 @@ pub fn nivel_db(tipo: Tipo, amostra_fim: u64) -> f64 {
         return DB_FLOOR;
     }
     let rms = (soma / cont as f64).sqrt();
-    let db = 20.0 * rms.max(1e-8).log10();
+    let db = 20.0 * libm::log10(rms.max(1e-8));
     db.clamp(DB_FLOOR, 0.0)
 }

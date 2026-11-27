@@ -68,7 +68,7 @@ fn rajada_n2399_n2400() {
     // n=2400: = 50ms → desligado
     let v_2399 = sinal(Tipo::Rajada, 2399);
     assert!(
-        (v_2399 - 0.5 * (std::f64::consts::PI * 2.0 * 1000.0 * 2399.0 / 48000.0).sin() as f32)
+        (v_2399 - 0.5 * libm::sin(std::f64::consts::PI * 2.0 * 1000.0 * 2399.0 / 48000.0) as f32)
             .abs()
             < 1e-6,
         "rajada n=2399: {v_2399}"
@@ -255,7 +255,7 @@ fn onda_osc_seno_181_valores_contra_formula_analitica() {
         let esperado = sinal(Tipo::Seno, n);
         // fórmula analítica escrita no próprio teste:
         let analitico =
-            (0.5f64 * (std::f64::consts::PI * 2.0 * 1000.0 * n as f64 / 48000.0).sin()) as f32;
+            (0.5f64 * libm::sin(std::f64::consts::PI * 2.0 * 1000.0 * n as f64 / 48000.0)) as f32;
         assert_eq!(onda[i], esperado, "onda[{i}] ≠ sinal({n})");
         assert_eq!(onda[i], analitico, "onda[{i}] ≠ fórmula analítica");
     }
@@ -600,7 +600,7 @@ fn geometria_spectrum_aurora_left_e_halo_top_mais_bottom() {
 // ---------------------------------------------------------------------------
 
 /// Tolerância de igualdade entre o oráculo e o MVP sem `toFixed`: só a
-/// diferença de último ulp entre `Math.sin` do V8 e `f64::sin`.
+/// diferença de último ulp entre `Math.sin` do V8 e `libm::sin`.
 const EPS_TEMPORAL: f64 = 1e-9;
 
 /// Bloco determinístico de 2048 amostras que passa de ±1 (exercita o recorte):

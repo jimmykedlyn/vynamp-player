@@ -77,8 +77,8 @@ pub fn limites_bandas(nyquist: f64, len: usize) -> Vec<(usize, usize)> {
     let max = 20000.0_f64.min(nyquist);
     let mut bandas = Vec::with_capacity(128);
     for i in 0..128 {
-        let low = 40.0 * (max / 40.0).powf(i as f64 / 128.0);
-        let high = 40.0 * (max / 40.0).powf((i + 1) as f64 / 128.0);
+        let low = 40.0 * libm::pow(max / 40.0, i as f64 / 128.0);
+        let high = 40.0 * libm::pow(max / 40.0, (i + 1) as f64 / 128.0);
         let a = (low / nyquist * len as f64).max(1.0).floor() as usize;
         let b = {
             let upper = ((high / nyquist) * len as f64).ceil() as usize;
@@ -120,8 +120,8 @@ pub fn spectrum_bands(
     let mut bandas = Vec::with_capacity(128);
     let max_val = 20000.0_f64.min(nyquist);
     for i in 0..128 {
-        let low = 40.0 * (max_val / 40.0).powf(i as f64 / 128.0);
-        let high = 40.0 * (max_val / 40.0).powf((i + 1) as f64 / 128.0);
+        let low = 40.0 * libm::pow(max_val / 40.0, i as f64 / 128.0);
+        let high = 40.0 * libm::pow(max_val / 40.0, (i + 1) as f64 / 128.0);
         let a = (low / nyquist * len as f64).max(1.0).floor() as usize;
         let b = {
             let upper = ((high / nyquist) * len as f64).ceil() as usize;
@@ -176,11 +176,11 @@ impl SpectrumPulse {
         let top = 20000.0_f64.min(rate / 2.0);
         let mut faixas = Vec::with_capacity(count);
         for i in 0..count {
-            let from = (20.0 * (top / 20.0).powf(i as f64 / count as f64) / (rate / 2.0)
+            let from = (20.0 * libm::pow(top / 20.0, i as f64 / count as f64) / (rate / 2.0)
                 * len as f64)
                 .floor() as usize;
             let to = {
-                let ceil_val = (20.0 * (top / 20.0).powf((i + 1) as f64 / count as f64)
+                let ceil_val = (20.0 * libm::pow(top / 20.0, (i + 1) as f64 / count as f64)
                     / (rate / 2.0)
                     * len as f64)
                     .ceil() as usize;
@@ -201,17 +201,17 @@ impl SpectrumPulse {
             16.0
         };
         self.last = now;
-        let keep = (-dt / 70.0).exp();
+        let keep = libm::exp(-dt / 70.0);
         let drop = dt * 0.0008;
 
         let top = 20000.0_f64.min(rate / 2.0);
         let bins_len = bins.map(|b| b.len()).unwrap_or(0);
         for i in 0..count {
-            let from = (20.0 * (top / 20.0).powf(i as f64 / count as f64) / (rate / 2.0)
+            let from = (20.0 * libm::pow(top / 20.0, i as f64 / count as f64) / (rate / 2.0)
                 * bins_len as f64)
                 .floor() as usize;
             let to = {
-                let ceil_val = (20.0 * (top / 20.0).powf((i + 1) as f64 / count as f64)
+                let ceil_val = (20.0 * libm::pow(top / 20.0, (i + 1) as f64 / count as f64)
                     / (rate / 2.0)
                     * bins_len as f64)
                     .ceil() as usize;
