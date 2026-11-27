@@ -106,11 +106,6 @@ fn envelope_do_mvp(estilo: &str) -> Value {
 }
 
 /// Usos de Web Audio nos `.js` do MVP, por arquivo e linha, com as APIs da linha.
-/// Para produzir o vermelho abaixo: reverta localmente o `RE_WEB_AUDIO` de
-/// `tools/gabarito-movimento/descricao.cjs` (remova o construtor entre
-/// parênteses), rode `cargo test --test gabarito_movimento
-/// criterio::ac3::ac3_cada_uso_de_web_audio_vira_comportamento`, registre o
-/// falho e restaure. Prova tirada depois do commit `6ec1ae6`.
 const WEB_AUDIO: [(&str, u64, &[&str]); 47] = [
     (
         "advanced-dsp.js",

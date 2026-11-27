@@ -530,3 +530,20 @@ test criterio::svg::empate_do_to_fixed_cabe_na_meia_unidade ... FAILED
 thread 'criterio::svg::empate_do_to_fixed_cabe_na_meia_unidade' (97180) panicked at tests\criterio\svg.rs:289:5:
 ["comando 0 `M`: abscissa MVP 48.38, oráculo 48.375, desvio 5.000000e-3 > teto 5.000000e-3", "comando 1 `h`: h MVP 12.63, oráculo 12.625, desvio 5.000000e-3 > teto 5.000000e-3"]
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 76 filtered out; finished in 0.00s
+
+## AC-3 — vermelho da varredura de Web Audio (prova tirada depois do commit 6ec1ae6)
+
+Sabotagem local: revertido o `RE_WEB_AUDIO` de `tools/gabarito-movimento/descricao.cjs`
+para a regex de `416066d:tools/gabarito-movimento/descricao.cjs` (sem o construtor
+`new (window.AudioContext||window.webkitAudioContext)()`).
+Comando: `node --test tools/gabarito-movimento/descricao.test.cjs`
+Saída real (linha da falha):
+  tools/gabarito-movimento/descricao.cjs:63
+  SyntaxError: Invalid regular expression: /new (window.)?(Offline)?AudioContext|.../g: Unterminated group
+  ✖ tools\gabarito-movimento\descricao.test.cjs (122.5672ms)
+  ℹ pass 0
+  ℹ fail 1
+A cópia literal tirava as barras invertidas de escape e virava regex inválida, o que
+não exercita o comportamento da varredura. O arquivo foi restaurado (`git checkout --`)
+e `git diff` ficou vazio. A prova válida da varredura antiga é a do commit 416066d já
+registrada acima; não foi possível reproduzi-la aqui por copiar o literal sem escapes.
