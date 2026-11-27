@@ -1,0 +1,16 @@
+{
+  "name": "gabarito-movimento",
+  "private": true,
+  "description": "Gerador do gabarito de movimento da TASK-E02-13: mede medidores, ondas e animações do MVP fixado sob sinais determinísticos.",
+  "license": "MIT OR Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "gerar": "node gerar.cjs",
+    "test": "node --test grade.test.cjs descricao.test.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1"
+  }
+}

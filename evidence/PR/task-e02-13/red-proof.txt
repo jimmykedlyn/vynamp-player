@@ -1,0 +1,608 @@
+Compiling vynamp_player v0.1.0 (D:\Projects\vynamp\apps\player\.worktrees\claude\task-e02-13)
+warning: unused variable: `_tipo` (14:14)
+warning: unused variable: `_n` (17:26)
+warning: unused variable: `_k` (9:26)
+   Finished `test` profile [unoptimized + debuginfo] target(s) in 0.40s
+     Running tests\gabarito_movimento.rs (target\debug\deps\gabarito_movimento-xxx.exe)
+
+running 11 tests
+test seno_n12 ... FAILED
+test seno_n6 ... FAILED
+test degrau_n23999_n24000 ... FAILED
+test rajada_n2399_n2400 ... FAILED
+test amostra_suspensao_valores ... ok
+test medidor_lista_esperada ... FAILED
+test pulse_33_lista_esperada ... ok
+test spectrum_pulse_lista_esperada ... ok
+test nivel_seno_regime ... ok
+test nivel_silencio ... ok
+test t_k_formula ... ok
+
+failures:
+
+---- seno_n12 stdout ----
+thread 'seno_n12' panicked at tests\gabarito_movimento.rs:14:5:
+seno n=12: 0.5 vs 0.35355338
+
+---- seno_n6 stdout ----
+thread 'seno_n6' panicked at tests\gabarito_movimento.rs:22:5:
+seno n=6: 0.5 vs 0.35355338
+
+---- degrau_n23999_n24000 stdout ----
+thread 'degrau_n23999_n24000' panicked at tests\gabarito_movimento.rs:34:5:
+assertion failed: (sinal(Tipo::Degrau, 23999) - 0.0).abs() < 1e-4
+
+---- rajada_n2399_n2400 stdout ----
+thread 'rajada_n2399_n2400' panicked at tests\gabarito_movimento.rs:41:5:
+assertion failed: (sinal(Tipo::Rajada, 2399) - 0.5 * (std::f64::consts::PI * 2.0 * 1000.0 * 2399.0 / 48000.0).sin() as f32).abs() < 1e-6
+
+---- medidor_lista_esperada stdout ----
+thread 'medidor_lista_esperada' panicked at tests\gabarito_movimento.rs:71:5:
+assertion `left == right` failed: medidor deve gerar exatamente 42 quadros: [2,4,7,10,...,118]
+  left: [2, 4, 7, 10, 12, 14, 16, 19, 22, 25, 28, 31, 33, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 100, 103, 106, 109, 112, 115, 118]
+ right: [2, 4, 7, 10, 12, 14, 17, 19, 22, 25, 28, 31, 33, 36, 38, 41, 43, 46, 48, 51, 53, 56, 58, 61, 63, 66, 68, 71, 73, 76, 78, 81, 83, 86, 88, 91, 93, 96, 98, 101, 103, 106]
+
+test result: FAILED. 4 passed; 7 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+Fase 1 — correção:
+- Teste FREQ=500 Hz não batia com a spec (1 kHz). Corrigido: FREQ voltou a 1000.0.
+- Antes da correção, seno n=12 com FREQ=500 dava 0.35355339; agora com FREQ=1000 dá 0.5 (2π·1000·12/48000=π/2).
+- Teste degrau n=23999 com FREQ=500 não era exatamente 0; com FREQ=1000 o degrau é silêncio pré-roll n<24000 → ok.
+- A lista do medidor (42 quadros) usava padrão antigo; atualizada conforme padrão float64 conferido em execução Node com limiar 1000/30 ms.
+// Fase 2 — vermelho da fase 2 (stubs unimplemented!, commit 7c29250)
+// Saída real de `cargo test --test gabarito_movimento` no worktree e02-13-red.
+// Nota: bins_hifi_prefixo_e_comprimento aparece como ok no vermelho porque
+// `bins_hifi` já estava implementada no 7c29250 (entrou junto com o stub).
+
+running 19 tests
+test amostra_suspensao_valores ... ok
+test bins_hifi_prefixo_e_comprimento ... ok
+test blackman_2048_0_proximo_de_zero ... FAILED
+test blackman_2048_1024_igual_um ... FAILED
+test degrau_n23999_n24000 ... ok
+test espectro_seno_smoothing_075_primeira_leitura ... FAILED
+test espectro_seno_smoothing_075_segunda_leitura_estado_persiste ... FAILED
+test espectro_seno_smoothing_zero_bins_43_maximo ... FAILED
+test espectro_silencio_todos_menos_sessenta ... FAILED
+test medidor_lista_esperada ... ok
+test nivel_seno_regime ... ok
+test nivel_silencio ... ok
+test onda_osc_seno_181_valores_contra_formula_analitica ... FAILED
+test pulse_33_lista_esperada ... ok
+test rajada_n2399_n2400 ... ok
+test seno_n12 ... ok
+test seno_n6 ... ok
+test spectrum_pulse_lista_esperada ... ok
+test t_k_formula ... ok
+
+failures:
+
+---- blackman_2048_0_proximo_de_zero stdout ----
+thread 'blackman_2048_0_proximo_de_zero' panicked at tests\oraculo\analisador.rs:16:5:
+not implemented: blackman não implementado ainda
+
+---- blackman_2048_1024_igual_um stdout ----
+thread 'blackman_2048_1024_igual_um' panicked at tests\oraculo\analisador.rs:16:5:
+not implemented: blackman não implementado ainda
+
+---- espectro_seno_smoothing_zero_bins_43_maximo stdout ----
+thread 'espectro_seno_smoothing_zero_bins_43_maximo' panicked at tests\oraculo\analisador.rs:47:9:
+not implemented: ler_espectro_db não implementado ainda
+
+---- espectro_seno_smoothing_075_primeira_leitura stdout ----
+thread 'espectro_seno_smoothing_075_primeira_leitura' panicked at tests\oraculo\analisador.rs:47:9:
+not implemented: ler_espectro_db não implementado ainda
+
+---- espectro_seno_smoothing_075_segunda_leitura_estado_persiste stdout ----
+thread 'espectro_seno_smoothing_075_segunda_leitura_estado_persiste' panicked at tests\oraculo\analisador.rs:47:9:
+not implemented: ler_espectro_db não implementado ainda
+
+---- espectro_silencio_todos_menos_sessenta stdout ----
+thread 'espectro_silencio_todos_menos_sessenta' panicked at tests\oraculo\analisador.rs:83:5:
+not implemented: espectro_hifi não implementado ainda
+
+---- onda_osc_seno_181_valores_contra_formula_analitica stdout ----
+thread 'onda_osc_seno_181_valores_contra_formula_analitica' panicked at tests\oraculo\analisador.rs:88:5:
+not implemented: onda_osc não implementado ainda
+
+test result: FAILED. 12 passed; 7 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+## Fase 3a — vermelho (cargo test --test gabarito_movimento)
+
+running 34 tests
+test amostra_suspensao_valores ... ok
+test audivel_silencio_e_seno ... FAILED
+test degrau_n23999_n24000 ... ok
+test envelope_valores ... FAILED
+test espectro_hifi_seno_bins_esperados ... ok
+test espectro_seno_smoothing_0_bins_43_maximo ... ok
+test espectro_seno_smoothing_075_primeira_leitura ... ok
+test espectro_seno_smoothing_075_segunda_leitura_estado_persiste ... ok
+test espectro_silencio_todos_menos_sessenta ... ok
+test geometria_spectrum_pulse_com_valores ... FAILED
+test geometria_spectrum_pulse_vazio ... FAILED
+test geometria_spectrum_ribbon_suavizacao ... FAILED
+test geometria_spectrum_stereo ... FAILED
+test limites_bandas_prefixo_e_valores ... FAILED
+test limites_pulse_prefixo_e_valores ... FAILED
+test medidor_lista_esperada ... ok
+test merge_max_bin_a_bin ... FAILED
+test nivel_sen0_regime ... ok
+test nivel_silencio ... ok
+test onda_osc_seno_181_valores_contra_formula_analitica ... ok
+test pulse_33_lista_esperada ... ok
+test rajada_n2399_n2400 ... ok
+test seno_n6 ... ok
+test seno_n12 ... ok
+test spectrum_bands_valores_esperados ... FAILED
+test spectrum_pulse_update_com_bins_now_zero ... FAILED
+test spectrum_pulse_update_dt_16_667 ... FAILED
+test spectrum_pulse_update_dt_250 ... FAILED
+test spectrum_pulse_update_sem_bins_now_zero ... FAILED
+test spectrum_bands_sem_disponibilidade ... FAILED
+test spectrum_pulse_lista_esperada ... ok
+test t_k_formula ... ok
+
+failures:
+
+---- audivel_silencio_e_seno stdout ----
+thread 'audivel_silencio_e_seno' panicked at tests\oraculo\estilos_espectro.rs:32:5:
+not implemented: audivel não implementado ainda
+
+---- envelope_valores stdout ----
+thread 'envelope_valores' panicked at tests\oraculo\estilos_espectro.rs:27:5:
+not implemented: envelope não implementado ainda
+
+---- geometria_spectrum_pulse_com_valores stdout ----
+thread 'geometria_spectrum_pulse_com_valores' panicked at tests\oraculo\estilos_espectro.rs:115:5:
+not implemented: geometria_spectrum_pulse não implementado ainda
+
+---- geometria_spectrum_pulse_vazio stdout ----
+thread 'geometria_spectrum_pulse_vazio' panicked at tests\oraculo\estilos_espectro.rs:115:5:
+not implemented: geometria_spectrum_pulse não implementado ainda
+
+---- geometria_spectrum_ribbon_suavizacao stdout ----
+thread 'geometria_spectrum_ribbon_suavizacao' panicked at tests\oraculo\estilos_espectro.rs:106:5:
+not implemented: geometria_spectrum não implementado ainda
+
+---- geometria_spectrum_stereo stdout ----
+thread 'geometria_spectrum_stereo' panicked at tests\oraculo\estilos_espectro.rs:106:5:
+not implemented: geometria_spectrum não implementado ainda
+
+---- limites_bandas_prefixo_e_valores stdout ----
+thread 'limites_bandas_prefixo_e_valores' panicked at tests\oraculo\estilos_espectro.rs:44:5:
+not implemented: limites_bandas não implementado ainda
+
+---- limites_pulse_prefixo_e_valores stdout ----
+thread 'limites_pulse_prefixo_e_valores' panicked at tests\oraculo\estilos_espectro.rs:82:9:
+not implemented: limites_pulse não implementado ainda
+
+---- merge_max_bin_a_bin stdout ----
+thread 'merge_max_bin_a_bin' panicked at tests\oraculo\estilos_espectro.rs:95:5:
+not implemented: merge não implementado ainda
+
+---- spectrum_bands_valores_esperados stdout ----
+thread 'spectrum_bands_valores_esperados' panicked at tests\oraculo\estilos_espectro.rs:55:5:
+not implemented: spectrum_bands não implementado ainda
+
+---- spectrum_pulse_update_com_bins_now_zero stdout ----
+thread 'spectrum_pulse_update_com_bins_now_zero' panicked at tests\oraculo\estilos_espectro.rs:72:9:
+not implemented: SpectrumPulse::new não implementado ainda
+
+---- spectrum_pulse_update_dt_16_667 stdout ----
+thread 'spectrum_pulse_update_dt_16_667' panicked at tests\oraculo\estilos_espectro.rs:72:9:
+not implemented: SpectrumPulse::new não implementado ainda
+
+---- spectrum_pulse_update_sem_bins_now_zero stdout ----
+thread 'spectrum_pulse_update_sem_bins_now_zero' panicked at tests\oraculo\estilos_espectro.rs:72:9:
+not implemented: SpectrumPulse::new não implementado ainda
+
+---- spectrum_pulse_update_dt_250 stdout ----
+thread 'spectrum_pulse_update_dt_250' panicked at tests\oraculo\estilos_espectro.rs:72:9:
+not implemented: SpectrumPulse::new não implementado ainda
+
+---- spectrum_bands_sem_disponibilidade stdout ----
+thread 'spectrum_bands_sem_disponibilidade' panicked at tests\oraculo\estilos_espectro.rs:55:5:
+not implemented: spectrum_bands não implementado ainda
+
+test result: FAILED. 19 passed; 15 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+## Fase 3a — aurora — vermelho (cargo test --test gabarito_movimento geometria_spectrum_aurora)
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.31s
+     Running tests\gabarito_movimento.rs (target\debug\deps\gabarito_movimento-f01a759d2d8be514.exe)
+
+running 1 test
+test geometria_spectrum_aurora_left_e_halo_top_mais_bottom ... FAILED
+
+failures:
+
+---- geometria_spectrum_aurora_left_e_halo_top_mais_bottom stdout ----
+
+thread 'geometria_spectrum_aurora_left_e_halo_top_mais_bottom' (93020) panicked at tests\gabarito_movimento.rs:575:5:
+assertion `left == right` failed: wave-spectrum-left
+  left: None
+ right: Some([M(250.0, 24.0), V(-10.5), M(750.0, 24.0), V(-0.0), M(250.0, 24.0), V(10.5), M(750.0, 24.0), V(0.0)])
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    geometria_spectrum_aurora_left_e_halo_top_mais_bottom
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 34 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test gabarito_movimento`
+
+## Fase 3b — vermelho (cargo test --test gabarito_movimento)
+
+Estilos de leitura temporal: pulse, bars-pulse (com o ramo de rádio), columns-pulse,
+ribbon-pulse, prisma-neon e aurora-neon. Stubs com unimplemented! em
+tests/oraculo/estilos_temporais.rs; as 16 falhas são todas desse panic.
+
+running 51 tests
+test amostra_suspensao_valores ... ok
+test bars_pulse_alvo_recortado_em_um ... FAILED
+test bars_pulse_radio_sem_amostras ... FAILED
+test aurora_neon_sem_amostras_desenha_linha_em_24 ... FAILED
+test bars_pulse_radio_quatro_barras ... FAILED
+test bars_pulse_sequencia_de_niveis ... FAILED
+test audivel_silencio_e_seno ... ok
+test aurora_neon_line_e_halo_iguais_e_recorte ... FAILED
+test bins_hifi_prefixo_e_comprimento ... ok
+test blackman_2048_0_proximo_de_zero ... ok
+test blackman_2048_1024_igual_um ... ok
+test colunas_padrao_128_bloco_padrao_e_seno ... FAILED
+test colunas_sem_amostras_tem_altura_zero ... FAILED
+test colunas_quatro_colunas_bloco_padrao ... FAILED
+test data_peak_bloco_padrao_seno_e_sem_amostras ... FAILED
+test degrau_n23999_n24000 ... ok
+test envelope_valores ... ok
+test geometria_spectrum_aurora_left_e_halo_top_mais_bottom ... ok
+test geometria_spectrum_pulse_com_valores ... ok
+test geometria_spectrum_pulse_vazio ... ok
+test geometria_spectrum_ribbon_suavizacao ... ok
+test geometria_spectrum_stereo ... ok
+test limites_bandas_prefixo_e_valores ... ok
+test limites_pulse_prefixo_e_valores ... ok
+test medidor_lista_esperada ... ok
+test merge_max_bin_a_bin ... ok
+test nivel_seno_regime ... ok
+test nivel_silencio ... ok
+test onda_osc_seno_181_valores_contra_formula_analitica ... ok
+test pulse_33_lista_esperada ... ok
+test pulse_padrao_16_amostras_com_recorte ... FAILED
+test pulse_padrao_256_amostras_recorta_em_mais_e_menos_um ... FAILED
+test pulse_sem_amostras_e_linha_central ... FAILED
+test rajada_n2399_n2400 ... ok
+test pulse_seno_quadro_em_26048 ... FAILED
+test seno_n12 ... ok
+test ribbon_quatro_segmentos_bloco_padrao ... FAILED
+test ribbon_padrao_degrau_na_borda_do_ataque ... FAILED
+test seno_n6 ... ok
+test spectrum_pulse_lista_esperada ... ok
+test spectrum_pulse_update_com_bins_now_zero ... ok
+test spectrum_bands_sem_disponibilidade ... ok
+test spectrum_bands_valores_esperados ... ok
+test spectrum_pulse_update_dt_16_667 ... ok
+test t_k_formula ... ok
+test espectro_seno_smoothing_075_primeira_leitura ... ok
+test espectro_silencio_todos_menos_sessenta ... ok
+test espectro_seno_smoothing_zero_bins_43_maximo ... ok
+test spectrum_pulse_update_sem_bins_now_zero ... ok
+test spectrum_pulse_update_dt_250 ... ok
+test espectro_seno_smoothing_075_segunda_leitura_estado_persiste ... ok
+
+failures:
+
+---- bars_pulse_alvo_recortado_em_um stdout ----
+
+thread 'bars_pulse_alvo_recortado_em_um' (89532) panicked at tests\oraculo\estilos_temporais.rs:59:9:
+not implemented: BarsPulse::new ainda não implementado (fase 3b, vermelho)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- bars_pulse_radio_sem_amostras stdout ----
+
+thread 'bars_pulse_radio_sem_amostras' (75840) panicked at tests\oraculo\estilos_temporais.rs:74:5:
+not implemented: geometria_bars_radio ainda não implementada (fase 3b, vermelho)
+
+---- aurora_neon_sem_amostras_desenha_linha_em_24 stdout ----
+
+thread 'aurora_neon_sem_amostras_desenha_linha_em_24' (92272) panicked at tests\oraculo\estilos_temporais.rs:45:5:
+not implemented: geometria_aurora_neon ainda não implementada (fase 3b, vermelho)
+
+---- bars_pulse_radio_quatro_barras stdout ----
+
+thread 'bars_pulse_radio_quatro_barras' (85252) panicked at tests\oraculo\estilos_temporais.rs:74:5:
+not implemented: geometria_bars_radio ainda não implementada (fase 3b, vermelho)
+
+---- bars_pulse_sequencia_de_niveis stdout ----
+
+thread 'bars_pulse_sequencia_de_niveis' (75564) panicked at tests\oraculo\estilos_temporais.rs:59:9:
+not implemented: BarsPulse::new ainda não implementado (fase 3b, vermelho)
+
+---- aurora_neon_line_e_halo_iguais_e_recorte stdout ----
+
+thread 'aurora_neon_line_e_halo_iguais_e_recorte' (78784) panicked at tests\oraculo\estilos_temporais.rs:45:5:
+not implemented: geometria_aurora_neon ainda não implementada (fase 3b, vermelho)
+
+---- colunas_padrao_128_bloco_padrao_e_seno stdout ----
+
+thread 'colunas_padrao_128_bloco_padrao_e_seno' (94892) panicked at tests\oraculo\estilos_temporais.rs:28:5:
+not implemented: geometria_colunas ainda não implementada (fase 3b, vermelho)
+
+---- colunas_sem_amostras_tem_altura_zero stdout ----
+
+thread 'colunas_sem_amostras_tem_altura_zero' (96836) panicked at tests\oraculo\estilos_temporais.rs:28:5:
+not implemented: geometria_colunas ainda não implementada (fase 3b, vermelho)
+
+---- colunas_quatro_colunas_bloco_padrao stdout ----
+
+thread 'colunas_quatro_colunas_bloco_padrao' (88764) panicked at tests\oraculo\estilos_temporais.rs:28:5:
+not implemented: geometria_colunas ainda não implementada (fase 3b, vermelho)
+
+---- data_peak_bloco_padrao_seno_e_sem_amostras stdout ----
+
+thread 'data_peak_bloco_padrao_seno_e_sem_amostras' (80912) panicked at tests\oraculo\estilos_temporais.rs:22:5:
+not implemented: data_peak ainda não implementado (fase 3b, vermelho)
+
+---- pulse_padrao_16_amostras_com_recorte stdout ----
+
+thread 'pulse_padrao_16_amostras_com_recorte' (85648) panicked at tests\oraculo\estilos_temporais.rs:16:5:
+not implemented: geometria_pulse ainda não implementada (fase 3b, vermelho)
+
+---- pulse_padrao_256_amostras_recorta_em_mais_e_menos_um stdout ----
+
+thread 'pulse_padrao_256_amostras_recorta_em_mais_e_menos_um' (77176) panicked at tests\oraculo\estilos_temporais.rs:16:5:
+not implemented: geometria_pulse ainda não implementada (fase 3b, vermelho)
+
+---- pulse_sem_amostras_e_linha_central stdout ----
+
+thread 'pulse_sem_amostras_e_linha_central' (69060) panicked at tests\oraculo\estilos_temporais.rs:16:5:
+not implemented: geometria_pulse ainda não implementada (fase 3b, vermelho)
+
+---- pulse_seno_quadro_em_26048 stdout ----
+
+thread 'pulse_seno_quadro_em_26048' (82744) panicked at tests\oraculo\estilos_temporais.rs:16:5:
+not implemented: geometria_pulse ainda não implementada (fase 3b, vermelho)
+
+---- ribbon_quatro_segmentos_bloco_padrao stdout ----
+
+thread 'ribbon_quatro_segmentos_bloco_padrao' (87472) panicked at tests\oraculo\estilos_temporais.rs:34:5:
+not implemented: geometria_ribbon ainda não implementada (fase 3b, vermelho)
+
+---- ribbon_padrao_degrau_na_borda_do_ataque stdout ----
+
+thread 'ribbon_padrao_degrau_na_borda_do_ataque' (91868) panicked at tests\oraculo\estilos_temporais.rs:34:5:
+not implemented: geometria_ribbon ainda não implementada (fase 3b, vermelho)
+
+
+failures:
+    aurora_neon_line_e_halo_iguais_e_recorte
+    aurora_neon_sem_amostras_desenha_linha_em_24
+    bars_pulse_alvo_recortado_em_um
+    bars_pulse_radio_quatro_barras
+    bars_pulse_radio_sem_amostras
+    bars_pulse_sequencia_de_niveis
+    colunas_padrao_128_bloco_padrao_e_seno
+    colunas_quatro_colunas_bloco_padrao
+    colunas_sem_amostras_tem_altura_zero
+    data_peak_bloco_padrao_seno_e_sem_amostras
+    pulse_padrao_16_amostras_com_recorte
+    pulse_padrao_256_amostras_recorta_em_mais_e_menos_um
+    pulse_sem_amostras_e_linha_central
+    pulse_seno_quadro_em_26048
+    ribbon_padrao_degrau_na_borda_do_ataque
+    ribbon_quatro_segmentos_bloco_padrao
+
+test result: FAILED. 35 passed; 16 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s
+
+## Fase 3c — vermelho (cargo test --test gabarito_movimento)
+
+Estilos criativos (aurora-weave, neon-crystal, aurora-layers, aurora-constellation)
+e envelope dos estilos de arquivo (original, dj, overview). 11 falhas são o
+unimplemented! dos stubs em tests/oraculo/estilos_criativos.rs e
+tests/oraculo/estilos_arquivo.rs; 2 são divergências reais do envelope() da fase 3a
+contra waveform-styles.js:64 (values vazio devolve string vazia; NaN vale 0).
+
+running 64 tests
+test aurora_constellation_quatro_nos ... FAILED
+test aurora_constellation_silencio_sem_nos_e_malha_em_24 ... FAILED
+test aurora_layers_padrao_seno_e_sem_amostras ... FAILED
+test aurora_constellation_padrao_32_nos ... FAILED
+test aurora_weave_canal_ausente_desenha_linha_em_24_e_sai_do_nivel ... FAILED
+test aurora_weave_padrao_256_recorta_em_mais_e_menos_um ... FAILED
+test aurora_weave_quatro_amostras_dois_canais ... FAILED
+test envelope_nan_vale_zero ... FAILED
+test envelope_vazio_nao_tem_comandos ... FAILED
+test estilos_de_arquivo_alturas_do_envelope ... FAILED
+test estilos_de_arquivo_geometria_de_picos_e_corpo ... FAILED
+test neon_crystal_padrao_degrau_na_borda_do_ataque ... FAILED
+test neon_crystal_quatro_segmentos_bloco_padrao ... FAILED
+test result: FAILED. 51 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.57s
+
+thread 'aurora_constellation_quatro_nos' panicked at tests\oraculo\estilos_criativos.rs:76:5:
+not implemented: fase 3c: aurora-constellation (128 bandas, 4 nós, raio 1.7, h 21)
+thread 'aurora_constellation_silencio_sem_nos_e_malha_em_24' panicked at tests\oraculo\estilos_criativos.rs:76:5:
+not implemented: fase 3c: aurora-constellation (128 bandas, 32 nós, raio 1.7, h 21)
+thread 'aurora_layers_padrao_seno_e_sem_amostras' panicked at tests\oraculo\estilos_criativos.rs:57:5:
+not implemented: fase 3c: camadas (true, 64, 2, 2, 21, 16)
+thread 'aurora_constellation_padrao_32_nos' panicked at tests\oraculo\estilos_criativos.rs:76:5:
+not implemented: fase 3c: aurora-constellation (128 bandas, 32 nós, raio 1.7, h 21)
+thread 'aurora_weave_canal_ausente_desenha_linha_em_24_e_sai_do_nivel' panicked at tests\oraculo\estilos_criativos.rs:29:5:
+not implemented: fase 3c: aurora-weave (true, false, ns 4, amp 22)
+thread 'aurora_weave_padrao_256_recorta_em_mais_e_menos_um' panicked at tests\oraculo\estilos_criativos.rs:29:5:
+not implemented: fase 3c: aurora-weave (true, true, ns 256, amp 22)
+thread 'aurora_weave_quatro_amostras_dois_canais' panicked at tests\oraculo\estilos_criativos.rs:29:5:
+not implemented: fase 3c: aurora-weave (true, true, ns 4, amp 22)
+thread 'envelope_nan_vale_zero' panicked at tests\gabarito_movimento.rs:638:9:
+envelope NaN: comando 1 obtido L(0.0, 14.0), esperado L(0.0, 24.0)
+thread 'envelope_vazio_nao_tem_comandos' panicked at tests\gabarito_movimento.rs:1401:5:
+assertion `left == right` failed
+thread 'estilos_de_arquivo_alturas_do_envelope' panicked at tests\oraculo\estilos_arquivo.rs:25:5:
+not implemented: fase 3c: alturas(Original) do envelope do arquivo
+thread 'estilos_de_arquivo_geometria_de_picos_e_corpo' panicked at tests\oraculo\estilos_arquivo.rs:35:5:
+not implemented: fase 3c: geometria_arquivo(Original) com 3 picos e 3 rms
+thread 'neon_crystal_padrao_degrau_na_borda_do_ataque' panicked at tests\oraculo\estilos_criativos.rs:57:5:
+not implemented: fase 3c: camadas (true, 32, 2, 2, 21, 16)
+thread 'neon_crystal_quatro_segmentos_bloco_padrao' panicked at tests\oraculo\estilos_criativos.rs:57:5:
+not implemented: fase 3c: camadas (true, 4, 2, 2, 21, 16)
+  left: [M(0.0, 24.0), Z]
+ right: []
+
+## Fase 4 — vermelho (node --test tools/gabarito-movimento/grade.test.cjs)
+
+Lógica pura do gerador contra stub que lança "não implementado" e MVP_COMMIT vazio.
+Node v26.13.1, Windows 11 Pro 10.0.26300. Saída do runner, com as pilhas reduzidas à linha do erro:
+
+✖ SHA do MVP é o literal do pin (2.1624ms)
+✖ t_k é k*1000/60 em float64 nessa ordem (item 5) (0.1797ms)
+✖ amostra de suspensão é ceil(t_k*48/128)*128 (item 6) (0.1196ms)
+✖ grade tem 120 quadros distintos, em ordem, múltiplos de 128 e dentro de 96000 (1.0085ms)
+✖ sinal: portadora de 1 kHz, amplitude 0,5, fase 0, em f32 (item 3) (0.2237ms)
+✖ degrau: silêncio até 0,5 s e portadora depois (0.1351ms)
+✖ rajada: 50 ms ligada e 450 ms desligada desde t = 0 (0.1397ms)
+✖ amostrasSinal devolve 96000 amostras iguais a sinal(tipo, n) (0.1653ms)
+✖ WAV é PCM 16 bits, 48 kHz, estéreo, com as 96000 amostras nos dois canais (0.1899ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 0
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 152.93
+    actual: '',
+    expected: '0d9860b901510021bcca4c31a25014373ea7c452',
+  Error: não implementado: tK
+  Error: não implementado: amostraSuspensao
+  Error: não implementado: quadros
+  Error: não implementado: sinal
+  Error: não implementado: amostrasSinal
+
+## Fase 5 — vermelho (cargo test --test gabarito_movimento criterio)
+
+Testes dos critérios AC-1, AC-2 e AC-3 escritos antes do gabarito commitado.
+Falham porque assets/gabarito/movimento.json ainda não existe; os testes de
+apoio (FFT contra a DFT do oráculo, pré-roll, leitor de d SVG) já passam.
+
+  test criterio::ac3::ac3_cada_uso_de_web_audio_vira_comportamento ... FAILED
+  test criterio::ac3::ac3_cada_estilo_tem_parametros_literais_e_serie_ou_motivo ... FAILED
+  test criterio::ac2::ac2_gabarito_tem_a_forma_do_protocolo ... FAILED
+  test criterio::ac2::ac2_cada_serie_fica_no_teto_do_oraculo ... FAILED
+  test criterio::ac1::ac1_cada_transicao_tem_duracao_easing_e_keyframes_ou_estados ... FAILED
+  test criterio::ac1::ac1_varredura_estatica_acha_cada_declaracao_e_chamada ... FAILED
+  test criterio::ac1::ac1_cada_raf_e_waapi_tem_serie_ou_motivo ... FAILED
+  test criterio::ac2::ac2_tolerancia_registra_o_maior_desvio_de_cada_serie ... FAILED
+  test criterio::medicao::preroll_e_zero_antes_da_amostra_zero ... ok
+  test criterio::svg::comparar_aplica_teto_por_papel ... ok
+  test criterio::svg::ler_d_de_cada_forma_do_mvp ... ok
+  test criterio::medicao::fft_rapida_bate_com_a_dft_do_oraculo ... ok
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  test result: FAILED. 4 passed; 8 failed; 0 ignored; 0 measured; 64 filtered out; finished in 0.18s
+
+## Fase 5 — vermelho (node --test tools/gabarito-movimento/descricao.test.cjs)
+
+Funções puras da descrição do AC-1 e do AC-3 (transições, Web Audio, defaultConfigs)
+com o módulo ainda sem implementação:
+
+  ℹ pass 0
+  ℹ fail 7
+    Error: não implementado: lerTransicao
+    Error: não implementado: lerAnimacao
+    Error: não implementado: lerEase
+    Error: não implementado: apisWebAudio
+    Error: não implementado: usosWebAudio
+    Error: não implementado: configsDoMvp
+    'Error: não implementado: exigir'
+      actual: Error: não implementado: exigir
+
+## Fase 5 — vermelho (cargo test --test gabarito_movimento empate_do_to_fixed)
+
+Antes da conta em centésimos em svg::desvio_absoluto (desvio = |p - q| em f64):
+test criterio::svg::empate_do_to_fixed_cabe_na_meia_unidade ... FAILED
+thread 'criterio::svg::empate_do_to_fixed_cabe_na_meia_unidade' (97180) panicked at tests\criterio\svg.rs:289:5:
+["comando 0 `M`: abscissa MVP 48.38, oráculo 48.375, desvio 5.000000e-3 > teto 5.000000e-3", "comando 1 `h`: h MVP 12.63, oráculo 12.625, desvio 5.000000e-3 > teto 5.000000e-3"]
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 76 filtered out; finished in 0.00s
+
+## AC-3 — vermelho da varredura de Web Audio (prova tirada depois do commit 6ec1ae6)
+
+Sabotagem 1 (node): revertido o arquivo inteiro com `git show 416066d:tools/gabarito-movimento/descricao.cjs > tools/gabarito-movimento/descricao.cjs`.
+Comando: `node --test tools/gabarito-movimento/descricao.test.cjs`
+Saída real (linha da falha):
+  ✖ AC-3: a API Web Audio de restore.js:274 e reconhecida (1.7698ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + []
+  - [ 'new (window.AudioContext||window.webkitAudioContext)' ]
+  ✖ failing tests:
+  test at toolsgabarito-movimentodescricao.test.cjs:41:1
+  ℹ tests 8
+  ℹ pass 7
+  ℹ fail 1
+Restaurado com `git checkout -- tools/gabarito-movimento/descricao.cjs`.
+
+Sabotagem 2 (Rust): revertido o arquivo inteiro com `git show 416066d:assets/gabarito/movimento.json > assets/gabarito/movimento.json`.
+Comando: `cargo test --locked --test gabarito_movimento ac3_cada_uso_de_web_audio`
+Saída real (linha da falha):
+  Error: "1 falha(s): ... restore.js:275\"], esperadas [... restore.js:274\", \"restore.js:275\"]"
+  test result: FAILED.
+Restaurado com `git checkout -- assets/gabarito/movimento.json`.
+
+## Testes de apoio — vermelho (prova tirada depois da implementacao)
+
+mesmo_valor_compara_numero_pelo_valor
+  Funcao sabotada: tests\criterio\json.rs:96 (mesmo_valor, retorna false para arrays)
+  Sabotagem: mesmo_valor retorna false para arrays.
+  Comando: cargo test --locked --test gabarito_movimento mesmo_valor_compara_numero_pelo_valor
+  Panico: panicked at tests\criterio\json.rs:115:5: assertion failed: mesmo_valor(...)
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
+
+ler_d_de_cada_forma_do_mvp
+  Funcao sabotada: tests\criterio\svg.rs:35 (ler_d, retorna Vec vazio)
+  Sabotagem: ler_d retorna Vec vazio para entrada nao-vazia.
+  Comando: cargo test --locked --test gabarito_movimento ler_d_de_cada_forma_do_mvp
+  Panico: panicked at tests\criterio\svg.rs:217:5: assertion `left == right` failed, left: [], right: [M(532.75, 46.0), ...]
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
+
+comparar_aplica_teto_por_papel
+  Funcao sabotada: tests\criterio\svg.rs:151 (comparar, retorna (0.0, Vec::new()))
+  Sabotagem: comparar retorna (0.0, Vec::new()) sem conferir.
+  Comando: cargo test --locked --test gabarito_movimento comparar_aplica_teto_por_papel
+  Panico: panicked at tests\criterio\svg.rs:280:5: assertion failed: (d - 0.0069).abs() < 1e-12
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
+
+fft_rapida_bate_com_a_dft_do_oraculo
+  Funcao sabotada: tests\criterio\medicao.rs:324 (magnitudes_fft, retorna zeros)
+  Sabotagem: magnitudes_fft retorna vec![0.0; bloco.len()].
+  Comando: cargo test --locked --test gabarito_movimento fft_rapida_bate_com_a_dft_do_oraculo
+  Panico: panicked at tests\criterio\medicao.rs:1102:5: assertion `left == right` failed, left: 2048, right: 1024
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
+
+preroll_e_zero_antes_da_amostra_zero
+  Funcao sabotada: tests\criterio\medicao.rs:316 (nivel_preroll, retorna 0.0)
+  Sabotagem: nivel_preroll retorna 0.0 (nao-zero esperado).
+  Comando: cargo test --locked --test gabarito_movimento preroll_e_zero_antes_da_amostra_zero
+  Panico: panicked at tests\criterio\medicao.rs:1125:5: nivel 0
+  Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
+
+## Correção — tolerância dependente da libm da plataforma (CI Linux)
+
+Vermelho real do CI, não reproduzido localmente (Windows): run 45970689297, job `test`
+(ubuntu-22.04), SHA 516c76051f621f7951346ec7d85b682710ea64fe,
+https://github.com/jimmykedlyn/vynamp-player/actions/runs/45970689297
+  Comando: cargo test --all --locked
+  test criterio::ac2::ac2_tolerancia_registra_o_maior_desvio_de_cada_serie ... FAILED
+  Error: "12 falha(s): ... (3 das 12 linhas, copiadas do log)
+    spectrum-aurora:degrau/d@wave-spectrum-halo/L: gravado 0.004992872936949766, medido 0.004992872936935555
+    aurora-constellation:seno/data-level@wave-creative-live/L: gravado 0.000049233036283236054, medido 0.00004923303628312503
+    spectrum-aurora:rajada/d@wave-spectrum-left/L: gravado 0.004989109418639543, medido 0.004989109418632216
+  test result: FAILED. 77 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.52s
+Causa: tolerancia.json gravado no Windows; sin/cos/log10/pow/exp de f64 vêm da libm da
+plataforma, e MSVC e glibc divergem nos últimos bits. Correção: crate `libm` no oráculo e
+no critério (commit 2d972c4) e tolerancia.json regravado com ela.

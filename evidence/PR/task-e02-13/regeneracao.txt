@@ -1,0 +1,51 @@
+# TASK-E02-13 — regeneração do gabarito de movimento (item 10 do "Protocolo de medição")
+
+Ambiente
+- MVP: commit 0d9860b901510021bcca4c31a25014373ea7c452 (pin read-only em D:/Projects/vynamp-mvp-pin-e02-13/mvp)
+- Chrome 156.0.8078.4 (Playwright 1.64.1, travado em tools/gabarito-movimento/package-lock.json)
+- Node v26.13.1
+- Windows 11 Pro 10.0.26300 x64
+
+Comandos (a partir da raiz do player; cada execução grava <saída>/assets/gabarito/movimento.json)
+  node tools/gabarito-movimento/gerar.cjs D:/Projects/vynamp-mvp-pin-e02-13/mvp D:/Projects/vynamp-e02-13-scratch/g1
+  node tools/gabarito-movimento/gerar.cjs D:/Projects/vynamp-mvp-pin-e02-13/mvp D:/Projects/vynamp-e02-13-scratch/g2
+  cp D:/Projects/vynamp-e02-13-scratch/g1/assets/gabarito/movimento.json assets/gabarito/movimento.json
+Ambas saíram com código 0 e "48 execuções"; a primeira levou 1m51s.
+
+sha256 (sha256sum)
+  execução 1 (g1): 032e92c6dc3cee05df3075c84216df424684d5066da3c312ed1a37aa3181a3e1
+  execução 2 (g2): 032e92c6dc3cee05df3075c84216df424684d5066da3c312ed1a37aa3181a3e1
+  assets/gabarito/movimento.json commitado (blob, `git show HEAD:assets/gabarito/movimento.json | sha256sum`):
+                   032e92c6dc3cee05df3075c84216df424684d5066da3c312ed1a37aa3181a3e1
+  git hash-object assets/gabarito/movimento.json: 302567f9518d5bc7c1af43186287a706d09acf6e
+
+O arquivo é gravado em LF e o .gitattributes fixa `eol=lf` para assets/gabarito/*.json e
+evidence/PR/task-e02-13/*.json; com core.autocrlf=true, sem isso o checkout no Windows
+viraria CRLF e o sha256 do disco deixaria de bater com o da geração.
+
+Tolerância documentada (evidence/PR/task-e02-13/tolerancia.json)
+- Uma chave por <execução>/<série>/<canal> (150 chaves), valor = maior desvio absoluto
+  medido contra o oráculo. Gravada pelo próprio teste:
+    VYNAMP_GRAVAR_TOLERANCIA=1 cargo test --test gabarito_movimento ac2_tolerancia
+  e conferida sem a variável (o teste compara chaves e valores exatos):
+    cargo test --test gabarito_movimento ac2_tolerancia
+- sha256 (blob, `git show HEAD:evidence/PR/task-e02-13/tolerancia.json | sha256sum`):
+    0ceb87a7d728b57a237fc9d2ffeb662c1a5368aa2cf80d15dd4d5035fc00ba2b
+  git hash-object 90e5a06e7c3828e1485d78388117b1a42fd1eb09
+  (regravado no commit 2d972c4; o anterior, 437dccf3.../6f5b0702..., foi medido com a libm
+  da plataforma)
+- O oráculo e o critério usam a crate `libm` (dev-dependency 0.2.16, travada no Cargo.lock)
+  para sin, cos, sincos, log10, pow e exp: a libm da plataforma diverge entre Windows (MSVC)
+  e Linux (glibc) nos últimos bits, e o tolerancia.json gravado no Windows não batia com o
+  recalculado no CI Linux (run 45970689297). Com `libm`, a conta é a mesma em qualquer
+  plataforma; a regravação mudou 4 chaves (seno/data-level, agora iguais ao valor do Linux) e
+  manteve as 8 chaves d de degrau/rajada (iguais ao valor do Windows).
+
+Maior desvio por família (cargo test --test gabarito_movimento ac2_cada_serie -- --nocapture)
+- atributo numérico: 4.927595e-4 em bars-pulse:rajada/data-level@wave-reactive-bars/L
+- data-frequency (0,5 dB): 0 em aurora-constellation:rajada/data-frequency-left
+- espectro (0,5 dB): 4.261549e-6 em 06-hifi-spectrum:rajada/espectro/R
+- geometria: 5.000000e-3 em aurora-constellation:rajada/d@wave-creative-mesh/L
+  (empate exato do toFixed(2): oráculo x,xx5, MVP x,xx+0,01; meia unidade, cabe no teto 0,005)
+- nível (0,1 dB): 0
+- onda (1e-4): 0

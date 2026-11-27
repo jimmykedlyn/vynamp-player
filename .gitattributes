@@ -9,3 +9,9 @@ setup.sh text eol=lf
 *.png binary
 *.zip binary
 *.flac binary
+
+# Gabarito e tolerância da TASK-E02-13: o gerador escreve LF, e o sha256 de duas
+# regenerações é comparado com o arquivo do clone. Com `core.autocrlf=true` o
+# checkout viraria CRLF e o hash do disco deixaria de bater com o da geração.
+assets/gabarito/*.json text eol=lf
+evidence/PR/task-e02-13/*.json text eol=lf
