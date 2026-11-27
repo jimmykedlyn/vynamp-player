@@ -3,6 +3,7 @@
 //! Teste headless que usa o oráculo de sinal, grade temporal e nível
 //! para conferir o comportamento dos medidores e ondas do MVP.
 
+mod criterio;
 mod oraculo;
 
 use oraculo::analisador::{Analisador, bins_hifi, blackman, bloco, espectro_hifi, onda_osc};

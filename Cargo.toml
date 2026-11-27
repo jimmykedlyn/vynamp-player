@@ -14,3 +14,6 @@ egui = { version = "0.37.0", default-features = false }
 [[bin]]
 name = "vynamp_player"
 path = "src/main.rs"
+
+[dev-dependencies]
+serde_json = { version = "1", features = ["float_roundtrip"] }

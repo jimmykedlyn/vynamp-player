@@ -478,3 +478,31 @@ Node v26.13.1, Windows 11 Pro 10.0.26300. Saída do runner, com as pilhas reduzi
   Error: não implementado: quadros
   Error: não implementado: sinal
   Error: não implementado: amostrasSinal
+
+## Fase 5 — vermelho (cargo test --test gabarito_movimento criterio)
+
+Testes dos critérios AC-1, AC-2 e AC-3 escritos antes do gabarito commitado.
+Falham porque assets/gabarito/movimento.json ainda não existe; os testes de
+apoio (FFT contra a DFT do oráculo, pré-roll, leitor de d SVG) já passam.
+
+  test criterio::ac3::ac3_cada_uso_de_web_audio_vira_comportamento ... FAILED
+  test criterio::ac3::ac3_cada_estilo_tem_parametros_literais_e_serie_ou_motivo ... FAILED
+  test criterio::ac2::ac2_gabarito_tem_a_forma_do_protocolo ... FAILED
+  test criterio::ac2::ac2_cada_serie_fica_no_teto_do_oraculo ... FAILED
+  test criterio::ac1::ac1_cada_transicao_tem_duracao_easing_e_keyframes_ou_estados ... FAILED
+  test criterio::ac1::ac1_varredura_estatica_acha_cada_declaracao_e_chamada ... FAILED
+  test criterio::ac1::ac1_cada_raf_e_waapi_tem_serie_ou_motivo ... FAILED
+  test criterio::ac2::ac2_tolerancia_registra_o_maior_desvio_de_cada_serie ... FAILED
+  test criterio::medicao::preroll_e_zero_antes_da_amostra_zero ... ok
+  test criterio::svg::comparar_aplica_teto_por_papel ... ok
+  test criterio::svg::ler_d_de_cada_forma_do_mvp ... ok
+  test criterio::medicao::fft_rapida_bate_com_a_dft_do_oraculo ... ok
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
+  test result: FAILED. 4 passed; 8 failed; 0 ignored; 0 measured; 64 filtered out; finished in 0.18s
