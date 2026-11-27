@@ -140,7 +140,7 @@ struct Transicao {
 /// As 14 transições e animações que não são `none`.
 const TRANSICOES: [Transicao; 14] = [
     Transicao {
-        origem: "audio-controls.css:3",
+        origem: "audio-controls.css:3:677",
         tipo: "transition",
         propriedades: &[("transform", 100.0, EASE)],
     },
@@ -155,22 +155,22 @@ const TRANSICOES: [Transicao; 14] = [
         propriedades: &[("width", 90.0, "linear")],
     },
     Transicao {
-        origem: "library-workspace.css:7",
+        origem: "library-workspace.css:7:590",
         tipo: "animation",
         propriedades: &[("opacity", 1000.0, "ease-in-out")],
     },
     Transicao {
-        origem: "lyrics.css:1",
+        origem: "lyrics.css:1:881",
         tipo: "transition",
         propriedades: &[("color", 200.0, EASE), ("opacity", 200.0, EASE)],
     },
     Transicao {
-        origem: "player.css:2",
+        origem: "player.css:2:217",
         tipo: "transition",
         propriedades: &[("background-color", 80.0, EASE), ("color", 80.0, EASE)],
     },
     Transicao {
-        origem: "refinement28.css:15",
+        origem: "refinement28.css:15:235",
         tipo: "transition",
         propriedades: &[
             ("background-color", 120.0, "ease"),
@@ -179,12 +179,12 @@ const TRANSICOES: [Transicao; 14] = [
         ],
     },
     Transicao {
-        origem: "refinement39.css:46",
+        origem: "refinement39.css:46:121",
         tipo: "transition",
         propriedades: &[("opacity", 120.0, "ease")],
     },
     Transicao {
-        origem: "restore.css:24",
+        origem: "restore.css:24:134",
         tipo: "transition",
         propriedades: &[
             ("border-color", 300.0, "ease"),
@@ -192,27 +192,27 @@ const TRANSICOES: [Transicao; 14] = [
         ],
     },
     Transicao {
-        origem: "restore.css:35",
+        origem: "restore.css:35:196",
         tipo: "transition",
         propriedades: &[("background", 150.0, "ease")],
     },
     Transicao {
-        origem: "restore.css:62",
+        origem: "restore.css:62:71",
         tipo: "transition",
         propriedades: &[("width", 200.0, "ease")],
     },
     Transicao {
-        origem: "waveform-styles.css:48",
+        origem: "waveform-styles.css:48:228",
         tipo: "transition",
         propriedades: &[("opacity", 150.0, "ease"), ("color", 150.0, "ease")],
     },
     Transicao {
-        origem: "waveform-styles.css:50",
+        origem: "waveform-styles.css:50:155",
         tipo: "transition",
         propriedades: &[("border-color", 150.0, "ease")],
     },
     Transicao {
-        origem: "waveform-styles.css:52",
+        origem: "waveform-styles.css:52:195",
         tipo: "transition",
         propriedades: &[
             ("border-color", 150.0, "ease"),

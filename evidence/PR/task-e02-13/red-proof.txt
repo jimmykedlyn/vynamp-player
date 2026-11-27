@@ -506,3 +506,19 @@ apoio (FFT contra a DFT do oráculo, pré-roll, leitor de d SVG) já passam.
   Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
   Error: "D:\\Projects\\vynamp\\apps\\player\\.worktrees\\claude\\task-e02-13/assets/gabarito/movimento.json: O sistema não pode encontrar o caminho especificado. (os error 3)"
   test result: FAILED. 4 passed; 8 failed; 0 ignored; 0 measured; 64 filtered out; finished in 0.18s
+
+## Fase 5 — vermelho (node --test tools/gabarito-movimento/descricao.test.cjs)
+
+Funções puras da descrição do AC-1 e do AC-3 (transições, Web Audio, defaultConfigs)
+com o módulo ainda sem implementação:
+
+  ℹ pass 0
+  ℹ fail 7
+    Error: não implementado: lerTransicao
+    Error: não implementado: lerAnimacao
+    Error: não implementado: lerEase
+    Error: não implementado: apisWebAudio
+    Error: não implementado: usosWebAudio
+    Error: não implementado: configsDoMvp
+    'Error: não implementado: exigir'
+      actual: Error: não implementado: exigir
