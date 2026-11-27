@@ -13,6 +13,7 @@ const http = require('http');
 const os = require('os');
 const path = require('path');
 const g = require('./grade.cjs');
+const descricao = require('./descricao.cjs');
 
 /** Estilos ao vivo (`liveModes` de waveform-styles.js) e as séries do item 6 de "Estilos de onda". */
 // Cada série: [atributo, id do elemento, canal]. Canal L = analisador do canal 0, R = do canal 1,
@@ -348,7 +349,13 @@ async function animacoes(browser, base, mvp) {
     await page.goto(base + 'index.html');
     await page.waitForFunction(() => window.VynampReference && document.readyState === 'complete' && document.documentElement.dataset.ready === 'true', null, {timeout: 30000});
     await page.evaluate(() => document.fonts.ready);
-    return {...await page.evaluate(animacoesNaPagina), estatica: varreduraEstatica(mvp)};
+    const estatica = varreduraEstatica(mvp);
+    return {
+      ...await page.evaluate(animacoesNaPagina),
+      estatica,
+      transicoes: descricao.descreverTransicoes(mvp, estatica),
+      comportamentos: descricao.descreverComportamentos(estatica, Object.keys(MEDIDORES), Object.keys(ESTILOS)),
+    };
   } finally {
     await ctxNav.close();
   }
@@ -399,6 +406,8 @@ async function main() {
       protocolo: {taxa: g.TAXA, amostras: g.AMOSTRAS, quadros: g.QUADROS, quantum: g.QUANTUM, sinais: g.SINAIS},
       balistica: {valor: null, motivo: 'paintMeter mapeia o dB direto; a única suavização é o smoothingTimeConstant do analisador'},
       animacoes: await animacoes(browser, base, mvp),
+      estilos: descricao.descreverEstilos(mvp),
+      webAudio: descricao.descreverWebAudio(mvp),
       execucoes,
     };
     const destino = path.join(raiz, 'assets', 'gabarito', 'movimento.json');
