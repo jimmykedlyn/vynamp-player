@@ -1,7 +1,6 @@
-//! Gabarito de movimento: teste TASK-E02-13 AC-2.
-//!
-//! Teste headless que usa o oráculo de sinal, grade temporal e nível
-//! para conferir o comportamento dos medidores e ondas do MVP.
+//! Gabarito de movimento: TASK-E02-13 AC-2 (medidor, onda, geometria dos
+//! estilos de onda) e AC-3 (comportamento Web Audio da varredura do MVP,
+//! transformado no formato consumível pelo Rust).
 
 mod criterio;
 mod oraculo;
@@ -103,7 +102,12 @@ fn medidor_lista_esperada() {
     );
     // Validações estruturais (prefixo e último quadro)
     assert_eq!(q[0], 2, "primeiro quadro deve ser 2");
-    assert_eq!(q.last().unwrap(), &118, "último quadro deve ser 118");
+    assert_eq!(
+        q.last()
+            .expect("lista de quadros nao vazia; ultimo quadro deve ser 118"),
+        &118,
+        "último quadro deve ser 118"
+    );
 }
 
 #[test]
@@ -507,11 +511,11 @@ fn geometria_spectrum_stereo() {
     let left_path = paths
         .iter()
         .find(|(k, _)| *k == "wave-spectrum-left")
-        .unwrap();
+        .expect("geometria_spectrum deve gerar wave-spectrum-left");
     let right_path = paths
         .iter()
         .find(|(k, _)| *k == "wave-spectrum-right")
-        .unwrap();
+        .expect("geometria_spectrum deve gerar wave-spectrum-right");
 
     // Left: M250 24 v-10.5, M750 24 v-0
     let expected_left = vec![
@@ -544,7 +548,7 @@ fn geometria_spectrum_ribbon_suavizacao() {
     let fill_path = paths
         .iter()
         .find(|(k, _)| *k == "wave-spectrum-fill")
-        .unwrap();
+        .expect("geometria_spectrum deve gerar wave-spectrum-fill");
 
     // Suavização 1-2-1: [(0+0+1)/4, (0+2+0)/4, (1+0+0)/4] = [0.25, 0.5, 0.25]
     let smoothed = vec![0.25, 0.5, 0.25];

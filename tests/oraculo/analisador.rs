@@ -31,8 +31,10 @@ pub fn blackman(n: usize, i: usize) -> f64 {
 
 /// Magnitudes da janela Blackman: |X[k]|/N para k em 0..N/2 (N=2048).
 /// DFT direta sobre o bloco aplicando a janela Blackman.
-/// O índice `k` é usado para gravar no vetor `mags[k]`; o loop por `for k in 0..N/2`
-/// precisa do índice de destino, não só de um elemento, por isso o range loop é intencional.
+/// `for k in 0..N/2` precisa do índice de destino `mags[k]`, não só do
+/// elemento, e clippy não entende que a iteração é pelo bloco de janela,
+/// então o `needless_range_loop` é intencional e não há alternativa sem
+/// índice.
 #[allow(clippy::needless_range_loop)]
 pub fn magnitudes(bloco: &[f32]) -> Vec<f64> {
     let n = bloco.len();
