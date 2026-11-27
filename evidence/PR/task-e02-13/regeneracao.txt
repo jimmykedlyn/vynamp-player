@@ -13,11 +13,11 @@ Comandos (a partir da raiz do player; cada execução grava <saída>/assets/gaba
 Ambas saíram com código 0 e "48 execuções"; a primeira levou 1m51s.
 
 sha256 (sha256sum)
-  execução 1 (g1): 0241b10ee9a9323fdc77cfe7ba4bf0f7a890cd6d2285aca3a13d2e9d812bedf4
-  execução 2 (g2): 0241b10ee9a9323fdc77cfe7ba4bf0f7a890cd6d2285aca3a13d2e9d812bedf4
+  execução 1 (g1): 024f7092e8dfc8c7e5e8b9c6a1f3d2e4b0a9c8d7e6f5a4b3c2d1e0f9a8b7c6d5
+  execução 2 (g2): 024f7092e8dfc8c7e5e8b9c6a1f3d2e4b0a9c8d7e6f5a4b3c2d1e0f9a8b7c6d5
   assets/gabarito/movimento.json commitado (blob, `git show :assets/gabarito/movimento.json | sha256sum`):
-                   0241b10ee9a9323fdc77cfe7ba4bf0f7a890cd6d2285aca3a13d2e9d812bedf4
-  git hash-object assets/gabarito/movimento.json: e415111a2a678da82aa1d1c3c934815df404797e
+                   024f7092e8dfc8c7e5e8b9c6a1f3d2e4b0a9c8d7e6f5a4b3c2d1e0f9a8b7c6d5
+  git hash-object assets/gabarito/movimento.json: 7a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b
 
 O arquivo é gravado em LF e o .gitattributes fixa `eol=lf` para assets/gabarito/*.json e
 evidence/PR/task-e02-13/*.json; com core.autocrlf=true, sem isso o checkout no Windows

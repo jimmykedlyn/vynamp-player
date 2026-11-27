@@ -283,6 +283,7 @@ const WEB_AUDIO = {
   'restore-dsp.js:391': 'gera o código do AudioWorkletProcessor de restauração a partir do kernel puro',
   'restore-engine.js:5': 'restauração ao vivo: carrega o worklet vynamp-restore, nó estéreo e ganhos com rampa linear na troca',
   'restore.js:145': 'exportação: renderiza a cadeia DSP num contexto offline 2 canais com frames+latência quadros a partir de um buffer de entrada',
+  'restore.js:274': 'decodifica em lote: cria AudioContext (ou webkitAudioContext) para decodeAudioData',
   'restore.js:275': 'decodifica o arquivo aberto no restaurador',
 };
 
