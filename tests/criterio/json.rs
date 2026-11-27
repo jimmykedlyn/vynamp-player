@@ -89,3 +89,36 @@ pub fn sem_falhas(falhas: Vec<String>) -> Result<(), String> {
         Err(format!("{} falha(s):\n{}", falhas.len(), falhas.join("\n")))
     }
 }
+
+/// Igualdade de JSON em que número se compara pelo valor: `1` (literal do MVP, lido por
+/// `JSON.stringify` como inteiro) e `1.0` (literal de `json!`) são o mesmo parâmetro.
+/// Objetos exigem as mesmas chaves; listas, o mesmo comprimento e a mesma ordem.
+pub fn mesmo_valor(a: &Value, b: &Value) -> bool {
+    match (a, b) {
+        (Value::Number(x), Value::Number(y)) => x.as_f64() == y.as_f64(),
+        (Value::Array(x), Value::Array(y)) => {
+            x.len() == y.len() && x.iter().zip(y).all(|(p, q)| mesmo_valor(p, q))
+        }
+        (Value::Object(x), Value::Object(y)) => {
+            x.len() == y.len()
+                && x.iter()
+                    .all(|(k, p)| y.get(k).is_some_and(|q| mesmo_valor(p, q)))
+        }
+        _ => a == b,
+    }
+}
+
+#[test]
+fn mesmo_valor_compara_numero_pelo_valor() {
+    use serde_json::json;
+    assert!(mesmo_valor(&json!({"gain": 1}), &json!({"gain": 1.0})));
+    assert!(mesmo_valor(&json!([1, "a"]), &json!([1.0, "a"])));
+    assert!(!mesmo_valor(&json!({"gain": 1}), &json!({"gain": 1.4})));
+    assert!(!mesmo_valor(
+        &json!({"gain": 1}),
+        &json!({"gain": 1, "x": 2})
+    ));
+    assert!(!mesmo_valor(&json!({}), &json!({"gain": 1})));
+    assert!(!mesmo_valor(&json!([1]), &json!([1, 2])));
+    assert!(!mesmo_valor(&json!("1"), &json!(1)));
+}

@@ -4,7 +4,9 @@
 //! `defaultConfigs` (waveform-styles.js:7-25) e `liveModes` (waveform-styles.js:66), e os
 //! 46 usos de Web Audio da varredura dos `.js`, não do próprio JSON.
 
-use crate::criterio::json::{campo, gabarito, lista, objeto, sem_falhas, texto, textos};
+use crate::criterio::json::{
+    campo, gabarito, lista, mesmo_valor, objeto, sem_falhas, texto, textos,
+};
 use crate::criterio::medicao::ALVOS;
 use serde_json::{Value, json};
 use std::collections::BTreeSet;
@@ -291,7 +293,7 @@ fn ac3_cada_estilo_tem_parametros_literais_e_serie_ou_motivo() -> Result<(), Str
         .map(|a| a.nome)
         .collect();
     for (e, (nome, parametros, ao_vivo)) in lidos.iter().zip(&esperados) {
-        if campo(e, "parametros", nome)? != parametros {
+        if !mesmo_valor(campo(e, "parametros", nome)?, parametros) {
             f.push(format!(
                 "{nome}: parâmetros {}, esperados {parametros}",
                 e["parametros"]
@@ -337,7 +339,9 @@ fn ac3_cada_estilo_tem_parametros_literais_e_serie_ou_motivo() -> Result<(), Str
         .and_then(Value::as_str)
         .unwrap_or("")
         .is_empty()
-        || radio.get("parametros") != Some(&json!({"bars": 128, "gain": 1.0, "altura": 22}))
+        || !radio
+            .get("parametros")
+            .is_some_and(|p| mesmo_valor(p, &json!({"bars": 128, "gain": 1.0, "altura": 22})))
     {
         f.push(format!(
             "bars-pulse: ramo de rádio sem motivo ou sem bars 128, gain 1, altura 22: {}",

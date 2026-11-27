@@ -131,6 +131,21 @@ fn letra(c: &Comando) -> &'static str {
     }
 }
 
+/// Desvio absoluto entre um número do MVP e o do oráculo. Quando o número do MVP é um
+/// decimal de 2 casas (saída de `toFixed(2)`), a conta é feita em centésimos: `100·q`
+/// sai exato em duas parcelas (`mul_add`), e o empate `x,xx5 → x,xx+0,01` dá 0,005
+/// exato, em vez dos 0,005000000000000782 de `12.63 - 12.625` em f64. Fora disso, conta
+/// direta.
+fn desvio_absoluto(p: f64, q: f64) -> f64 {
+    let centesimos = (p * 100.0).round();
+    if (p * 100.0 - centesimos).abs() > 1e-6 || !q.is_finite() {
+        return (p - q).abs();
+    }
+    let alto = 100.0 * q;
+    let baixo = 100.0f64.mul_add(q, -alto);
+    (((centesimos - alto) - baixo) / 100.0).abs()
+}
+
 /// Compara a geometria do MVP com a do oráculo. Devolve o maior desvio absoluto entre
 /// todos os números e as violações (sequência diferente ou valor fora do teto).
 pub fn comparar(mvp: &[Comando], oraculo: &[Comando], tetos: Tetos) -> (f64, Vec<String>) {
@@ -179,7 +194,7 @@ pub fn comparar(mvp: &[Comando], oraculo: &[Comando], tetos: Tetos) -> (f64, Vec
             }
         };
         for (p, q, teto, papel) in pares {
-            let d = (p - q).abs();
+            let d = desvio_absoluto(p, q);
             desvio = desvio.max(d);
             if d > teto || d.is_nan() {
                 violacoes.push(format!(
@@ -270,4 +285,28 @@ fn comparar_aplica_teto_por_papel() {
     assert!(!v.is_empty() && d.is_infinite());
     let (d, v) = comparar(&[Comando::Z], &[Comando::V(0.0)], t);
     assert!(!v.is_empty() && d.is_infinite());
+}
+
+#[test]
+fn empate_do_to_fixed_cabe_na_meia_unidade() {
+    // O oráculo dá 12,625 (empate exato); o MVP escreve toFixed(2) = "12.63". O desvio
+    // é exatamente 0,005, que cabe em "a até 0,005"; em f64, 12.63 - 12.625 dá
+    // 0,005000000000000782, e a conta tem de ser feita em centésimos.
+    let t = Tetos {
+        escala: 0.0,
+        fator_v: 1.0,
+    };
+    let (d, v) = comparar(
+        &[Comando::M(48.38, 24.0), Comando::H(12.63)],
+        &[Comando::M(48.375, 24.0), Comando::H(12.625)],
+        t,
+    );
+    assert!(v.is_empty(), "{v:?}");
+    assert_eq!(d, 0.005);
+    // Um centésimo a mais já passa do teto.
+    let (_, v) = comparar(&[Comando::H(12.64)], &[Comando::H(12.625)], t);
+    assert_eq!(v.len(), 1, "{v:?}");
+    // Número com mais de 2 casas segue a conta direta: 0,0051 passa do teto.
+    let (_, v) = comparar(&[Comando::H(12.6301)], &[Comando::H(12.625)], t);
+    assert_eq!(v.len(), 1, "{v:?}");
 }
