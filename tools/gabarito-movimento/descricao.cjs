@@ -60,7 +60,7 @@ function lerEase(css) {
 }
 
 /** Mesma expressão da varredura de Web Audio do AC-3. */
-const RE_WEB_AUDIO = /new (window\.)?(Offline)?AudioContext|AudioWorkletNode|AudioWorkletProcessor|registerProcessor|audioWorklet|\.create(Analyser|Gain|BiquadFilter|Delay|Convolver|DynamicsCompressor|WaveShaper|StereoPanner|ChannelSplitter|ChannelMerger|Oscillator|BufferSource|Buffer|MediaElementSource|ConstantSource|IIRFilter|Panner)\(|decodeAudioData|startRendering|getFloat(TimeDomain|Frequency)Data|getByte(TimeDomain|Frequency)Data|getFrequencyResponse|setValueAtTime|linearRampToValueAtTime|setTargetAtTime|exponentialRampToValueAtTime/g;
+const RE_WEB_AUDIO = /new \((window\.)?(Offline|webkit)?AudioContext(\|\|(window\.)?(Offline|webkit)?AudioContext)*\)|new (window\.)?(Offline|webkit)?AudioContext|AudioWorkletNode|AudioWorkletProcessor|registerProcessor|audioWorklet|\.create(Analyser|Gain|BiquadFilter|Delay|Convolver|DynamicsCompressor|WaveShaper|StereoPanner|ChannelSplitter|ChannelMerger|Oscillator|BufferSource|Buffer|MediaElementSource|ConstantSource|IIRFilter|Panner)\(|decodeAudioData|startRendering|getFloat(TimeDomain|Frequency)Data|getByte(TimeDomain|Frequency)Data|getFrequencyResponse|setValueAtTime|linearRampToValueAtTime|setTargetAtTime|exponentialRampToValueAtTime/g;
 
 /** APIs de Web Audio de uma linha, na ordem da primeira ocorrência. */
 function apisWebAudio(linha) {

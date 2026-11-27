@@ -106,7 +106,7 @@ fn envelope_do_mvp(estilo: &str) -> Value {
 }
 
 /// Usos de Web Audio nos `.js` do MVP, por arquivo e linha, com as APIs da linha.
-const WEB_AUDIO: [(&str, u64, &[&str]); 46] = [
+const WEB_AUDIO: [(&str, u64, &[&str]); 47] = [
     (
         "advanced-dsp.js",
         251,
@@ -267,6 +267,11 @@ const WEB_AUDIO: [(&str, u64, &[&str]); 46] = [
             "startRendering",
         ],
     ),
+    (
+        "restore.js",
+        274,
+        &["new (window.AudioContext||window.webkitAudioContext)"],
+    ),
     ("restore.js", 275, &["decodeAudioData"]),
 ];
 
@@ -353,7 +358,7 @@ fn ac3_cada_estilo_tem_parametros_literais_e_serie_ou_motivo() -> Result<(), Str
 
 #[test]
 fn ac3_cada_uso_de_web_audio_vira_comportamento() -> Result<(), String> {
-    // Given os 46 usos de Web Audio da varredura; When o gabarito os descreve; Then cada
+    // Given os 47 usos de Web Audio da varredura; When o gabarito os descreve; Then cada
     // um tem as APIs da linha e um comportamento escrito, sem nó do navegador como dado.
     let lidos = lista(campo(gabarito()?, "webAudio", "gabarito")?, "webAudio")?;
     let mut f = Vec::new();
