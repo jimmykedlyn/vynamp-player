@@ -590,3 +590,19 @@ preroll_e_zero_antes_da_amostra_zero
   Comando: cargo test --locked --test gabarito_movimento preroll_e_zero_antes_da_amostra_zero
   Panico: panicked at tests\criterio\medicao.rs:1125:5: nivel 0
   Resultado: test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 77 filtered out.
+
+## Correção — tolerância dependente da libm da plataforma (CI Linux)
+
+Vermelho real do CI, não reproduzido localmente (Windows): run 45970689297, job `test`
+(ubuntu-22.04), SHA 516c76051f621f7951346ec7d85b682710ea64fe,
+https://github.com/jimmykedlyn/vynamp-player/actions/runs/45970689297
+  Comando: cargo test --all --locked
+  test criterio::ac2::ac2_tolerancia_registra_o_maior_desvio_de_cada_serie ... FAILED
+  Error: "12 falha(s): ... (3 das 12 linhas, copiadas do log)
+    spectrum-aurora:degrau/d@wave-spectrum-halo/L: gravado 0.004992872936949766, medido 0.004992872936935555
+    aurora-constellation:seno/data-level@wave-creative-live/L: gravado 0.000049233036283236054, medido 0.00004923303628312503
+    spectrum-aurora:rajada/d@wave-spectrum-left/L: gravado 0.004989109418639543, medido 0.004989109418632216
+  test result: FAILED. 77 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.52s
+Causa: tolerancia.json gravado no Windows; sin/cos/log10/pow/exp de f64 vêm da libm da
+plataforma, e MSVC e glibc divergem nos últimos bits. Correção: crate `libm` no oráculo e
+no critério (commit 2d972c4) e tolerancia.json regravado com ela.

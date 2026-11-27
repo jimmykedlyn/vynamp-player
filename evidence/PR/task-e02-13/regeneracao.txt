@@ -29,8 +29,17 @@ Tolerância documentada (evidence/PR/task-e02-13/tolerancia.json)
     VYNAMP_GRAVAR_TOLERANCIA=1 cargo test --test gabarito_movimento ac2_tolerancia
   e conferida sem a variável (o teste compara chaves e valores exatos):
     cargo test --test gabarito_movimento ac2_tolerancia
-- sha256 437dccf37a14cd101d34e5cfa9688eba119fb1f41c65f54c69aa22d4d0698bc7
-  git hash-object 6f5b07020910ef9009bf216dd9f55527acb53d83
+- sha256 (blob, `git show HEAD:evidence/PR/task-e02-13/tolerancia.json | sha256sum`):
+    0ceb87a7d728b57a237fc9d2ffeb662c1a5368aa2cf80d15dd4d5035fc00ba2b
+  git hash-object 90e5a06e7c3828e1485d78388117b1a42fd1eb09
+  (regravado no commit 2d972c4; o anterior, 437dccf3.../6f5b0702..., foi medido com a libm
+  da plataforma)
+- O oráculo e o critério usam a crate `libm` (dev-dependency 0.2.16, travada no Cargo.lock)
+  para sin, cos, sincos, log10, pow e exp: a libm da plataforma diverge entre Windows (MSVC)
+  e Linux (glibc) nos últimos bits, e o tolerancia.json gravado no Windows não batia com o
+  recalculado no CI Linux (run 45970689297). Com `libm`, a conta é a mesma em qualquer
+  plataforma; a regravação mudou 4 chaves (seno/data-level, agora iguais ao valor do Linux) e
+  manteve as 8 chaves d de degrau/rajada (iguais ao valor do Windows).
 
 Maior desvio por família (cargo test --test gabarito_movimento ac2_cada_serie -- --nocapture)
 - atributo numérico: 4.927595e-4 em bars-pulse:rajada/data-level@wave-reactive-bars/L
