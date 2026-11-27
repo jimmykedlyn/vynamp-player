@@ -38,6 +38,13 @@ test('APIs de Web Audio de uma linha, na ordem e sem repetir', () => {
   assert.deepEqual(d.apisWebAudio('nada aqui'), []);
 });
 
+test('AC-3: a API Web Audio de restore.js:274 e reconhecida', () => {
+  assert.deepEqual(
+    d.apisWebAudio('   const audioCtx=new (window.AudioContext||window.webkitAudioContext)();'),
+    ['new (window.AudioContext||window.webkitAudioContext)'],
+  );
+});
+
 test('usos de Web Audio pulam linhas de comentário', () => {
   const usos = d.usosWebAudio({'a.js': '// ctx.createGain()\nx=ctx.createGain();\n * decodeAudioData\n'});
   assert.deepEqual(usos, [{arquivo: 'a.js', linha: 2, apis: ['.createGain(']}]);
